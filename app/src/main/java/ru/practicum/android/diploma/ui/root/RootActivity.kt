@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.ui.root
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import by.kirich1409.viewbindingdelegate.CreateMethod
@@ -24,19 +25,19 @@ class RootActivity : AppCompatActivity() {
             with(binding) {
                 when (destination.id) {
                     R.id.mainFragment -> {
-                        bottomNavigationView.visibility = View.VISIBLE
+                        bottomNavigationView.isVisible = true
                     }
 
                     R.id.favoriteFragment -> {
-                        bottomNavigationView.visibility = View.VISIBLE
+                        bottomNavigationView.isVisible = true
                     }
 
                     R.id.teamFragment -> {
-                        bottomNavigationView.visibility = View.VISIBLE
+                        bottomNavigationView.isVisible = true
                     }
 
                     else -> {
-                        bottomNavigationView.visibility = View.GONE
+                        bottomNavigationView.isVisible = false
                     }
                 }
             }
