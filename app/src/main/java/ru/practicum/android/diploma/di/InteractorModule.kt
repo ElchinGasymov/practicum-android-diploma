@@ -8,4 +8,8 @@ val interactorModule = module {
     factory<SelectedVacanciesInteractor> {
         SelectedVacanciesInteractorImpl(get())
     }
+
+    factory<SearchInteractor> {
+        SearchInteractorImpl(repository = get())
+    }
 }
