@@ -6,7 +6,7 @@ import ru.practicum.android.diploma.domain.db.SelectedVacanciesInteractor
 class SelectedVacanciesInteractorImpl(
     private val selectedVacanciesRepository: SelectedVacanciesRepository
 ) : SelectedVacanciesInteractor {
-    override suspend fun getVacancy(vacancyId: Long): Vacancy {
+    override suspend fun getVacancy(vacancyId: Int): Vacancy {
         return selectedVacanciesRepository.getVacancy(vacancyId)
     }
 
@@ -14,8 +14,12 @@ class SelectedVacanciesInteractorImpl(
         selectedVacanciesRepository.addVacancy(vacancy)
     }
 
-    override suspend fun deleteVacancy(vacancyId: Long) {
+    override suspend fun deleteVacancy(vacancyId: Int) {
         selectedVacanciesRepository.deleteVacancy(vacancyId)
+    }
+
+    override suspend fun hasLike(vacancyId: Int): Boolean {
+        return selectedVacanciesRepository.hasLike(vacancyId)
     }
 
     override fun listVacancies(): Flow<List<Vacancy>> {
