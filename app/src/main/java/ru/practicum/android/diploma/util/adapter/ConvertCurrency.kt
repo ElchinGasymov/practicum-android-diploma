@@ -25,7 +25,7 @@ fun toSalaryString(salary: Int): String {
     var cycle = 0
     for (i in salarySize downTo 0) {
         cycle = cycle + 1
-        if (cycle == cycleSize) {
+        if (cycle == CYCLE_SIZE) {
             cycle = 0
             result = " " + salary.toString()[i] + result
         } else {
@@ -35,7 +35,7 @@ fun toSalaryString(salary: Int): String {
     return result.trim()
 }
 
-const val cycleSize = 3
+const val CYCLE_SIZE = 3
 
 // Функция для конвертации зарплаты в строку с указанием валюты
 fun converterSalaryToString(salaryFrom: Int?, salaryTo: Int?, currency: String?): String {
