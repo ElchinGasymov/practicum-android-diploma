@@ -8,8 +8,9 @@ data class PhoneEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val idVacancy: Int,
-    val city: String,
+    val cityCode: String?,
     val comment: String?,
-    val country: String,
-    val formatted: String
+    val countryCode: String?,
+    val formatted: String?,
+    val number: String?
 )

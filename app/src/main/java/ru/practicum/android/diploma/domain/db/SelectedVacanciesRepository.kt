@@ -1,8 +1,8 @@
 package ru.practicum.android.diploma.domain.db
 
-import ru.practicum.android.diploma.domain.models.VacancyDetails
 import kotlinx.coroutines.flow.Flow
 import ru.practicum.android.diploma.domain.models.Vacancy
+import ru.practicum.android.diploma.domain.models.VacancyDetails
 
 interface SelectedVacanciesRepository {
     suspend fun getVacancy(vacancyId: Int): VacancyDetails
@@ -11,7 +11,7 @@ interface SelectedVacanciesRepository {
 
     suspend fun deleteVacancy(vacancyId: Int)
 
-    suspend fun hasLike(vacancyId: Int):Boolean
+    suspend fun hasLike(vacancyId: Int): Boolean
 
     fun listVacancies(): Flow<List<Vacancy>>
 }

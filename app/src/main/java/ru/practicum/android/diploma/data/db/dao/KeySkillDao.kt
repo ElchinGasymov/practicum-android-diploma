@@ -12,7 +12,7 @@ interface KeySkillDao {
     suspend fun getSelectedKeySkill(vacancyId: Int): List<KeySkillEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertKeySkill(keySkillEntity: KeySkillEntity)
+    suspend fun insertKeySkill(keySkillEntity: List<KeySkillEntity>)
 
     @Query("DELETE FROM `key_skill_table` WHERE idVacancy=:vacancyId")
     suspend fun deleteKeySkill(vacancyId: Int)

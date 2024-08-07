@@ -21,5 +21,5 @@ interface VacancyDao {
     suspend fun findVacancy(vacancyId: Int): VacancyEntity
 
     @Query("SELECT COUNT(`vacancy_table`.`id`) FROM `vacancy_table` WHERE `vacancy_table`.`id` = :vacancyId;")
-    suspend fun hasLike(vacancyId: Int)
+    suspend fun hasLike(vacancyId: Int): Int
 }

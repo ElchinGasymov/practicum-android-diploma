@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.CreateMethod
@@ -18,12 +19,14 @@ import ru.practicum.android.diploma.presentation.Favourites.FavouritesFragmentVi
 class FavouritesFragment : Fragment() {
 
     private val viewModel: FavouritesFragmentViewModel by viewModel()
-    private val adapter by lazy { VacancyPagingAdapter(){ vacancy ->
-        findNavController().navigate(
-            R.id.action_favoriteFragment_to_vacancyFragment,
-            bundleOf(VACANCY_KEY to vacancy.id)
-        )
-    } }
+    private val adapter by lazy {
+        VacancyPagingAdapter() { vacancy ->
+            findNavController().navigate(
+                R.id.action_favoriteFragment_to_vacancyFragment,
+                bundleOf(VACANCY_KEY to vacancy.id)
+            )
+        }
+    }
     private val binding: FragmentFavouritesBinding by viewBinding(CreateMethod.INFLATE)
 
     override fun onCreateView(
@@ -38,20 +41,22 @@ class FavouritesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.rwVacancy.adapter = adapter
         viewModel.listVacancy.observe(viewLifecycleOwner) { state ->
-            when(state.state){
+            when (state.state) {
                 FavouritesDbState.ERROR -> {
                     binding.widgetNothing.isVisible = false
-                    binding.widjetWrong.isVisible = true
+                    binding.widgetWrong.isVisible = true
                     binding.rwVacancy.isVisible = false
                 }
+
                 FavouritesDbState.EMPTY -> {
                     binding.widgetNothing.isVisible = true
-                    binding.widjetWrong.isVisible = false
+                    binding.widgetWrong.isVisible = false
                     binding.rwVacancy.isVisible = false
                 }
+
                 FavouritesDbState.SUCCESSFUL -> {
                     binding.widgetNothing.isVisible = false
-                    binding.widjetWrong.isVisible = false
+                    binding.widgetWrong.isVisible = false
                     binding.rwVacancy.isVisible = true
                     adapter.data = state.list
                 }

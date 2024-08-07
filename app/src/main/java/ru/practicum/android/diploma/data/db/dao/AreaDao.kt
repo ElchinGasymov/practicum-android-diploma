@@ -12,7 +12,7 @@ interface AreaDao {
     suspend fun getSelectedArea(vacancyId: Int): List<AreaEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertArea(areaEntity: AreaEntity)
+    suspend fun insertArea(areaEntity: List<AreaEntity>)
 
     @Query("DELETE FROM `area_table` WHERE idVacancy=:vacancyId")
     suspend fun deleteArea(vacancyId: Int)

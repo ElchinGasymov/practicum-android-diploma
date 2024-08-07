@@ -4,8 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
-import ru.practicum.android.diploma.domain.models.Vacancy
+import ru.practicum.android.diploma.domain.db.SelectedVacanciesInteractor
+import ru.practicum.android.diploma.domain.models.VacancyDetails
 
 class FavouritesFragmentViewModel(
     private val selectedVacanciesInteractor: SelectedVacanciesInteractor
@@ -18,25 +20,25 @@ class FavouritesFragmentViewModel(
     fun getVacancyList() {
         viewModelScope.launch {
             selectedVacanciesInteractor.listVacancies()
-                .catch{ exception ->
+                .catch { exception ->
                     _listVacancy.postValue(FavouritesScreenState(FavouritesDbState.ERROR, emptyList()))
-            }.collect { list ->
-                if (list.isEmpty){
-                    _listVacancy.postValue(FavouritesScreenState(FavouritesDbState.EMPTY, emptyList()))
-                } else {
-                    _listVacancy.postValue(FavouritesScreenState(FavouritesDbState.SUCCESSFUL, list))
+                }.collect { list ->
+                    if (list.isEmpty()) {
+                        _listVacancy.postValue(FavouritesScreenState(FavouritesDbState.EMPTY, emptyList()))
+                    } else {
+                        _listVacancy.postValue(FavouritesScreenState(FavouritesDbState.SUCCESSFUL, list))
+                    }
                 }
-            }
         }
     }
 
-    fun addVacancy(vacancy: Vacancy) {
+    fun addVacancy(vacancy: VacancyDetails) {
         viewModelScope.launch {
             selectedVacanciesInteractor.addVacancy(vacancy)
         }
     }
 
-    fun deleteVacancy(vacancyId: Long) {
+    fun deleteVacancy(vacancyId: Int) {
         viewModelScope.launch {
             selectedVacanciesInteractor.deleteVacancy(vacancyId)
         }
@@ -52,8 +54,8 @@ class FavouritesFragmentViewModel(
         }
     }
 
-    private val _favouriteVacancy = MutableLiveData<Vacancy>()
-    val favouriteVacancy: LiveData<Vacancy>
+    private val _favouriteVacancy = MutableLiveData<VacancyDetails>()
+    val favouriteVacancy: LiveData<VacancyDetails>
         get() = _favouriteVacancy
 
     fun getVacancy(vacancyId: Int) {

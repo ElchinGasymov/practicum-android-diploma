@@ -31,6 +31,7 @@
         app:layout_constraintTop_toBottomOf="@id/favouritesFragmentTitle" />
 
     <androidx.constraintlayout.widget.Group
+        android:id="@+id/widgetNothing"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:visibility="gone"
@@ -39,6 +40,7 @@
         app:layout_constraintTop_toBottomOf="@id/favouritesFragmentTitle" />
 
     <androidx.constraintlayout.widget.Group
+        android:id="@+id/widgetWrong"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:visibility="gone"

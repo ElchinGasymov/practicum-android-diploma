@@ -8,5 +8,5 @@ data class KeySkillEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val idVacancy: Int,
-    val name: String
+    val name: String?
 )
