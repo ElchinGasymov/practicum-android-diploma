@@ -34,20 +34,23 @@ class FavouritesFragmentViewModel(
         }
     }
 
-    private val _favouriteVacancy = MutableLiveData<Boolean>()
-    val favouriteVacancy: LiveData<Boolean>
-        get() = _favouriteVacancy
+    private val _hasLikeAnswer = MutableLiveData<Boolean>()
+    val hasLikeAnswer: LiveData<Boolean>
+        get() = _hasLikeAnswer
 
-
-    fun favouriteOrNot(vacancyId: Long) {
+    fun hasLike(vacancyId: Int) {
         viewModelScope.launch {
-            val vacancy = selectedVacanciesInteractor.getVacancy(vacancyId)
-            if (vacancy == null) {
-                _favouriteVacancy.postValue(false)
-            } else {
-                _favouriteVacancy.postValue(true)
-            }
+            _hasLikeAnswer.postValue(selectedVacanciesInteractor.hasLike(vacancyId))
         }
     }
 
+    private val _favouriteVacancy = MutableLiveData<Vacancy>()
+    val favouriteVacancy: LiveData<Vacancy>
+        get() = _favouriteVacancy
+
+    fun getVacancy(vacancyId: Int) {
+        viewModelScope.launch {
+            _favouriteVacancy.postValue(selectedVacanciesInteractor.getVacancy(vacancyId))
+        }
+    }
 }
