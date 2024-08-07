@@ -1,17 +1,19 @@
 package ru.practicum.android.diploma.data.db
 
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.domain.db.SelectedVacanciesRepository
-import java.util.concurrent.Flow
+import ru.practicum.android.diploma.domain.models.Vacancy
+import ru.practicum.android.diploma.domain.models.VacancyDetails
 
 class SelectedVacanciesRepositoryImpl(
     private val vacanciesDatabase: AppDatabase
 ) : SelectedVacanciesRepository {
-    override suspend fun getVacancy(vacancyId: Int): Vacancy {
+    override suspend fun getVacancy(vacancyId: Int): VacancyDetails {
         return vacanciesDatabase.vacancyDao().findVacancy(vacancyId).map {}
     }
 
-    override suspend fun addVacancy(vacancy: Vacancy) {
+    override suspend fun addVacancy(vacancy: VacancyDetails) {
         vacanciesDatabase.vacancyDao().insertVacancy(vacancy.map {})
     }
 
@@ -20,7 +22,8 @@ class SelectedVacanciesRepositoryImpl(
     }
 
     override fun listVacancies(): Flow<List<Vacancy>> = flow {
-        emit(vacanciesDatabase.vacancyDao().getSelectedVacancies().map {})
+        vacanciesDatabase.vacancyDao().getSelectedVacancies()
+        emit()
     }
 
     override suspend fun hasLike(vacancyId: Int): Boolean {

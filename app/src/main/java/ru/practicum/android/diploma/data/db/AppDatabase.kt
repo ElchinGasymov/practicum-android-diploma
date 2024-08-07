@@ -9,7 +9,8 @@ import ru.practicum.android.diploma.data.db.dao.VacancyDao
     entities = [
         VacancyEntity::class,
         PhoneEntity::class,
-        KeySkillEntity::class
+        KeySkillEntity::class,
+        AreaEntity::class,
     ]
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -18,5 +19,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun phoneDao(): PhoneDao
 
     abstract fun keySkillDao(): KeySkillDao
+
+    abstract fun areaDao(): AreaDao
 }
 
