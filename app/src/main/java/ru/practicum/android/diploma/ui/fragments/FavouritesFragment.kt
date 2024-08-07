@@ -39,6 +39,7 @@ class FavouritesFragment : Fragment() {
                 binding.widgetNothing.isVisible = false
                 binding.widjetWrong.isVisible = false
                 binding.rwVacancy.isVisible = true
+                adapter.data = it
             }
         }
         viewModel.getVacancyList()
