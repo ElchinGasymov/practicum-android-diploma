@@ -2,15 +2,17 @@ package ru.practicum.android.diploma.domain.db.impl
 
 import kotlinx.coroutines.flow.Flow
 import ru.practicum.android.diploma.domain.db.SelectedVacanciesInteractor
+import ru.practicum.android.diploma.domain.models.Vacancy
+import ru.practicum.android.diploma.domain.models.VacancyDetails
 
 class SelectedVacanciesInteractorImpl(
     private val selectedVacanciesRepository: SelectedVacanciesRepository
 ) : SelectedVacanciesInteractor {
-    override suspend fun getVacancy(vacancyId: Int): Vacancy {
+    override suspend fun getVacancy(vacancyId: Int): VacancyDetails {
         return selectedVacanciesRepository.getVacancy(vacancyId)
     }
 
-    override suspend fun addVacancy(vacancy: Vacancy) {
+    override suspend fun addVacancy(vacancy: VacancyDetails) {
         selectedVacanciesRepository.addVacancy(vacancy)
     }
 
