@@ -15,8 +15,11 @@ interface VacancyDao {
     suspend fun insertVacancy(vacancy: VacancyEntity)
 
     @Query("DELETE FROM `vacancy_table` WHERE id=:vacancyId")
-    suspend fun deleteVacancy(vacancyId: Long)
+    suspend fun deleteVacancy(vacancyId: Int)
 
     @Query("SELECT * FROM `vacancy_table` WHERE `vacancy_table`.id = :vacancyId")
-    suspend fun findVacancy(vacancyId: Long): VacancyEntity
+    suspend fun findVacancy(vacancyId: Int): VacancyEntity
+
+    @Query("SELECT COUNT(`vacancy_table`.`id`) FROM `vacancy_table` WHERE `vacancy_table`.`id` = :vacancyId;")
+    suspend fun hasLike(vacancyId: Int)
 }

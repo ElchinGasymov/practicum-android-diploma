@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName
 @Entity(tableName = "vacancy_table")
 data class VacancyEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Long,
+    val id: Int,
     val name: String,
     val employer: Employer,
     val salary: Salary?,
