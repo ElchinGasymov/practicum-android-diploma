@@ -5,7 +5,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import ru.practicum.android.diploma.data.db.entity.AreaEntity
-import ru.practicum.android.diploma.data.db.entity.KeySkillEntity
 
 @Dao
 interface AreaDao {

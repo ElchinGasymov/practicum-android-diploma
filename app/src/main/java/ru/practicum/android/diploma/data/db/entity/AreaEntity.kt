@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "area_table")
-data class AreaEntity (
+data class AreaEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val idVacancy: Int,
