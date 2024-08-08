@@ -26,11 +26,11 @@ import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.presentation.viewmodels.SearchViewModel
 import ru.practicum.android.diploma.ui.state.SearchScreenState
 import ru.practicum.android.diploma.util.DebounceExtension
+import ru.practicum.android.diploma.util.DebounceExtension.Companion.TWO_SECONDS
 import ru.practicum.android.diploma.util.ResponseData
+import ru.practicum.android.diploma.util.VACANCY_KEY
 import ru.practicum.android.diploma.util.adapter.VacancyAdapter
 
-const val TWO_SECONDS = 2000L
-const val VACANCY_KEY = "VACANCY_KEY"
 
 class SearchFragment : Fragment() {
 
@@ -121,10 +121,7 @@ class SearchFragment : Fragment() {
                             showNoInternetState()
                         }
 
-                        ResponseData.ResponseError.CLIENT_ERROR -> {
-                            showServerError()
-                        }
-
+                        ResponseData.ResponseError.CLIENT_ERROR,
                         ResponseData.ResponseError.SERVER_ERROR -> {
                             showServerError()
                         }
@@ -175,14 +172,8 @@ class SearchFragment : Fragment() {
                             showMessage(getString(R.string.next_page_internet_error))
                         }
 
-                        ResponseData.ResponseError.CLIENT_ERROR -> {
-                            showMessage(getString(R.string.next_page_server_error))
-                        }
-
-                        ResponseData.ResponseError.SERVER_ERROR -> {
-                            showMessage(getString(R.string.next_page_server_error))
-                        }
-
+                        ResponseData.ResponseError.CLIENT_ERROR,
+                        ResponseData.ResponseError.SERVER_ERROR,
                         ResponseData.ResponseError.NOT_FOUND -> {
                             showMessage(getString(R.string.next_page_server_error))
                         }

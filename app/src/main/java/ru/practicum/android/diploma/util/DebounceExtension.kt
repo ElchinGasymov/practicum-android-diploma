@@ -13,6 +13,7 @@ class DebounceExtension(
     private val scope: CoroutineScope
 ) {
     companion object {
+        const val TWO_SECONDS = 2000L
         const val HALF_SECOND = 500L
     }
 
