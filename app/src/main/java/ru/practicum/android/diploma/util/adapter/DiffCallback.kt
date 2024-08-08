@@ -3,7 +3,7 @@ package ru.practicum.android.diploma.util.adapter
 import androidx.recyclerview.widget.DiffUtil
 import ru.practicum.android.diploma.domain.models.Vacancy
 
-class DiffCallback (
+class DiffCallback(
     private val oldList: List<Vacancy>,
     private val newList: List<Vacancy>
 ) : DiffUtil.Callback() {
