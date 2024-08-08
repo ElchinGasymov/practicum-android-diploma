@@ -2,17 +2,19 @@ package ru.practicum.android.diploma.data.db
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import ru.practicum.android.diploma.data.db.entity.ConverterDb
+import ru.practicum.android.diploma.data.db.converters.ConverterIntoEntity
+import ru.practicum.android.diploma.data.db.converters.ConverterIntoModel
 import ru.practicum.android.diploma.domain.db.SelectedVacanciesRepository
 import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.domain.models.VacancyDetails
 
 class SelectedVacanciesRepositoryImpl(
     private val vacanciesDatabase: AppDatabase,
-    private val converter: ConverterDb
+    private val converterModel: ConverterIntoModel,
+    private val converterIntoEntity: ConverterIntoEntity
 ) : SelectedVacanciesRepository {
     override suspend fun getVacancy(vacancyId: Int): VacancyDetails {
-        return converter.intoVacancyDetail(
+        return converterModel.intoVacancyDetail(
             listPhone = vacanciesDatabase.phoneDao().getSelectedPhone(vacancyId),
             listKey = vacanciesDatabase.keySkillDao().getSelectedKeySkill(vacancyId),
             vacancyEntity = vacanciesDatabase.vacancyDao().findVacancy(vacancyId),
@@ -21,10 +23,10 @@ class SelectedVacanciesRepositoryImpl(
     }
 
     override suspend fun addVacancy(vacancy: VacancyDetails) {
-        vacanciesDatabase.vacancyDao().insertVacancy(converter.intoVacancyEntity(vacancy))
-        vacanciesDatabase.areaDao().insertArea(converter.intoAreaEntity(vacancy))
-        vacanciesDatabase.phoneDao().insertPhone(converter.intoPhoneEntity(vacancy))
-        vacanciesDatabase.keySkillDao().insertKeySkill(converter.intoKeySkillEntity(vacancy))
+        vacanciesDatabase.vacancyDao().insertVacancy(converterIntoEntity.intoVacancyEntity(vacancy))
+        vacanciesDatabase.areaDao().insertArea(converterIntoEntity.intoAreaEntity(vacancy))
+        vacanciesDatabase.phoneDao().insertPhone(converterIntoEntity.intoPhoneEntity(vacancy))
+        vacanciesDatabase.keySkillDao().insertKeySkill(converterIntoEntity.intoKeySkillEntity(vacancy))
     }
 
     override suspend fun deleteVacancy(vacancyId: Int) {
@@ -38,9 +40,9 @@ class SelectedVacanciesRepositoryImpl(
         val listVacancy = ArrayList<Vacancy>()
         vacanciesDatabase.vacancyDao().getSelectedVacancies().forEach { vacancyEntity ->
             listVacancy.add(
-                converter.intoVacancy(
+                converterModel.intoVacancy(
                     vacancy = vacancyEntity,
-                    areas = vacanciesDatabase.areaDao().getSelectedArea(vacancyEntity.id.toInt())
+                    areas = vacanciesDatabase.areaDao().getSelectedArea(vacancyEntity.id)
                 )
             )
         }
