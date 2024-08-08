@@ -60,13 +60,16 @@ class SearchViewModel(
                             maxPages = response.value.pages
                             currentPage = response.value.page
                             if (isNewRequest) {
-                                setScreenState(
-                                    SearchScreenState.Success(response.value.results, response.value.foundVacancies)
-                                )
+                                if (response.value.results.isEmpty()) {
+                                    setScreenState(SearchScreenState.NothingFound)
+                                } else {
+                                    setScreenState(
+                                        SearchScreenState.Success(response.value.results, response.value.foundVacancies)
+                                    )
+                                }
                             } else {
                                 setScreenState(SearchScreenState.LoadNextPage(response.value.results))
                             }
-
                         }
                         is ResponseData.Error -> {
                             if (isNewRequest) {
