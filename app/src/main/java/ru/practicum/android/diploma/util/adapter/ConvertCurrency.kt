@@ -4,9 +4,17 @@ package ru.practicum.android.diploma.util.adapter
 fun formatValueSalary(salaryFrom: Int?, salaryTo: Int?): String {
     return when {
         salaryFrom != null && (salaryTo == null || salaryTo == 0) -> "от ${toSalaryString(salaryFrom)}"
-        (salaryFrom == 0 || salaryFrom == null) && salaryTo != null && salaryTo != 0 -> "до ${toSalaryString(salaryTo)}"
-        salaryFrom != null && salaryFrom != 0 && salaryTo != null && salaryTo != 0 -> "от ${toSalaryString(salaryFrom)} до ${toSalaryString(salaryTo)}"
-        else -> "Зарплата не указана"
+        (salaryFrom == 0 || salaryFrom == null) && salaryTo != null && salaryTo != 0 -> "до ${
+            toSalaryString(salaryTo)
+        }"
+
+        salaryFrom != null && salaryFrom != 0 && salaryTo != null && salaryTo != 0 -> "от ${
+            toSalaryString(salaryFrom)
+        } до ${toSalaryString(salaryTo)}"
+
+        else -> {
+            "Зарплата не указана"
+        }
     }
 }
 
@@ -14,7 +22,6 @@ fun formatValueSalary(salaryFrom: Int?, salaryTo: Int?): String {
 fun toSalaryString(salary: Int): String {
     return "%,d".format(salary).replace(',', ' ')
 }
-
 
 // Функция для конвертации зарплаты в строку с указанием валюты
 fun converterSalaryToString(salaryFrom: Int?, salaryTo: Int?, currency: String?): String {
