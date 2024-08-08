@@ -61,7 +61,7 @@ class FavouritesFragment : Fragment() {
                     binding.widgetNothing.isVisible = false
                     binding.widgetWrong.isVisible = false
                     binding.rwVacancy.isVisible = true
-                    adapter.vacancies.addAll(state.list)
+                    adapter.setVacancies(state.list)
                 }
             }
         }
