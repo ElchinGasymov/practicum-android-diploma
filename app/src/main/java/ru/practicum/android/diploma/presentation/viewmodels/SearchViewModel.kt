@@ -57,19 +57,16 @@ class SearchViewModel(
                 .collect { response ->
                     when (response) {
                         is ResponseData.Data -> {
-                            if (response.value.results.isEmpty()) {
-                                setScreenState(SearchScreenState.NothingFound)
+                            maxPages = response.value.pages
+                            currentPage = response.value.page
+                            if (isNewRequest) {
+                                setScreenState(
+                                    SearchScreenState.Success(response.value.results, response.value.foundVacancies)
+                                )
                             } else {
-                                maxPages = response.value.pages
-                                currentPage = response.value.page
-                                if (isNewRequest) {
-                                    setScreenState(
-                                        SearchScreenState.Success(response.value.results, response.value.foundVacancies)
-                                    )
-                                } else {
-                                    setScreenState(SearchScreenState.LoadNextPage(response.value.results))
-                                }
+                                setScreenState(SearchScreenState.LoadNextPage(response.value.results))
                             }
+
                         }
                         is ResponseData.Error -> {
                             if (isNewRequest) {
