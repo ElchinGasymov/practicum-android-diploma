@@ -15,16 +15,12 @@ class VacancyViewHolder(
 
     fun bind(item: Vacancy) {
         with(binding) {
-            if (item.area?.name?.isNotBlank() == true) {
-                val title = buildString {
-                    append(item.name)
-                    append(", ")
-                    append(item.area.name)
-                }
-                positionTitle.text = title
+            val title = if (item.area?.name?.isNotBlank() == true) {
+                "${item.name}, ${item.area.name}"
             } else {
-                positionTitle.text = item.name
+                item.name
             }
+            positionTitle.text = title
 
             // Устанавливает название компании
             companyTitle.text = item.employer?.name
