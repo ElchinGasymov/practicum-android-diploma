@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.presentation.Favourites
+package ru.practicum.android.diploma.presentation.favourites
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

@@ -13,20 +13,23 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFavouritesBinding
-import ru.practicum.android.diploma.presentation.Favourites.FavouritesDbState
-import ru.practicum.android.diploma.presentation.Favourites.FavouritesFragmentViewModel
+import ru.practicum.android.diploma.presentation.favourites.FavouritesDbState
+import ru.practicum.android.diploma.presentation.favourites.FavouritesFragmentViewModel
+import ru.practicum.android.diploma.util.adapter.VacancyAdapter
 
 class FavouritesFragment : Fragment() {
 
     private val viewModel: FavouritesFragmentViewModel by viewModel()
-//    private val adapter by lazy {
-//        VacancyPagingAdapter() { vacancy ->
-//            findNavController().navigate(
-//                R.id.action_favoriteFragment_to_vacancyFragment,
-//                bundleOf(VACANCY_KEY to vacancy.id)
-//            )
-//        }
-//    }
+    private val adapter by lazy {
+        VacancyAdapter(
+            onClick = { vacancy ->
+                findNavController().navigate(
+                    R.id.action_favoriteFragment_to_vacancyFragment,
+                    bundleOf(VACANCY_KEY to vacancy.id)
+                )
+            }
+        )
+    }
     private val binding: FragmentFavouritesBinding by viewBinding(CreateMethod.INFLATE)
 
     override fun onCreateView(
@@ -39,7 +42,7 @@ class FavouritesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-       // binding.rwVacancy.adapter = adapter
+        binding.rwVacancy.adapter = adapter
         viewModel.listVacancy.observe(viewLifecycleOwner) { state ->
             when (state.state) {
                 FavouritesDbState.ERROR -> {
@@ -58,7 +61,7 @@ class FavouritesFragment : Fragment() {
                     binding.widgetNothing.isVisible = false
                     binding.widgetWrong.isVisible = false
                     binding.rwVacancy.isVisible = true
-              //      adapter.data = state.list
+                    adapter.vacancies.addAll(state.list)
                 }
             }
         }
