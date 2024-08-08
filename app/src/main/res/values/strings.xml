@@ -21,7 +21,6 @@
     <string name="enter_region">Введите регион</string>
     <string name="no_region">Такого региона нет</string>
     <string name="failed_to_get_list">Не удалось получить список</string>
-    <string name="found_count_vacancies">Найдено %d вакансий</string>
     <string name="choose">Выбрать</string>
     <string name="apply">Применить</string>
     <string name="cancel">Сбросить</string>
@@ -47,6 +46,8 @@
     <string name="server_error">Ошибка сервера</string>
     <string name="favorite_list_empty">Список пуст</string>
     <string name="there_no_such_vacancies">Таких вакансий нет</string>
+    <string name="next_page_server_error">Произошла ошибка</string>
+    <string name="next_page_internet_error">Проверьте подключение к интернету</string>
 
     <string name="title_team">Над приложением работали</string>
     <string name="name1">Гасымов Элчин Эмильевич</string>
@@ -54,6 +55,12 @@
     <string name="name3">Молоданов Виталий Олегович</string>
     <string name="name4">Шокин Андрей Александрович</string>
     <string name="name5">Рябицкий Андрей Игоревич</string>
+
+    <plurals name="vacancy_quantity">
+        <item quantity="one">Найдена %d вакансия</item>
+        <item quantity="few">Найдено %d вакансии</item>
+        <item quantity="many">Найдено %d вакансий</item>
+    </plurals>
 
 
 </resources>
