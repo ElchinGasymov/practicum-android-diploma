@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.SearchInteractor
+import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.ui.state.SearchScreenState
 import ru.practicum.android.diploma.util.ITEMS_PER_PAGE
 import ru.practicum.android.diploma.util.Options
@@ -59,25 +60,11 @@ class SearchViewModel(
                         is ResponseData.Data -> {
                             maxPages = response.value.pages
                             currentPage = response.value.page
-                            if (isNewRequest) {
-                                if (response.value.results.isEmpty()) {
-                                    setScreenState(SearchScreenState.NothingFound)
-                                } else {
-                                    setScreenState(
-                                        SearchScreenState.Success(response.value.results, response.value.foundVacancies)
-                                    )
-                                }
-                            } else {
-                                setScreenState(SearchScreenState.LoadNextPage(response.value.results))
-                            }
+                            setDataState(response.value.results, response.value.foundVacancies, isNewRequest)
                         }
-                        is ResponseData.Error -> {
-                            if (isNewRequest) {
-                                setScreenState(SearchScreenState.Error(response.error))
-                            } else {
-                                setScreenState(SearchScreenState.ErrorNextPage(response.error))
-                            }
 
+                        is ResponseData.Error -> {
+                            setErrorState(response.error, isNewRequest)
                         }
                     }
                 }
@@ -93,6 +80,28 @@ class SearchViewModel(
                 setScreenState(SearchScreenState.LoadingNextPage)
                 search(false)
             }
+        }
+    }
+
+    private fun setDataState(data: List<Vacancy>, quantity: Int, isNewRequest: Boolean) {
+        if (isNewRequest) {
+            if (data.isEmpty()) {
+                setScreenState(SearchScreenState.NothingFound)
+            } else {
+                setScreenState(
+                    SearchScreenState.Success(data, quantity)
+                )
+            }
+        } else {
+            setScreenState(SearchScreenState.LoadNextPage(data))
+        }
+    }
+
+    private fun setErrorState(error: ResponseData.ResponseError, isNewRequest: Boolean) {
+        if (isNewRequest) {
+            setScreenState(SearchScreenState.Error(error))
+        } else {
+            setScreenState(SearchScreenState.ErrorNextPage(error))
         }
     }
 }
