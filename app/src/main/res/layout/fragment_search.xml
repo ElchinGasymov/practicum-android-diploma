@@ -23,7 +23,6 @@
             android:layout_gravity="end"
             android:layout_margin="@dimen/dimen_8dp"
             android:clickable="true"
-            android:contentDescription="filter_icon_description"
             android:scaleType="center"
             android:src="@drawable/ic_filter_off_12px" />
     </androidx.appcompat.widget.Toolbar>
