@@ -2,11 +2,11 @@ package ru.practicum.android.diploma.data.impl
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import ru.practicum.android.diploma.data.dto.CLIENT_ERROR_RANGE
+import ru.practicum.android.diploma.data.dto.RESULT_CODE_BAD_REQUEST
 import ru.practicum.android.diploma.data.dto.RESULT_CODE_NOT_FOUND
 import ru.practicum.android.diploma.data.dto.RESULT_CODE_NO_INTERNET
+import ru.practicum.android.diploma.data.dto.RESULT_CODE_SERVER_ERROR
 import ru.practicum.android.diploma.data.dto.RESULT_CODE_SUCCESS
-import ru.practicum.android.diploma.data.dto.SERVER_ERROR_RANGE
 import ru.practicum.android.diploma.data.dto.VacancyRequest
 import ru.practicum.android.diploma.data.dto.VacancyResponse
 import ru.practicum.android.diploma.data.dto.toModel
@@ -29,8 +29,8 @@ class VacancyRepositoryImpl(private val networkClient: NetworkClient) : VacancyR
 
             RESULT_CODE_NO_INTERNET -> emit(ResponseData.Error(ResponseData.ResponseError.NO_INTERNET))
             RESULT_CODE_NOT_FOUND -> emit(ResponseData.Error(ResponseData.ResponseError.NOT_FOUND))
-            in CLIENT_ERROR_RANGE -> emit(ResponseData.Error(ResponseData.ResponseError.CLIENT_ERROR))
-            in SERVER_ERROR_RANGE -> emit(ResponseData.Error(ResponseData.ResponseError.SERVER_ERROR))
+            RESULT_CODE_BAD_REQUEST -> emit(ResponseData.Error(ResponseData.ResponseError.CLIENT_ERROR))
+            RESULT_CODE_SERVER_ERROR -> emit(ResponseData.Error(ResponseData.ResponseError.SERVER_ERROR))
             else -> emit(ResponseData.Error(ResponseData.ResponseError.SERVER_ERROR))
         }
     }
