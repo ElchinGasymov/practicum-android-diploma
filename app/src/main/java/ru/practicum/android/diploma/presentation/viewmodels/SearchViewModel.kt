@@ -8,6 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.SearchInteractor
 import ru.practicum.android.diploma.ui.state.SearchScreenState
+import ru.practicum.android.diploma.util.ITEMS_PER_PAGE
 import ru.practicum.android.diploma.util.Options
 import ru.practicum.android.diploma.util.ResponseData
 
@@ -19,10 +20,8 @@ class SearchViewModel(
     private var currentPage = 0
     private var maxPages = 1
     private var isNextPageLoading = false
-    private val itemsPerPage = 20
     private var mainRequest = ""
     private var requestNextPage = ""
-
 
     fun render(): LiveData<SearchScreenState> {
         return screenStateLiveData
@@ -54,7 +53,7 @@ class SearchViewModel(
     private fun search(isNewRequest: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
             searchInteractor
-                .search(Options(requestNextPage, itemsPerPage, currentPage))
+                .search(Options(requestNextPage, ITEMS_PER_PAGE, currentPage))
                 .collect { response ->
                     when (response) {
                         is ResponseData.Data -> {
@@ -64,18 +63,13 @@ class SearchViewModel(
                                 maxPages = response.value.pages
                                 currentPage = response.value.page
                                 if (isNewRequest) {
-                                    setScreenState(
-                                        SearchScreenState.Success(
+                                    setScreenState(SearchScreenState.Success(
                                             response.value.results,
                                             response.value.foundVacancies
                                         )
                                     )
                                 } else {
-                                    setScreenState(
-                                        SearchScreenState.LoadNextPage(
-                                            response.value.results
-                                        )
-                                    )
+                                    setScreenState(SearchScreenState.LoadNextPage(response.value.results))
                                 }
                             }
                         }

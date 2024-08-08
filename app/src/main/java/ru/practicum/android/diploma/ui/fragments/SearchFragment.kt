@@ -31,7 +31,6 @@ import ru.practicum.android.diploma.util.ResponseData
 import ru.practicum.android.diploma.util.VACANCY_KEY
 import ru.practicum.android.diploma.util.adapter.VacancyAdapter
 
-
 class SearchFragment : Fragment() {
 
     private val binding: FragmentSearchBinding by viewBinding(CreateMethod.INFLATE)
@@ -66,10 +65,8 @@ class SearchFragment : Fragment() {
         }
 
         val textWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-            }
-
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun afterTextChanged(s: Editable?) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s != null) {
                     if (s.isNotEmpty()) {
@@ -84,18 +81,11 @@ class SearchFragment : Fragment() {
                     }
                 }
             }
-
-            override fun afterTextChanged(s: Editable?) {
-
-            }
-
         }
         binding.searchQuery.addTextChangedListener(textWatcher)
         binding.clearCrossIc.setOnClickListener {
             binding.searchQuery.text.clear()
         }
-
-
         binding.searchRecycleView.addOnScrollListener(object : OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -111,7 +101,6 @@ class SearchFragment : Fragment() {
             }
 
         })
-
         viewModel.render().observe(viewLifecycleOwner) { state ->
             when (state) {
                 SearchScreenState.Default -> {}
@@ -255,6 +244,4 @@ class SearchFragment : Fragment() {
         val textView: TextView = view.findViewById(com.google.android.material.R.id.snackbar_text)
         textView.textAlignment = View.TEXT_ALIGNMENT_CENTER
     }
-
-
 }
