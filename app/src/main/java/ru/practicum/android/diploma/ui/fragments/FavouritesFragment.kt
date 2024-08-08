@@ -15,17 +15,20 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFavouritesBinding
 import ru.practicum.android.diploma.presentation.favourites.FavouritesDbState
 import ru.practicum.android.diploma.presentation.favourites.FavouritesFragmentViewModel
+import ru.practicum.android.diploma.util.adapter.VacancyAdapter
 
 class FavouritesFragment : Fragment() {
 
     private val viewModel: FavouritesFragmentViewModel by viewModel()
     private val adapter by lazy {
-        VacancyPagingAdapter() { vacancy ->
-            findNavController().navigate(
-                R.id.action_favoriteFragment_to_vacancyFragment,
-                bundleOf(VACANCY_KEY to vacancy.id)
-            )
-        }
+        VacancyAdapter(
+            onClick = { vacancy ->
+                findNavController().navigate(
+                    R.id.action_favoriteFragment_to_vacancyFragment,
+                    bundleOf(VACANCY_KEY to vacancy.id)
+                )
+            }
+        )
     }
     private val binding: FragmentFavouritesBinding by viewBinding(CreateMethod.INFLATE)
 
@@ -58,7 +61,7 @@ class FavouritesFragment : Fragment() {
                     binding.widgetNothing.isVisible = false
                     binding.widgetWrong.isVisible = false
                     binding.rwVacancy.isVisible = true
-                    adapter.data = state.list
+                    adapter.setVacancies(state.list)
                 }
             }
         }
