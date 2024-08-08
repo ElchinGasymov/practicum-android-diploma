@@ -220,9 +220,8 @@ class SearchFragment : Fragment() {
     private fun setOnItemClicked(vacancy: Vacancy) {
         val json = Gson().toJson(vacancy)
         findNavController().navigate(
-            R.id.action_searchFragment_to_vacancyFragment, bundleOf(
-                VACANCY_KEY to json
-            )
+            R.id.action_searchFragment_to_vacancyFragment,
+            bundleOf(VACANCY_KEY to json)
         )
     }
 
