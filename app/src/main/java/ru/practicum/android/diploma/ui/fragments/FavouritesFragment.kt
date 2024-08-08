@@ -19,14 +19,14 @@ import ru.practicum.android.diploma.presentation.Favourites.FavouritesFragmentVi
 class FavouritesFragment : Fragment() {
 
     private val viewModel: FavouritesFragmentViewModel by viewModel()
-    private val adapter by lazy {
-        VacancyPagingAdapter() { vacancy ->
-            findNavController().navigate(
-                R.id.action_favoriteFragment_to_vacancyFragment,
-                bundleOf(VACANCY_KEY to vacancy.id)
-            )
-        }
-    }
+//    private val adapter by lazy {
+//        VacancyPagingAdapter() { vacancy ->
+//            findNavController().navigate(
+//                R.id.action_favoriteFragment_to_vacancyFragment,
+//                bundleOf(VACANCY_KEY to vacancy.id)
+//            )
+//        }
+//    }
     private val binding: FragmentFavouritesBinding by viewBinding(CreateMethod.INFLATE)
 
     override fun onCreateView(
@@ -39,7 +39,7 @@ class FavouritesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.rwVacancy.adapter = adapter
+       // binding.rwVacancy.adapter = adapter
         viewModel.listVacancy.observe(viewLifecycleOwner) { state ->
             when (state.state) {
                 FavouritesDbState.ERROR -> {
@@ -58,7 +58,7 @@ class FavouritesFragment : Fragment() {
                     binding.widgetNothing.isVisible = false
                     binding.widgetWrong.isVisible = false
                     binding.rwVacancy.isVisible = true
-                    adapter.data = state.list
+              //      adapter.data = state.list
                 }
             }
         }
