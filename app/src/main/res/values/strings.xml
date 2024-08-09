@@ -39,29 +39,32 @@
     <string name="contacts_title">Контакты</string>
     <string name="contact_person">Контактное лицо</string>
     <string name="email_title">E-mail</string>
-    <string name="phone_title">Телефон</string>
-    <string name="no_information">Нет информации</string>
-    <string name="comment_title">Комментарий</string>
+    <string name="phone_title">Telephone</string>
 
 
-    <string name="vacancy_not_found_or_deleted">Вакансия не найдена или\n удалена</string>
-    <string name="server_error">Ошибка сервера</string>
-    <string name="favorite_list_empty">Список пуст</string>
-    <string name="there_no_such_vacancies">Таких вакансий нет</string>
-    <string name="next_page_server_error">Произошла ошибка</string>
-    <string name="next_page_internet_error">Проверьте подключение к интернету</string>
+    <string name="vacancy_not_found_or_deleted">Job vacancy not found or\n deleted</string>
+    <string name="server_error">Server error</string>
+    <string name="favorite_list_empty">The list is empty</string>
+    <string name="there_no_such_vacancies">There are no such vacancies</string>
+    <string name="next_page_server_error">An error has occurred</string>
+    <string name="next_page_internet_error">Check your internet connection</string>
 
-    <string name="title_team">Над приложением работали</string>
-    <string name="name1">Гасымов Элчин Эмильевич</string>
-    <string name="name2">Королев Егор Алексеевич</string>
-    <string name="name3">Молоданов Виталий Олегович</string>
-    <string name="name4">Шокин Андрей Александрович</string>
-    <string name="name5">Рябицкий Андрей Игоревич</string>
+    <string name="title_team">We were working on the application</string>
+    <string name="name1" translatable="false">Гасымов Элчин Эмильевич</string>
+    <string name="name2" translatable="false">Королев Егор Алексеевич</string>
+    <string name="name3" translatable="false">Молоданов Виталий Олегович</string>
+    <string name="name4" translatable="false">Шокин Андрей Александрович</string>
+    <string name="name5" translatable="false">Рябицкий Андрей Игоревич</string>
 
     <plurals name="vacancy_quantity">
         <item quantity="one">Найдена %d вакансия</item>
-        <item quantity="few">Найдено %d вакансии</item>
+        <item quantity="few">Найдено %d вакансий</item>
         <item quantity="many">Найдено %d вакансий</item>
+        <item quantity="zero">%d vacancies found</item>
+        <item quantity="one">%d vacancy found</item>
+        <item quantity="few">%d vacancies found</item>
+        <item quantity="many">%d vacancies found</item>
+        <item quantity="other">%d vacancies found</item>
     </plurals>
 
 
