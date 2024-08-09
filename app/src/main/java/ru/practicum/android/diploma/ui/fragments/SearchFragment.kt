@@ -1,14 +1,13 @@
 package ru.practicum.android.diploma.ui.fragments
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -28,8 +27,9 @@ import ru.practicum.android.diploma.ui.state.SearchScreenState
 import ru.practicum.android.diploma.util.DebounceExtension
 import ru.practicum.android.diploma.util.DebounceExtension.Companion.TWO_SECONDS
 import ru.practicum.android.diploma.util.ResponseData
-import ru.practicum.android.diploma.util.VACANCY_KEY
 import ru.practicum.android.diploma.util.adapter.VacancyAdapter
+
+const val VACANCY_KEY = "VACANCY_KEY"
 
 class SearchFragment : Fragment() {
 
@@ -63,30 +63,23 @@ class SearchFragment : Fragment() {
             binding.textUnderSearch.text = getCorrectAmountText(amountVacancies)
             binding.textUnderSearch.isVisible = true
         }
-
-        val textWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // override function for detekt
-            }
-            override fun afterTextChanged(s: Editable?) {
-                // override function for detekt
-            }
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s != null) {
-                    if (s.isNotEmpty()) {
-                        binding.searchIconLoupe.isVisible = false
-                        binding.clearCrossIc.isVisible = true
-                        binding.searchDefaultPlaceholder.isVisible = false
-                        searchDebounced.debounce()
-                    } else {
-                        viewModel.setRequest("")
-                        binding.searchIconLoupe.isVisible = true
-                        binding.clearCrossIc.isVisible = false
-                    }
-                }
-            }
+        binding.filterIc.setOnClickListener {
+            findNavController().navigate(R.id.action_searchFragment_to_filterFragment)
         }
-        binding.searchQuery.addTextChangedListener(textWatcher)
+
+        binding.searchQuery.doOnTextChanged { text, _, _, _ ->
+            if (!text.isNullOrEmpty()) {
+                binding.searchIconLoupe.isVisible = false
+                binding.clearCrossIc.isVisible = true
+                binding.searchDefaultPlaceholder.isVisible = false
+                searchDebounced.debounce()
+            } else {
+                viewModel.setRequest("")
+                binding.searchIconLoupe.isVisible = true
+                binding.clearCrossIc.isVisible = false
+            }
+
+        }
         binding.clearCrossIc.setOnClickListener {
             binding.searchQuery.text.clear()
         }
@@ -242,9 +235,9 @@ class SearchFragment : Fragment() {
             .setTextColor(requireContext().getColor(R.color.white))
             .setBackgroundTint(requireContext().getColor(R.color.red))
             .setTextMaxLines(2)
-        snackbar.show()
         val view = snackbar.view
         val textView: TextView = view.findViewById(com.google.android.material.R.id.snackbar_text)
         textView.textAlignment = View.TEXT_ALIGNMENT_CENTER
+        snackbar.show()
     }
 }
