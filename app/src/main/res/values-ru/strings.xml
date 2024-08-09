@@ -43,7 +43,7 @@
     <string name="phone_title">Телефон</string>
 
 
-    <string name="Vacancy_not_found_or_deleted">Вакансия не найдена или удалена</string>
+    <string name="vacancy_not_found_or_deleted">Вакансия не найдена или\n удалена</string>
     <string name="server_error">Ошибка сервера</string>
     <string name="favorite_list_empty">Список пуст</string>
     <string name="there_no_such_vacancies">Таких вакансий нет</string>

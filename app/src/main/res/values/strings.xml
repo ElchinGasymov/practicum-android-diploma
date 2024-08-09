@@ -42,7 +42,7 @@
     <string name="phone_title">Telephone</string>
 
 
-    <string name="Vacancy_not_found_or_deleted">Job vacancy not found or deleted</string>
+    <string name="vacancy_not_found_or_deleted">Job vacancy not found or\n deleted</string>
     <string name="server_error">Server error</string>
     <string name="favorite_list_empty">The list is empty</string>
     <string name="there_no_such_vacancies">There are no such vacancies</string>
