@@ -9,7 +9,7 @@ import ru.practicum.android.diploma.domain.models.VacancyDetails
 class ConverterIntoEntity {
     fun intoVacancyEntity(vacancy: VacancyDetails): VacancyEntity {
         return VacancyEntity(
-            id = vacancy.id.toInt(),
+            id = vacancy.id,
             idAreaModel = vacancy.area?.id,
             nameAreaModel = vacancy.area?.name,
             countryId = vacancy.area?.countryId,

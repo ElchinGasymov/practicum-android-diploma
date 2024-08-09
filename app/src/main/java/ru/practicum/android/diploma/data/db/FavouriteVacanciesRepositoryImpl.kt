@@ -4,17 +4,17 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.data.db.converters.ConverterIntoEntity
 import ru.practicum.android.diploma.data.db.converters.ConverterIntoModel
-import ru.practicum.android.diploma.domain.db.SelectedVacanciesRepository
+import ru.practicum.android.diploma.domain.db.FavouriteVacanciesRepository
 import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.domain.models.VacancyDetails
 
-class SelectedVacanciesRepositoryImpl(
+class FavouriteVacanciesRepositoryImpl(
     private val vacanciesDatabase: AppDatabase,
-    private val converterModel: ConverterIntoModel,
+    private val converterIntoModel: ConverterIntoModel,
     private val converterIntoEntity: ConverterIntoEntity
-) : SelectedVacanciesRepository {
-    override suspend fun getVacancy(vacancyId: Int): VacancyDetails {
-        return converterModel.intoVacancyDetail(
+) : FavouriteVacanciesRepository {
+    override suspend fun getVacancy(vacancyId: String): VacancyDetails {
+        return converterIntoModel.intoVacancyDetail(
             listPhone = vacanciesDatabase.phoneDao().getSelectedPhone(vacancyId),
             listKey = vacanciesDatabase.keySkillDao().getSelectedKeySkill(vacancyId),
             vacancyEntity = vacanciesDatabase.vacancyDao().findVacancy(vacancyId),
@@ -29,7 +29,7 @@ class SelectedVacanciesRepositoryImpl(
         vacanciesDatabase.keySkillDao().insertKeySkill(converterIntoEntity.intoKeySkillEntity(vacancy))
     }
 
-    override suspend fun deleteVacancy(vacancyId: Int) {
+    override suspend fun deleteVacancy(vacancyId: String) {
         vacanciesDatabase.vacancyDao().deleteVacancy(vacancyId)
         vacanciesDatabase.areaDao().deleteArea(vacancyId)
         vacanciesDatabase.phoneDao().deletePhone(vacancyId)
@@ -40,7 +40,7 @@ class SelectedVacanciesRepositoryImpl(
         val listVacancy = ArrayList<Vacancy>()
         vacanciesDatabase.vacancyDao().getSelectedVacancies().forEach { vacancyEntity ->
             listVacancy.add(
-                converterModel.intoVacancy(
+                converterIntoModel.intoVacancy(
                     vacancy = vacancyEntity,
                     areas = vacanciesDatabase.areaDao().getSelectedArea(vacancyEntity.id)
                 )
@@ -49,7 +49,7 @@ class SelectedVacanciesRepositoryImpl(
         emit(listVacancy)
     }
 
-    override suspend fun hasLike(vacancyId: Int): Boolean {
+    override suspend fun hasLike(vacancyId: String): Boolean {
         return vacanciesDatabase.vacancyDao().hasLike(vacancyId) > 0
     }
 }
