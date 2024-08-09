@@ -6,20 +6,28 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
-import ru.practicum.android.diploma.domain.db.SelectedVacanciesInteractor
+import ru.practicum.android.diploma.domain.db.FavouriteVacanciesInteractor
 import ru.practicum.android.diploma.domain.models.VacancyDetails
 
 class FavouritesFragmentViewModel(
-    private val selectedVacanciesInteractor: SelectedVacanciesInteractor
+    private val favouriteVacanciesInteractor: FavouriteVacanciesInteractor
 ) : ViewModel() {
 
     private val _listVacancy = MutableLiveData<FavouritesScreenState>()
     val listVacancy: LiveData<FavouritesScreenState>
         get() = _listVacancy
 
+    private val _favouriteVacancy = MutableLiveData<VacancyDetails>()
+    val favouriteVacancy: LiveData<VacancyDetails>
+        get() = _favouriteVacancy
+
+    private val _hasLikeAnswer = MutableLiveData<Boolean>()
+    val hasLikeAnswer: LiveData<Boolean>
+        get() = _hasLikeAnswer
+
     fun getVacancyList() {
         viewModelScope.launch {
-            selectedVacanciesInteractor.listVacancies()
+            favouriteVacanciesInteractor.listVacancies()
                 .catch { exception ->
                     _listVacancy.postValue(FavouritesScreenState(FavouritesDbState.ERROR, emptyList()))
                 }.collect { list ->
@@ -34,33 +42,25 @@ class FavouritesFragmentViewModel(
 
     fun addVacancy(vacancy: VacancyDetails) {
         viewModelScope.launch {
-            selectedVacanciesInteractor.addVacancy(vacancy)
+            favouriteVacanciesInteractor.addVacancy(vacancy)
         }
     }
 
-    fun deleteVacancy(vacancyId: Int) {
+    fun deleteVacancy(vacancyId: String) {
         viewModelScope.launch {
-            selectedVacanciesInteractor.deleteVacancy(vacancyId)
+            favouriteVacanciesInteractor.deleteVacancy(vacancyId)
         }
     }
 
-    private val _hasLikeAnswer = MutableLiveData<Boolean>()
-    val hasLikeAnswer: LiveData<Boolean>
-        get() = _hasLikeAnswer
-
-    fun hasLike(vacancyId: Int) {
+    fun hasLike(vacancyId: String) {
         viewModelScope.launch {
-            _hasLikeAnswer.postValue(selectedVacanciesInteractor.hasLike(vacancyId))
+            _hasLikeAnswer.postValue(favouriteVacanciesInteractor.hasLike(vacancyId))
         }
     }
 
-    private val _favouriteVacancy = MutableLiveData<VacancyDetails>()
-    val favouriteVacancy: LiveData<VacancyDetails>
-        get() = _favouriteVacancy
-
-    fun getVacancy(vacancyId: Int) {
+    fun getVacancy(vacancyId: String) {
         viewModelScope.launch {
-            _favouriteVacancy.postValue(selectedVacanciesInteractor.getVacancy(vacancyId))
+            _favouriteVacancy.postValue(favouriteVacanciesInteractor.getVacancy(vacancyId))
         }
     }
 }
