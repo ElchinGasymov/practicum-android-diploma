@@ -6,29 +6,445 @@
     android:layout_height="match_parent"
     tools:context=".ui.fragments.VacancyFragment">
 
-    <TextView
-        android:id="@+id/vacancy_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Экран вакансия"
-        android:textAlignment="center"
-        android:textSize="@dimen/text_size_22"
-        app:layout_constraintBottom_toTopOf="@+id/button_back_to_search_from_vacancy"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/vacancy_toolbar"
+        style="@style/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height_64dp"
+        app:buttonGravity="center_vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:navigationIcon="@drawable/ic_arrow_back_16px"
+        app:title="@string/vacancy_toolbar">
 
-    <Button
-        android:id="@+id/button_back_to_search_from_vacancy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dimen_8dp"
-        android:text="Вернуться к поиску"
+        <ImageView
+            android:id="@+id/vacancy_favorite_icon"
+            android:layout_width="@dimen/icon_height_48dp"
+            android:layout_height="@dimen/icon_width_48dp"
+            android:layout_gravity="end"
+            android:layout_marginVertical="@dimen/dimen_8dp"
+            android:layout_marginEnd="@dimen/dimen_8dp"
+            android:clickable="true"
+            android:scaleType="center"
+            android:src="@drawable/ic_favorites_off_23px" />
+
+        <ImageView
+            android:id="@+id/vacancy_share_icon"
+            android:layout_width="@dimen/icon_height_48dp"
+            android:layout_height="@dimen/icon_width_48dp"
+            android:layout_gravity="end"
+            android:layout_marginVertical="@dimen/dimen_8dp"
+            android:layout_marginEnd="@dimen/dimen_8dp"
+            android:clickable="true"
+            android:scaleType="center"
+            android:src="@drawable/ic_share_20px" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <ScrollView
+        android:id="@+id/vacancy_details_layout"
+        android:layout_width="@dimen/dimen_0dp"
+        android:layout_height="@dimen/dimen_0dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/vacancy_text" />
+        app:layout_constraintTop_toBottomOf="@id/vacancy_toolbar"
+        tools:visibility="visible">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/dimen_16dp">
+
+            <TextView
+                android:id="@+id/position_title"
+                style="@style/text_32_display_bold_700"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_24dp"
+                android:textColor="?attr/colorOnPrimary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Разработчик багов" />
+
+            <TextView
+                android:id="@+id/salary_title"
+                style="@style/text_22_display_medium_500"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_4dp"
+                android:textColor="?attr/colorOnPrimary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/position_title"
+                tools:text="от 3 🍔 " />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_view"
+                android:layout_width="@dimen/dimen_0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_16dp"
+                android:backgroundTint="@color/light_gray"
+                app:cardCornerRadius="@dimen/radius_shape_12"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/salary_title">
+
+                <ImageView
+                    android:id="@+id/item_logo"
+                    android:layout_width="@dimen/icon_width_48dp"
+                    android:layout_height="@dimen/icon_height_48dp"
+                    android:layout_marginVertical="@dimen/dimen_16dp"
+                    android:layout_marginStart="@dimen/dimen_16dp"
+                    android:backgroundTint="@color/gray"
+                    android:padding="@dimen/dimen_1dp"
+                    android:src="@drawable/ic_placeholder_30px" />
+
+                <TextView
+                    android:id="@+id/company_title"
+                    style="@style/text_22_display_medium_500"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dimen_72dp"
+                    android:layout_marginTop="@dimen/dimen_16dp"
+                    android:layout_marginEnd="@dimen/dimen_16dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/black"
+                    app:layout_constraintBaseline_toBaselineOf="@id/item_logo"
+                    tools:text="Bug-International" />
+
+                <TextView
+                    android:id="@+id/area"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dimen_72dp"
+                    android:layout_marginTop="@dimen/dimen_42dp"
+                    android:layout_marginEnd="@dimen/dimen_16dp"
+                    android:layout_marginBottom="@dimen/dimen_16dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/black"
+                    tools:text="FIXград" />
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/experience_title"
+                style="@style/text_16_display_medium_500"
+                android:layout_width="@dimen/dimen_0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_24dp"
+                android:text="@string/experience_title"
+                android:textColor="?attr/colorOnPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/card_view" />
+
+            <TextView
+                android:id="@+id/experience"
+                android:layout_width="@dimen/dimen_0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_4dp"
+                android:text="@string/no_information"
+                android:textColor="?attr/colorOnPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/experience_title"
+                tools:text="от 1 года" />
+
+            <TextView
+                android:id="@+id/schedule_employment"
+                android:layout_width="@dimen/dimen_0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_8dp"
+                android:text="@string/no_information"
+                android:textColor="?attr/colorOnPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/experience"
+                tools:text="Полная занятость" />
+
+            <TextView
+                android:id="@+id/description_title"
+                style="@style/text_22_display_medium_500"
+                android:layout_width="@dimen/dimen_0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_32dp"
+                android:text="@string/vacancy_description_title"
+                android:textColor="?attr/colorOnPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/schedule_employment" />
+
+            <TextView
+                android:id="@+id/duties_subtitle"
+                style="@style/text_16_regular_400"
+                android:layout_width="@dimen/dimen_0dp"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/dimen_16dp"
+                android:text="@string/duties"
+                android:textColor="?attr/colorOnPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/description_title" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/key_skills_group"
+                android:layout_width="@dimen/dimen_0dp"
+                android:layout_height="@dimen/dimen_0dp"
+                app:constraint_referenced_ids="core_skills_title, core_skills"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/core_skills_title"
+                style="@style/text_22_display_medium_500"
+                android:layout_width="@dimen/dimen_0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_24dp"
+                android:text="@string/core_skills_title"
+                android:textColor="?attr/colorOnPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/duties_subtitle" />
+
+            <TextView
+                android:id="@+id/core_skills"
+                style="@style/text_16_regular_400"
+                android:layout_width="@dimen/dimen_0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_16dp"
+                android:text="@string/no_information"
+                android:textColor="?attr/colorOnPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/core_skills_title" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/contacts_group"
+                android:layout_width="@dimen/dimen_0dp"
+                android:layout_height="@dimen/dimen_0dp"
+                app:constraint_referenced_ids="contact_title, contact_person_title, contact_name, email_title, contact_email, phone_title, contact_phone, comment_title, contact_comment"
+                tools:visibility="visible" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/contacts_person_group"
+                android:layout_width="@dimen/dimen_0dp"
+                android:layout_height="@dimen/dimen_0dp"
+                app:constraint_referenced_ids="contact_person_title, contact_name"
+                tools:visibility="visible" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/contacts_email_group"
+                android:layout_width="@dimen/dimen_0dp"
+                android:layout_height="@dimen/dimen_0dp"
+                app:constraint_referenced_ids="email_title, contact_email"
+                tools:visibility="visible" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/contacts_phone_group"
+                android:layout_width="@dimen/dimen_0dp"
+                android:layout_height="@dimen/dimen_0dp"
+                app:constraint_referenced_ids="phone_title, contact_phone"
+                tools:visibility="visible" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/contacts_comment_group"
+                android:layout_width="@dimen/dimen_0dp"
+                android:layout_height="@dimen/dimen_0dp"
+                app:constraint_referenced_ids="comment_title, contact_comment"
+                tools:visibility="visible" />
+
+
+            <TextView
+                android:id="@+id/contact_title"
+                style="@style/text_22_display_medium_500"
+                android:layout_width="@dimen/dimen_0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_24dp"
+                android:text="@string/contacts_title"
+                android:textColor="?attr/colorOnPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/core_skills" />
+
+            <TextView
+                android:id="@+id/contact_person_title"
+                style="@style/text_16_display_medium_500"
+                android:layout_width="@dimen/dimen_0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_16dp"
+                android:text="@string/contact_person"
+                android:textColor="?attr/colorOnPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/contact_title" />
+
+            <TextView
+                android:id="@+id/contact_name"
+                style="@style/text_16_regular_400"
+                android:layout_width="@dimen/dimen_0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_4dp"
+                android:text="@string/no_information"
+                android:textColor="?attr/colorOnPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/contact_person_title" />
+
+            <TextView
+                android:id="@+id/email_title"
+                style="@style/text_16_display_medium_500"
+                android:layout_width="@dimen/dimen_0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_16dp"
+                android:text="@string/email_title"
+                android:textColor="?attr/colorOnPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/contact_name" />
+
+            <TextView
+                android:id="@+id/contact_email"
+                style="@style/text_16_regular_400"
+                android:layout_width="@dimen/dimen_0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_4dp"
+                android:text="@string/no_information"
+                android:textColor="@color/blue"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/email_title" />
+
+            <TextView
+                android:id="@+id/phone_title"
+                style="@style/text_16_display_medium_500"
+                android:layout_width="@dimen/dimen_0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_16dp"
+                android:text="@string/phone_title"
+                android:textColor="?attr/colorOnPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/contact_email" />
+
+            <TextView
+                android:id="@+id/contact_phone"
+                style="@style/text_16_regular_400"
+                android:layout_width="@dimen/dimen_0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_4dp"
+                android:text="@string/no_information"
+                android:textColor="@color/blue"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/phone_title" />
+
+            <TextView
+                android:id="@+id/comment_title"
+                style="@style/text_16_display_medium_500"
+                android:layout_width="@dimen/dimen_0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_16dp"
+                android:text="@string/comment_title"
+                android:textColor="?attr/colorOnPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/contact_phone" />
+
+            <TextView
+                android:id="@+id/contact_comment"
+                style="@style/text_16_regular_400"
+                android:layout_width="@dimen/dimen_0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_4dp"
+                android:text="@string/no_information"
+                android:textColor="?attr/colorOnPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/comment_title" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/blue"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="gone" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/server_error_placeholder_group"
+        android:layout_width="@dimen/dimen_0dp"
+        android:layout_height="@dimen/dimen_0dp"
+        app:constraint_referenced_ids="server_error_placeholder, server_error_text"
+        tools:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/server_error_placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dimen_16dp"
+        android:foregroundGravity="center"
+        android:src="@drawable/server_error_placeholder_vacancy"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vacancy_toolbar" />
+
+    <TextView
+        android:id="@+id/server_error_text"
+        style="@style/text_22_display_medium_500"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/server_error"
+        android:textColor="?attr/colorOnPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/server_error_placeholder" />
+
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/not_found_placeholder_group"
+        android:layout_width="@dimen/dimen_0dp"
+        android:layout_height="@dimen/dimen_0dp"
+        app:constraint_referenced_ids="vacancy_not_found_placeholder, vacancy_not_found_text"
+        tools:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/vacancy_not_found_placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dimen_16dp"
+        android:foregroundGravity="center"
+        android:src="@drawable/not_found_placeholder_vacancy"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vacancy_toolbar" />
+
+    <TextView
+        android:id="@+id/vacancy_not_found_text"
+        style="@style/text_22_display_medium_500"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/vacancy_not_found_or_deleted"
+        android:textColor="?attr/colorOnPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vacancy_not_found_placeholder" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
