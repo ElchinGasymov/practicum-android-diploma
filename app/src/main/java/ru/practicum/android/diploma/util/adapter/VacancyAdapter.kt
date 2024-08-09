@@ -11,7 +11,7 @@ class VacancyAdapter(
     private val onClick: (Vacancy) -> Unit,
     private val onLongClick: (Vacancy) -> Unit = {}
 ) : RecyclerView.Adapter<VacancyViewHolder>() {
-    val vacancies = ArrayList<Vacancy>()
+    private val vacancies = ArrayList<Vacancy>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VacancyViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         return VacancyViewHolder(SearchItemViewBinding.inflate(layoutInflater, parent, false), onClick, onLongClick)
