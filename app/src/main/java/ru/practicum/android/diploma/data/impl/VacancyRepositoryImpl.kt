@@ -17,7 +17,7 @@ import ru.practicum.android.diploma.util.ResponseData
 
 class VacancyRepositoryImpl(private val networkClient: NetworkClient) : VacancyRepository {
 
-    override fun getVacancy(id: Int): Flow<ResponseData<VacancyDetails>> = flow {
+    override fun getVacancy(id: String): Flow<ResponseData<VacancyDetails>> = flow {
         val response = networkClient.doRequest(VacancyRequest(id = id))
         when (response.resultCode) {
             RESULT_CODE_SUCCESS -> {

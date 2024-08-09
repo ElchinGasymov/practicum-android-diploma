@@ -8,7 +8,7 @@ import ru.practicum.android.diploma.data.dto.VacancyResponse
 
 interface HHApiService {
     @GET("vacancies/{vacancy_id}")
-    suspend fun getVacancy(@Path("vacancy_id") id: Int): VacancyResponse
+    suspend fun getVacancy(@Path("vacancy_id") id: String): VacancyResponse
 
     @GET("vacancies")
     suspend fun searchVacancies(@QueryMap options: Map<String, String>): SearchResponse
