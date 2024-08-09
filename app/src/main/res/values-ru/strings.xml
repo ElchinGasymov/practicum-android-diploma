@@ -62,4 +62,6 @@
         <item quantity="few">Найдено %d вакансии</item>
         <item quantity="many">Найдено %d вакансий</item>
     </plurals>
+    <string name="no_information">Нет информации</string>
+    <string name="comment_title">Название коммента</string>
 </resources>
