@@ -15,6 +15,7 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFavouritesBinding
 import ru.practicum.android.diploma.presentation.favourites.FavouritesDbState
 import ru.practicum.android.diploma.presentation.favourites.FavouritesFragmentViewModel
+import ru.practicum.android.diploma.ui.fragments.SearchFragment.Companion.VACANCY_KEY
 import ru.practicum.android.diploma.util.adapter.VacancyAdapter
 
 class FavouritesFragment : Fragment() {
@@ -67,9 +68,5 @@ class FavouritesFragment : Fragment() {
         }
 
         viewModel.getVacancyList()
-    }
-
-    companion object {
-        private const val VACANCY_KEY = "vacancy"
     }
 }
