@@ -4,10 +4,10 @@ import org.koin.dsl.module
 import ru.practicum.android.diploma.data.db.SelectedVacanciesRepositoryImpl
 import ru.practicum.android.diploma.data.impl.SearchRepositoryImpl
 import ru.practicum.android.diploma.domain.api.SearchRepository
-import ru.practicum.android.diploma.domain.db.SelectedVacanciesRepository
+import ru.practicum.android.diploma.domain.db.FavouriteVacanciesRepository
 
 val repositoryModule = module {
-    single<SelectedVacanciesRepository> {
+    single<FavouriteVacanciesRepository> {
         SelectedVacanciesRepositoryImpl(
             vacanciesDatabase = get(),
             converterIntoModel = get(),

@@ -9,9 +9,10 @@ import ru.practicum.android.diploma.data.db.dao.VacancyDao
 import ru.practicum.android.diploma.data.db.entity.AreaEntity
 import ru.practicum.android.diploma.data.db.entity.KeySkillEntity
 import ru.practicum.android.diploma.data.db.entity.PhoneEntity
+import ru.practicum.android.diploma.data.db.entity.VacancyEntity
 
 @Database(
-    version = 1,
+    version = 2,
     entities = [
         VacancyEntity::class,
         PhoneEntity::class,
