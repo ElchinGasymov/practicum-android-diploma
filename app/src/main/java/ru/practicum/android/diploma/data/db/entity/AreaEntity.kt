@@ -6,8 +6,8 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "area_table")
 data class AreaEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
-    val idVacancy: Int,
+    val id: String,
+    val idVacancy: String,
     val idArea: String?,
     val name: String?,
     val countryId: String?,
