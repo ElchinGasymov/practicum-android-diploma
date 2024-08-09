@@ -44,7 +44,7 @@ class ConverterIntoEntity {
         vacancy.contacts?.phones?.forEach { phonesModel ->
             listPhone.add(
                 PhoneEntity(
-                    idVacancy = vacancy.id.toInt(),
+                    idVacancy = vacancy.id,
                     cityCode = phonesModel.cityCode,
                     comment = phonesModel.comment,
                     countryCode = phonesModel.countryCode,
@@ -61,7 +61,7 @@ class ConverterIntoEntity {
         vacancy.keySkills?.forEach { keySkillsModel ->
             listKey.add(
                 KeySkillEntity(
-                    idVacancy = vacancy.id.toInt(),
+                    idVacancy = vacancy.id,
                     name = keySkillsModel.name
                 )
             )
@@ -74,7 +74,7 @@ class ConverterIntoEntity {
         vacancy.area?.areas?.forEach { area ->
             listArea.add(
                 AreaEntity(
-                    idVacancy = vacancy.id.toInt(),
+                    idVacancy = vacancy.id,
                     idArea = area.id,
                     name = area.name,
                     countryId = area.countryId

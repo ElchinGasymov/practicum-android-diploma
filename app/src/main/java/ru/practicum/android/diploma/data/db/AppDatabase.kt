@@ -12,7 +12,7 @@ import ru.practicum.android.diploma.data.db.entity.PhoneEntity
 import ru.practicum.android.diploma.data.db.entity.VacancyEntity
 
 @Database(
-    version = 2,
+    version = 3,
     entities = [
         VacancyEntity::class,
         PhoneEntity::class,
