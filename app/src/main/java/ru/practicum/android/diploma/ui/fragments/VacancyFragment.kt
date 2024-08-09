@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
-import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
 
 class VacancyFragment : Fragment() {
@@ -27,7 +26,7 @@ class VacancyFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.buttonBackToSearchFromVacancy.setOnClickListener {
-            findNavController().navigate(R.id.mainFragment)
+            findNavController().navigateUp()
         }
     }
 
