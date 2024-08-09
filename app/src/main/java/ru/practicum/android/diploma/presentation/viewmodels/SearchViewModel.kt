@@ -12,7 +12,6 @@ import ru.practicum.android.diploma.ui.state.SearchScreenState
 import ru.practicum.android.diploma.util.Options
 import ru.practicum.android.diploma.util.ResponseData
 
-
 class SearchViewModel(
     private val searchInteractor: SearchInteractor
 ) : ViewModel() {
