@@ -10,7 +10,7 @@ val repositoryModule = module {
     single<SelectedVacanciesRepository> {
         SelectedVacanciesRepositoryImpl(
             vacanciesDatabase = get(),
-            converterModel = get(),
+            converterIntoModel = get(),
             converterIntoEntity = get()
         )
     }

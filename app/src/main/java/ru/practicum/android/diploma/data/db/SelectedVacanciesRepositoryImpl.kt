@@ -10,11 +10,11 @@ import ru.practicum.android.diploma.domain.models.VacancyDetails
 
 class SelectedVacanciesRepositoryImpl(
     private val vacanciesDatabase: AppDatabase,
-    private val converterModel: ConverterIntoModel,
+    private val converterIntoModel: ConverterIntoModel,
     private val converterIntoEntity: ConverterIntoEntity
 ) : SelectedVacanciesRepository {
     override suspend fun getVacancy(vacancyId: Int): VacancyDetails {
-        return converterModel.intoVacancyDetail(
+        return converterIntoModel.intoVacancyDetail(
             listPhone = vacanciesDatabase.phoneDao().getSelectedPhone(vacancyId),
             listKey = vacanciesDatabase.keySkillDao().getSelectedKeySkill(vacancyId),
             vacancyEntity = vacanciesDatabase.vacancyDao().findVacancy(vacancyId),
@@ -40,7 +40,7 @@ class SelectedVacanciesRepositoryImpl(
         val listVacancy = ArrayList<Vacancy>()
         vacanciesDatabase.vacancyDao().getSelectedVacancies().forEach { vacancyEntity ->
             listVacancy.add(
-                converterModel.intoVacancy(
+                converterIntoModel.intoVacancy(
                     vacancy = vacancyEntity,
                     areas = vacanciesDatabase.areaDao().getSelectedArea(vacancyEntity.id)
                 )
