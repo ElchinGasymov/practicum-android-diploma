@@ -12,11 +12,13 @@ import ru.practicum.android.diploma.ui.state.SearchScreenState
 import ru.practicum.android.diploma.util.Options
 import ru.practicum.android.diploma.util.ResponseData
 
-const val ITEMS_PER_PAGE = 20
 
 class SearchViewModel(
     private val searchInteractor: SearchInteractor
 ) : ViewModel() {
+    companion object {
+        const val ITEMS_PER_PAGE = 20
+    }
 
     private val screenStateLiveData = MutableLiveData<SearchScreenState>(SearchScreenState.Default)
     private var currentPage = 0

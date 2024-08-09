@@ -30,7 +30,6 @@ import ru.practicum.android.diploma.util.ResponseData
 import ru.practicum.android.diploma.util.adapter.VacancyAdapter
 
 
-
 class SearchFragment : Fragment() {
     companion object {
         const val VACANCY_KEY = "VACANCY_KEY"
