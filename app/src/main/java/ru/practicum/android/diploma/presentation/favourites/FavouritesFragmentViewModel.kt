@@ -29,7 +29,6 @@ class FavouritesFragmentViewModel(
         viewModelScope.launch {
             favouriteVacanciesInteractor.listVacancies()
                 .catch { exception ->
-
                     _listVacancy.postValue(FavouritesScreenState(FavouritesDbState.ERROR, emptyList()))
                 }.collect { list ->
                     if (list.isEmpty()) {
