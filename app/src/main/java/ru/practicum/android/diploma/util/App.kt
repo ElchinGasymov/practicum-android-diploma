@@ -8,8 +8,6 @@ import ru.practicum.android.diploma.di.interactorModule
 import ru.practicum.android.diploma.di.repositoryModule
 import ru.practicum.android.diploma.di.viewModelModule
 
-const val ITEMS_PER_PAGE = 20
-
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
