@@ -5,5 +5,5 @@ import ru.practicum.android.diploma.domain.models.VacancyDetails
 import ru.practicum.android.diploma.util.ResponseData
 
 interface DetailsInteractor {
-    fun getVacancy(id: Int): Flow<ResponseData<VacancyDetails>>
+    fun getVacancy(id: String): Flow<ResponseData<VacancyDetails>>
 }

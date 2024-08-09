@@ -7,7 +7,7 @@ import ru.practicum.android.diploma.domain.models.VacancyDetails
 import ru.practicum.android.diploma.util.ResponseData
 
 class DetailsInteractorImpl(private val repository: VacancyRepository) : DetailsInteractor {
-    override fun getVacancy(id: Int): Flow<ResponseData<VacancyDetails>> {
+    override fun getVacancy(id: String): Flow<ResponseData<VacancyDetails>> {
         return repository.getVacancy(id)
     }
 }
