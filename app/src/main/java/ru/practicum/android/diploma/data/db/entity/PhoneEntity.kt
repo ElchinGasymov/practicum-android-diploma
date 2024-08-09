@@ -6,8 +6,8 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "phone_table")
 data class PhoneEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
-    val idVacancy: Int,
+    val idDb: Int = 0,
+    val idVacancy: String,
     val cityCode: String?,
     val comment: String?,
     val countryCode: String?,
