@@ -131,7 +131,7 @@
 
             <TextView
                 android:id="@+id/experience_title"
-                style="@style/text_16_display_medium_500"
+                style="@style/text_16_medium_500"
                 android:layout_width="@dimen/dimen_0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dimen_24dp"
@@ -270,7 +270,7 @@
 
             <TextView
                 android:id="@+id/contact_person_title"
-                style="@style/text_16_display_medium_500"
+                style="@style/text_16_medium_500"
                 android:layout_width="@dimen/dimen_0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dimen_16dp"
@@ -294,7 +294,7 @@
 
             <TextView
                 android:id="@+id/email_title"
-                style="@style/text_16_display_medium_500"
+                style="@style/text_16_medium_500"
                 android:layout_width="@dimen/dimen_0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dimen_16dp"
@@ -318,7 +318,7 @@
 
             <TextView
                 android:id="@+id/phone_title"
-                style="@style/text_16_display_medium_500"
+                style="@style/text_16_medium_500"
                 android:layout_width="@dimen/dimen_0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dimen_16dp"
@@ -342,7 +342,7 @@
 
             <TextView
                 android:id="@+id/comment_title"
-                style="@style/text_16_display_medium_500"
+                style="@style/text_16_medium_500"
                 android:layout_width="@dimen/dimen_0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dimen_16dp"
