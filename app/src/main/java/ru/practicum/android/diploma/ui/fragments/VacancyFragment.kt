@@ -150,6 +150,11 @@ class VacancyFragment : Fragment() {
             }
             binding.coreSkills.text = keySkillsText
         }
+        setVacancyContacts(vacancyDetails)
+        binding.vacancyDetailsLayout.isVisible = true
+    }
+
+    private fun setVacancyContacts(vacancyDetails: VacancyDetails) {
         if (vacancyDetails.contacts?.name?.isNotEmpty() == true ||
             vacancyDetails.contacts?.phones?.isNotEmpty() == true
         ) {
@@ -167,8 +172,5 @@ class VacancyFragment : Fragment() {
         } else {
             binding.contactsGroup.isVisible = false
         }
-
-        binding.vacancyDetailsLayout.isVisible = true
     }
-
 }
