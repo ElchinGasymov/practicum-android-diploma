@@ -9,7 +9,6 @@ import ru.practicum.android.diploma.domain.db.FavouriteVacanciesRepository
 import ru.practicum.android.diploma.domain.api.VacancyRepository
 
 
-
 val repositoryModule = module {
     single<FavouriteVacanciesRepository> {
         FavouriteVacanciesRepositoryImpl(
@@ -23,6 +22,6 @@ val repositoryModule = module {
         SearchRepositoryImpl(networkClient = get())
     }
     single<VacancyRepository> {
-        VacancyRepositoryImpl(get())
+        VacancyRepositoryImpl(get(), get())
     }
 }

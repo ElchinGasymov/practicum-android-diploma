@@ -12,10 +12,14 @@ import ru.practicum.android.diploma.data.dto.VacancyResponse
 import ru.practicum.android.diploma.data.dto.toModel
 import ru.practicum.android.diploma.data.network.NetworkClient
 import ru.practicum.android.diploma.domain.api.VacancyRepository
+import ru.practicum.android.diploma.domain.db.FavouriteVacanciesRepository
 import ru.practicum.android.diploma.domain.models.VacancyDetails
 import ru.practicum.android.diploma.util.ResponseData
 
-class VacancyRepositoryImpl(private val networkClient: NetworkClient) : VacancyRepository {
+class VacancyRepositoryImpl(
+    private val networkClient: NetworkClient,
+    private val favouriteVacanciesRepository: FavouriteVacanciesRepository
+) : VacancyRepository {
 
     override fun getVacancy(id: String): Flow<ResponseData<VacancyDetails>> = flow {
         val response = networkClient.doRequest(VacancyRequest(id = id))
@@ -27,7 +31,20 @@ class VacancyRepositoryImpl(private val networkClient: NetworkClient) : VacancyR
                 }
             }
 
-            RESULT_CODE_NO_INTERNET -> emit(ResponseData.Error(ResponseData.ResponseError.NO_INTERNET))
+            RESULT_CODE_NO_INTERNET -> {
+                val vacancyDetails = try {
+                    favouriteVacanciesRepository.getVacancy(id)
+                } catch (e: Exception) {
+                    null
+                }
+
+                if (vacancyDetails != null) {
+                    emit(ResponseData.Data(vacancyDetails))
+                } else {
+                    emit(ResponseData.Error(ResponseData.ResponseError.NO_INTERNET))
+                }
+            }
+
             RESULT_CODE_NOT_FOUND -> emit(ResponseData.Error(ResponseData.ResponseError.NOT_FOUND))
             RESULT_CODE_BAD_REQUEST -> emit(ResponseData.Error(ResponseData.ResponseError.CLIENT_ERROR))
             RESULT_CODE_SERVER_ERROR -> emit(ResponseData.Error(ResponseData.ResponseError.SERVER_ERROR))
