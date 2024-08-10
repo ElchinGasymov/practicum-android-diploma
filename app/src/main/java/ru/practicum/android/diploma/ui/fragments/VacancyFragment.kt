@@ -23,7 +23,6 @@ import ru.practicum.android.diploma.ui.state.VacancyScreenState
 import ru.practicum.android.diploma.util.ResponseData
 import ru.practicum.android.diploma.util.adapter.converterSalaryToString
 
-
 class VacancyFragment : Fragment() {
 
     private val binding: FragmentVacancyBinding by viewBinding(CreateMethod.INFLATE)
@@ -96,7 +95,6 @@ class VacancyFragment : Fragment() {
         }
     }
 
-
     private fun startProgressBar() {
         binding.progressBar.isVisible = true
     }
@@ -110,7 +108,6 @@ class VacancyFragment : Fragment() {
             viewModel.onLikeClicked(vacancyDetails)
         }
     }
-
 
     private fun hidePlaceholders() {
         hideVacancy()
