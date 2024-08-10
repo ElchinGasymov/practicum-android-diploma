@@ -39,7 +39,12 @@ class VacancyRepositoryImpl(
                     emit(ResponseData.Error(ResponseData.ResponseError.NO_INTERNET))
                 }
             }
-            RESULT_CODE_NOT_FOUND -> emit(ResponseData.Error(ResponseData.ResponseError.NOT_FOUND))
+
+            RESULT_CODE_NOT_FOUND -> {
+                favouriteVacanciesRepository.deleteVacancy(id)
+                emit(ResponseData.Error(ResponseData.ResponseError.NOT_FOUND))
+            }
+
             RESULT_CODE_BAD_REQUEST -> emit(ResponseData.Error(ResponseData.ResponseError.CLIENT_ERROR))
             RESULT_CODE_SERVER_ERROR -> emit(ResponseData.Error(ResponseData.ResponseError.SERVER_ERROR))
             else -> emit(ResponseData.Error(ResponseData.ResponseError.SERVER_ERROR))
