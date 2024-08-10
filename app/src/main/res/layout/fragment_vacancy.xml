@@ -62,7 +62,7 @@
                 style="@style/text_32_display_bold_700"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dimen_24dp"
+                android:layout_marginTop="28dp"
                 android:textColor="?attr/colorOnPrimary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -193,6 +193,7 @@
                 android:id="@+id/key_skills_group"
                 android:layout_width="@dimen/dimen_0dp"
                 android:layout_height="@dimen/dimen_0dp"
+                android:visibility="gone"
                 app:constraint_referenced_ids="core_skills_title, core_skills"
                 tools:visibility="visible" />
 
@@ -224,36 +225,33 @@
                 android:id="@+id/contacts_group"
                 android:layout_width="@dimen/dimen_0dp"
                 android:layout_height="@dimen/dimen_0dp"
-                app:constraint_referenced_ids="contact_title, contact_person_title, contact_name, email_title, contact_email, phone_title, contact_phone, comment_title, contact_comment"
-                tools:visibility="visible" />
+                app:constraint_referenced_ids="contact_title, contact_person_title
+                , contact_name, email_title, contact_email, phone_title, contact_phone
+                , comment_title, contact_comment" />
 
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/contacts_person_group"
                 android:layout_width="@dimen/dimen_0dp"
                 android:layout_height="@dimen/dimen_0dp"
-                app:constraint_referenced_ids="contact_person_title, contact_name"
-                tools:visibility="visible" />
+                app:constraint_referenced_ids="contact_person_title, contact_name" />
 
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/contacts_email_group"
                 android:layout_width="@dimen/dimen_0dp"
                 android:layout_height="@dimen/dimen_0dp"
-                app:constraint_referenced_ids="email_title, contact_email"
-                tools:visibility="visible" />
+                app:constraint_referenced_ids="email_title, contact_email" />
 
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/contacts_phone_group"
                 android:layout_width="@dimen/dimen_0dp"
                 android:layout_height="@dimen/dimen_0dp"
-                app:constraint_referenced_ids="phone_title, contact_phone"
-                tools:visibility="visible" />
+                app:constraint_referenced_ids="phone_title, contact_phone" />
 
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/contacts_comment_group"
                 android:layout_width="@dimen/dimen_0dp"
                 android:layout_height="@dimen/dimen_0dp"
-                app:constraint_referenced_ids="comment_title, contact_comment"
-                tools:visibility="visible" />
+                app:constraint_referenced_ids="comment_title, contact_comment" />
 
 
             <TextView
@@ -386,6 +384,7 @@
         android:id="@+id/server_error_placeholder_group"
         android:layout_width="@dimen/dimen_0dp"
         android:layout_height="@dimen/dimen_0dp"
+        android:visibility="gone"
         app:constraint_referenced_ids="server_error_placeholder, server_error_text"
         tools:visibility="gone" />
 
@@ -418,6 +417,7 @@
         android:id="@+id/not_found_placeholder_group"
         android:layout_width="@dimen/dimen_0dp"
         android:layout_height="@dimen/dimen_0dp"
+        android:visibility="gone"
         app:constraint_referenced_ids="vacancy_not_found_placeholder, vacancy_not_found_text"
         tools:visibility="gone" />
 
@@ -444,6 +444,39 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/vacancy_not_found_placeholder" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/no_internet_placeholder_group"
+        android:layout_width="@dimen/dimen_0dp"
+        android:layout_height="@dimen/dimen_0dp"
+        android:visibility="gone"
+        app:constraint_referenced_ids="no_connection_placeholder, no_connection_text"
+        tools:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/no_connection_placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dimen_16dp"
+        android:src="@drawable/no_connection_sceleton_head"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/vacancy_toolbar"
+        tools:visibility="gone" />
+
+    <TextView
+        android:id="@+id/no_connection_text"
+        style="@style/text_22_display_medium_500"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/no_connection"
+        android:textColor="?attr/colorOnPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/no_connection_placeholder"
+        tools:text="Нет интернета" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

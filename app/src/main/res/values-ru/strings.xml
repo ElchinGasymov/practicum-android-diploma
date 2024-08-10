@@ -41,7 +41,8 @@
     <string name="contact_person">Контактное лицо</string>
     <string name="email_title">E-mail</string>
     <string name="phone_title">Телефон</string>
-
+    <string name="no_information">Нет информации</string>
+    <string name="comment_title">Телефон</string>
 
     <string name="vacancy_not_found_or_deleted">Вакансия не найдена или\n удалена</string>
     <string name="server_error">Ошибка сервера</string>
@@ -62,6 +63,5 @@
         <item quantity="few">Найдено %d вакансии</item>
         <item quantity="many">Найдено %d вакансий</item>
     </plurals>
-    <string name="no_information">Нет информации</string>
-    <string name="comment_title">Название коммента</string>
+
 </resources>
