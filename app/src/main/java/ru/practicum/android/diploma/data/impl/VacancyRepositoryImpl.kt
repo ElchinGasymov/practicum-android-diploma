@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.data.impl
 
+import android.database.SQLException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.data.dto.RESULT_CODE_BAD_REQUEST
@@ -33,9 +34,16 @@ class VacancyRepositoryImpl(
                     RESULT_CODE_NO_INTERNET -> {
                         val localVacancy = try {
                             favouriteVacanciesRepository.getVacancy(id)
-                        } catch (e: Exception) {
+                        } catch (e: NoSuchElementException) {
                             null
+                        } catch (e: SQLException) {
+                            emit(ResponseData.Error(ResponseData.ResponseError.SERVER_ERROR))
+                            return@flow
+                        } catch (e: Exception) {
+                            emit(ResponseData.Error(ResponseData.ResponseError.SERVER_ERROR))
+                            return@flow
                         }
+
                         if (localVacancy != null) {
                             emit(ResponseData.Data(localVacancy))
                         } else {
