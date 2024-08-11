@@ -11,12 +11,16 @@ import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.ui.state.SearchScreenState
 import ru.practicum.android.diploma.util.Options
 import ru.practicum.android.diploma.util.ResponseData
+import ru.practicum.android.diploma.util.debounce
 
 class SearchViewModel(
     private val searchInteractor: SearchInteractor
 ) : ViewModel() {
     companion object {
         const val ITEMS_PER_PAGE = 20
+
+        const val ONE_SECOND = 1000L
+        const val TWO_SECONDS = 2000L
     }
 
     private val screenStateLiveData = MutableLiveData<SearchScreenState>(SearchScreenState.Default)
@@ -25,6 +29,18 @@ class SearchViewModel(
     private var isNextPageLoading = false
     private var mainRequest = ""
     private var requestNextPage = ""
+    private val _vacancyIsClickable = MutableLiveData(true)
+    var vacancyIsClickable: LiveData<Boolean> = _vacancyIsClickable
+
+    private val vacancySearchDebounce =
+        debounce<String>(TWO_SECONDS, viewModelScope, true) { query ->
+            searchVacancies(query)
+        }
+
+    private val vacancyOnClickDebounce =
+        debounce<Boolean>(ONE_SECOND, viewModelScope, false) {
+            _vacancyIsClickable.value = it
+        }
 
     fun render(): LiveData<SearchScreenState> {
         return screenStateLiveData
@@ -42,7 +58,7 @@ class SearchViewModel(
         setScreenState(SearchScreenState.Default)
     }
 
-    fun searchVacancies(request: String) {
+    private fun searchVacancies(request: String) {
         if (request != this.mainRequest) {
             currentPage = 0
             setScreenState(SearchScreenState.Loading)
@@ -82,6 +98,16 @@ class SearchViewModel(
                 setScreenState(SearchScreenState.LoadingNextPage)
                 search(false)
             }
+        }
+    }
+
+    fun onVacancyClicked() {
+        vacancyOnClickDebounce(true)
+    }
+
+    fun searchDebounce(query: String) {
+        if (query.isNotEmpty()) {
+            vacancySearchDebounce(query)
         }
     }
 
