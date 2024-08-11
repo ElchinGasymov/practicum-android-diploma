@@ -34,4 +34,5 @@
     <dimen name="dividerThickness">1dp</dimen>
 
     <dimen name="radius_shape_12">12dp</dimen>
+    <dimen name="dimen_margin_28dp">28dp</dimen>
 </resources>
