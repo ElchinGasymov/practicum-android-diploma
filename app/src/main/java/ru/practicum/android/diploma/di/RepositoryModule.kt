@@ -23,6 +23,6 @@ val repositoryModule = module {
         SearchRepositoryImpl(networkClient = get())
     }
     single<VacancyRepository> {
-        VacancyRepositoryImpl(get())
+        VacancyRepositoryImpl(get(), get())
     }
 }
