@@ -211,9 +211,6 @@ class SearchFragment : Fragment() {
     private fun setOnItemClicked(vacancy: Vacancy) {
         if (viewModel.vacancyIsClickable.value == false) return
         viewModel.onVacancyClicked()
-
-        val json = Gson().toJson(vacancy)
-
         findNavController().navigate(
             R.id.action_searchFragment_to_vacancyFragment,
             bundleOf(VACANCY_KEY to vacancy.id)
