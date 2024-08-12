@@ -190,11 +190,14 @@ class VacancyFragment : Fragment() {
 
     private fun getShareText(vacancyDetails: VacancyDetails): String {
         val shareText = StringBuilder()
-        shareText.append(context?.getString(
-            R.string.share_vacancy,
-            vacancyDetails.name,
-            vacancyDetails.alternateUrl)
-            ?: "")
+        shareText.append(
+            context?.getString(
+                R.string.share_vacancy,
+                vacancyDetails.name,
+                vacancyDetails.alternateUrl
+            )
+                ?: ""
+        )
         return shareText.toString()
     }
 
