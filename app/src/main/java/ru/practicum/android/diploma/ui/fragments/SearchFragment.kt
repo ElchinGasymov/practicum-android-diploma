@@ -198,6 +198,7 @@ class SearchFragment : Fragment() {
     private fun showNothingFoundState() {
         stopProgressBar()
         binding.noVacancyToShow.isVisible = true
+        binding.noVacancyToShowText.isVisible = true
         binding.textUnderSearch.setText(R.string.there_no_such_vacancies)
         binding.textUnderSearch.isVisible = true
     }
