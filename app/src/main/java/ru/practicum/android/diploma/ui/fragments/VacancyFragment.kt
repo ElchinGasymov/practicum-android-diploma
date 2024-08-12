@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.ui.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Html
 import android.view.LayoutInflater
@@ -152,6 +153,11 @@ class VacancyFragment : Fragment() {
         }
         setVacancyContacts(vacancyDetails)
         binding.vacancyDetailsLayout.isVisible = true
+
+        binding.vacancyShareIcon.setOnClickListener {
+            onShareClick(vacancyDetails)
+        }
+
     }
 
     private fun setVacancyContacts(vacancyDetails: VacancyDetails) {
@@ -173,4 +179,23 @@ class VacancyFragment : Fragment() {
             binding.contactsGroup.isVisible = false
         }
     }
+
+    private fun onShareClick(vacancyDetails: VacancyDetails) {
+        Intent(Intent.ACTION_SEND).apply {
+            putExtra(Intent.EXTRA_TEXT, getShareText(vacancyDetails))
+            type = "text/html"
+            startActivity(Intent.createChooser(this, null))
+        }
+    }
+
+    private fun getShareText(vacancyDetails: VacancyDetails): String {
+        val shareText = StringBuilder()
+        shareText.append(context?.getString(
+            R.string.share_vacancy,
+            vacancyDetails.name,
+            vacancyDetails.alternateUrl)
+            ?: "")
+        return shareText.toString()
+    }
+
 }
