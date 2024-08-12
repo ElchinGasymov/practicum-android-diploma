@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.DetailsInteractor
-import ru.practicum.android.diploma.domain.db.FavouriteVacanciesInteractor
+import ru.practicum.android.diploma.domain.FavouriteVacanciesInteractor
 import ru.practicum.android.diploma.domain.models.VacancyDetails
 import ru.practicum.android.diploma.ui.state.FavouriteState
 import ru.practicum.android.diploma.ui.state.VacancyScreenState
