@@ -64,4 +64,6 @@
         <item quantity="many">Найдено %d вакансий</item>
     </plurals>
 
+    <string name="share_vacancy">Интересная вакансия \"%1$s\" %2$s</string>
+
 </resources>
