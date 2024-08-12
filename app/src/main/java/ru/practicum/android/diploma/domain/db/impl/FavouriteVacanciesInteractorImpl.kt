@@ -11,7 +11,7 @@ class FavouriteVacanciesInteractorImpl(
     private val favouriteVacanciesRepository: FavouriteVacanciesRepository
 ) : FavouriteVacanciesInteractor {
     override suspend fun getVacancy(vacancyId: String): VacancyDetails {
-        return favouriteVacanciesRepository.getVacancy(vacancyId)
+        return favouriteVacanciesRepository.getVacancy(vacancyId)!!
     }
 
     override suspend fun addVacancy(vacancy: VacancyDetails) {
