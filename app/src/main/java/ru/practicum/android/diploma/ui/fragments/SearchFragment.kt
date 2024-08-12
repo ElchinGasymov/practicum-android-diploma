@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
@@ -212,11 +211,9 @@ class SearchFragment : Fragment() {
     private fun setOnItemClicked(vacancy: Vacancy) {
         if (viewModel.vacancyIsClickable.value == false) return
         viewModel.onVacancyClicked()
-
-        val json = Gson().toJson(vacancy)
         findNavController().navigate(
             R.id.action_searchFragment_to_vacancyFragment,
-            bundleOf(VACANCY_KEY to json)
+            bundleOf(VACANCY_KEY to vacancy.id)
         )
     }
 

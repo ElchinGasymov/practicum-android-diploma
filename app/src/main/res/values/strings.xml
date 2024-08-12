@@ -41,7 +41,7 @@
     <string name="email_title">E-mail</string>
     <string name="phone_title">Telephone</string>
     <string name="no_information">No Information</string>
-    <string name="comment_title">Comment title</string>
+    <string name="comment_title">Telephone</string>
 
     <string name="vacancy_not_found_or_deleted">Job vacancy not found or\n deleted</string>
     <string name="server_error">Server error</string>
