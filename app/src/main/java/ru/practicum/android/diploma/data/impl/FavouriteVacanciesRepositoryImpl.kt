@@ -14,13 +14,18 @@ class FavouriteVacanciesRepositoryImpl(
     private val converterIntoModel: ConverterIntoModel,
     private val converterIntoEntity: ConverterIntoEntity
 ) : FavouriteVacanciesRepository {
-    override suspend fun getVacancy(vacancyId: String): VacancyDetails {
-        return converterIntoModel.intoVacancyDetail(
-            listPhone = vacanciesDatabase.phoneDao().getSelectedPhone(vacancyId),
-            listKey = vacanciesDatabase.keySkillDao().getSelectedKeySkill(vacancyId),
-            vacancyEntity = vacanciesDatabase.vacancyDao().findVacancy(vacancyId),
-            areaEntity = vacanciesDatabase.areaDao().getSelectedArea(vacancyId)
-        )
+    override suspend fun getVacancy(vacancyId: String): VacancyDetails? {
+        val vacancy = vacanciesDatabase.vacancyDao().findVacancy(vacancyId)
+        if (vacancy != null) {
+            return converterIntoModel.intoVacancyDetail(
+                listPhone = vacanciesDatabase.phoneDao().getSelectedPhone(vacancyId),
+                listKey = vacanciesDatabase.keySkillDao().getSelectedKeySkill(vacancyId),
+                vacancyEntity = vacancy,
+                areaEntity = vacanciesDatabase.areaDao().getSelectedArea(vacancyId)
+            )
+        } else {
+            return null
+        }
     }
 
     override suspend fun addVacancy(vacancy: VacancyDetails) {
