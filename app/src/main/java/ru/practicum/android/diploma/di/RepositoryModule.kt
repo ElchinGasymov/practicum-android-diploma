@@ -8,8 +8,6 @@ import ru.practicum.android.diploma.domain.api.SearchRepository
 import ru.practicum.android.diploma.domain.FavouriteVacanciesRepository
 import ru.practicum.android.diploma.domain.api.VacancyRepository
 
-
-
 val repositoryModule = module {
     single<FavouriteVacanciesRepository> {
         FavouriteVacanciesRepositoryImpl(
