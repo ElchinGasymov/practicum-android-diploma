@@ -40,6 +40,9 @@
             style="@style/search_edittext_style"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_56dp"
+            android:imeOptions="actionDone"
+            android:maxLines="1"
+            android:singleLine="true"
             android:layout_gravity="center"
             android:layout_marginHorizontal="@dimen/margin_size_16"
             android:background="@drawable/shape_search_edit_text"
@@ -84,13 +87,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_edit_frame"
         tools:text="Найдено вакансий"
+        android:elevation="@dimen/dimen_8dp"
         tools:visibility="visible" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_recycle_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dimen_16dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
         android:layout_weight="1"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constrainedHeight="true"
@@ -98,7 +102,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/search_edit_frame"
-        tools:itemCount="10"
+        tools:itemCount="2"
+        android:paddingTop="@dimen/dimen_20dp"
         tools:listitem="@layout/search_item_view" />
 
 
