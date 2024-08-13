@@ -5,7 +5,7 @@ import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.domain.models.VacancyDetails
 
 interface FavouriteVacanciesRepository {
-    suspend fun getVacancy(vacancyId: String): VacancyDetails
+    suspend fun getVacancy(vacancyId: String): VacancyDetails?
 
     suspend fun addVacancy(vacancy: VacancyDetails)
 
