@@ -147,7 +147,7 @@ class VacancyFragment : Fragment() {
             binding.keySkillsGroup.isVisible = true
             var keySkillsText = ""
             vacancyDetails.keySkills.forEach {
-                keySkillsText += StringBuilder().append(it.name).append("\n").toString()
+                keySkillsText += StringBuilder().append("• ").append(it.name).append("\n").toString()
             }
             binding.coreSkills.text = keySkillsText
         }
