@@ -37,14 +37,8 @@ class VacancyFragment : Fragment() {
         return binding.root
     }
 
-    override fun onDestroy() {
-        requireActivity().findViewById<View>(R.id.divider).isVisible = true
-        super.onDestroy()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        requireActivity().findViewById<View>(R.id.divider).isVisible = false
 
         arguments?.let {
             viewModel.getVacancyDetails(it.getString(VACANCY_KEY).toString())
