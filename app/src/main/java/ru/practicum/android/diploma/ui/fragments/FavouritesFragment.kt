@@ -13,8 +13,8 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFavouritesBinding
-import ru.practicum.android.diploma.presentation.favourites.FavouritesDbState
-import ru.practicum.android.diploma.presentation.favourites.FavouritesFragmentViewModel
+import ru.practicum.android.diploma.presentation.viewmodels.favourites.FavouritesDbState
+import ru.practicum.android.diploma.presentation.viewmodels.favourites.FavouritesFragmentViewModel
 import ru.practicum.android.diploma.ui.fragments.SearchFragment.Companion.VACANCY_KEY
 import ru.practicum.android.diploma.util.adapter.VacancyAdapter
 

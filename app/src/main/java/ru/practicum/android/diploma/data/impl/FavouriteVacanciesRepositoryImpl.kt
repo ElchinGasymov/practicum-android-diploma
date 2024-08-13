@@ -1,10 +1,11 @@
-package ru.practicum.android.diploma.data.db
+package ru.practicum.android.diploma.data.impl
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import ru.practicum.android.diploma.data.db.AppDatabase
 import ru.practicum.android.diploma.data.db.converters.ConverterIntoEntity
 import ru.practicum.android.diploma.data.db.converters.ConverterIntoModel
-import ru.practicum.android.diploma.domain.db.FavouriteVacanciesRepository
+import ru.practicum.android.diploma.domain.FavouriteVacanciesRepository
 import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.domain.models.VacancyDetails
 
