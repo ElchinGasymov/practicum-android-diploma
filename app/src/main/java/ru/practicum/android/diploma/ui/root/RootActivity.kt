@@ -31,7 +31,6 @@ class RootActivity : AppCompatActivity() {
                     binding.divider.isVisible = true
                 }
 
-
                 else -> {
                     binding.bottomNavigationView.isVisible = false
                     binding.divider.isVisible = false
