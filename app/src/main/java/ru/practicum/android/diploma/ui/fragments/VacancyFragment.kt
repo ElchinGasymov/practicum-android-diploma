@@ -37,8 +37,14 @@ class VacancyFragment : Fragment() {
         return binding.root
     }
 
+    override fun onDestroy() {
+        requireActivity().findViewById<View>(R.id.divider).isVisible = true
+        super.onDestroy()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        requireActivity().findViewById<View>(R.id.divider).isVisible = false
 
         arguments?.let {
             viewModel.getVacancyDetails(it.getString(VACANCY_KEY).toString())
@@ -147,7 +153,7 @@ class VacancyFragment : Fragment() {
             binding.keySkillsGroup.isVisible = true
             var keySkillsText = ""
             vacancyDetails.keySkills.forEach {
-                keySkillsText += StringBuilder().append(it.name).append("\n").toString()
+                keySkillsText += StringBuilder().append("• ").append(it.name).append("\n").toString()
             }
             binding.coreSkills.text = keySkillsText
         }
