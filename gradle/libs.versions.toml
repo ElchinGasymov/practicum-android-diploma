@@ -20,6 +20,7 @@ targetSdk = "33"
 # Detekt
 detekt = "1.23.3"
 detektTwitterComposeRules ="0.0.26"
+pagingRuntimeKtx = "3.3.1"
 
 [libraries]
 
@@ -34,7 +35,6 @@ koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinAndr
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
 navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
 navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigationFragmentKtx" }
-retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit-v290 = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofitVersion" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomCompiler" }
@@ -62,5 +62,6 @@ unitTests-junit = "junit:junit:4.13.2"
 # UI tests
 uiTests-junitExt = "androidx.test.ext:junit:1.2.1"
 uiTests-espressoCore = "androidx.test.espresso:espresso-core:3.6.1"
+paging-runtime-ktx = { group = "androidx.paging", name = "paging-runtime-ktx", version.ref = "pagingRuntimeKtx" }
 
 [bundles]

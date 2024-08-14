@@ -17,6 +17,7 @@
     <dimen name="dimen_12dp">12dp</dimen>
     <dimen name="dimen_16dp">16dp</dimen>
     <dimen name="dimen_20dp">20dp</dimen>
+    <dimen name="dimen_24dp">24dp</dimen>
     <dimen name="dimen_32dp">32dp</dimen>
     <dimen name="dimen_38dp">38dp</dimen>
     <dimen name="dimen_42dp">42dp</dimen>
@@ -31,4 +32,7 @@
     <dimen name="margin_size_35">35dp</dimen>
 
     <dimen name="dividerThickness">1dp</dimen>
+
+    <dimen name="radius_shape_12">12dp</dimen>
+    <dimen name="dimen_margin_28dp">28dp</dimen>
 </resources>
