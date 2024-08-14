@@ -97,6 +97,8 @@
         <item name="placeholderTextAppearance">@style/text_16_regular_400</item>
         <item name="placeholderTextColor">?attr/colorOnSecondaryFixed</item>
         <item name="expandedHintEnabled">false</item>
+        <item name="android:clickable">true</item>
+        <item name="android:enabled">false</item>
     </style>
 
     <style name="salary_text_input_style">
