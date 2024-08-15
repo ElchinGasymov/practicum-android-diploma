@@ -47,8 +47,9 @@ class FilterFragment : Fragment() {
         binding.filterSettingsTitle.setNavigationOnClickListener { findNavController().navigateUp() }
         binding.applyButton.setOnClickListener { saveAndNavigateUp() }
         binding.clearButton.setOnClickListener { clearFilters() }
-        binding.salaryFlagCheckbox.setOnCheckedChangeListener { _, isChecked -> // Пример использования Checkbox, если включена опция показа только с зарплатой
-            //viewModel.setSalaryOnlyCheckbox(isChecked)
+        // Пример использования Checkbox, если включена опция показа только с зарплатой
+        binding.salaryFlagCheckbox.setOnCheckedChangeListener { _, isChecked -> //
+            // viewModel.setSalaryOnlyCheckbox(isChecked)
         }
         // Переход на экран выбора индустрии
         binding.industryTextInput.setOnClickListener {
@@ -67,9 +68,14 @@ class FilterFragment : Fragment() {
     }
 
     private fun initTextBehaviour() {
-        // Настройка поведения поля salary при изменении текста
+        initSalaryTextBehaviour()
+        initWorkAndIndustryTextBehaviour()
+    }
+
+    // Настройка поведения поля salary при изменении текста
+    private fun initSalaryTextBehaviour() {
         binding.salary.doOnTextChanged { text, _, _, _ ->
-            //viewModel.setExpectedSalary(text?.toString())
+            // viewModel.setExpectedSalary(text?.toString())
             if (text.isNullOrEmpty()) {
                 // Если текст пустой, убираем иконку и меняем цвет hint
                 binding.salaryLayout.endIconMode = TextInputLayout.END_ICON_NONE
@@ -96,8 +102,11 @@ class FilterFragment : Fragment() {
                 }
             }
         }
+    }
 
-        // ОНастройка поведения поля workTextInput при изменении текста
+    // Настройка поведения полей workTextInput и industryTextInput при изменении текста
+    private fun initWorkAndIndustryTextBehaviour() {
+        // Настройка поведения поля workTextInput при изменении текста
         binding.workTextInput.doOnTextChanged { text, _, _, _ ->
             if (text.isNullOrEmpty()) {
                 updateWorkPlaceHintAppearance(false) // Если текст пустой, hint остаётся стандартным
@@ -119,7 +128,7 @@ class FilterFragment : Fragment() {
     // Метод для обновления внешнего вида hint в зависимости от заполненности поля
     private fun updateWorkPlaceHintAppearance(isFilled: Boolean) {
         val isDarkTheme =
-            (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
+            resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
 
         if (isFilled) {
             // Если поле заполнено, уменьшаем hint и меняем его цвет в зависимости от темы
@@ -138,7 +147,7 @@ class FilterFragment : Fragment() {
     // Метод для обновления внешнего вида hint в зависимости от заполненности поля industryTextInput
     private fun updateIndustryHintAppearance(isFilled: Boolean) {
         val isDarkTheme =
-            (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
+            resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
 
         if (isFilled) {
             // Если поле заполнено, уменьшаем hint и меняем его цвет в зависимости от темы
@@ -210,24 +219,20 @@ class FilterFragment : Fragment() {
     }
 
     // Переход на экран выбора места работы
-    fun navigateToPlaceOfWork() {
-
-    }
+    fun navigateToPlaceOfWork() {}
 
     // Переход на экран выбора индустрии
-    fun navigateToIndustry() {
-
-    }
+    fun navigateToIndustry() {}
 
     // Очистка выбранного места работы
     private fun clearWorkPlace() {
-        //viewModel.setNewRegionCountry(region = null, country = null, countryId = null, regionId = null)
+        // viewModel.setNewRegionCountry(region = null, country = null, countryId = null, regionId = null)
         clearArguments(1)
     }
 
     // Очистка выбранной индустрии
     private fun clearIndustry() {
-        //viewModel.setNewIndustry(null)
+        // viewModel.setNewIndustry(null)
         clearArguments(0)
     }
 
@@ -237,7 +242,7 @@ class FilterFragment : Fragment() {
             clearButton.isVisible = false
             salary.setText("")
         }
-        //viewModel.clearPrefs()
+        // viewModel.clearPrefs()
     }
 
     // Метод для скрытия элементов интерфейса в зависимости от типа
@@ -260,16 +265,16 @@ class FilterFragment : Fragment() {
 
     // Метод для сохранения настроек фильтров
     private fun savePrefs() {
-        //viewModel.savePrefs()
+        // viewModel.savePrefs()
     }
 
     // Метод для отображения кнопки "Применить"
-    private fun applyButtonVisibility(visible: Boolean) {
-        binding.applyButton.isVisible = visible
-    }
+    // private fun applyButtonVisibility(visible: Boolean) {
+    //     binding.applyButton.isVisible = visible
+    // }
 
     // Метод для отображения кнопки "Сбросить"
-    private fun clearButtonVisibility(visible: Boolean) {
-        binding.clearButton.isVisible = visible
-    }
+    // private fun clearButtonVisibility(visible: Boolean) {
+    //     binding.clearButton.isVisible = visible
+    // }
 }

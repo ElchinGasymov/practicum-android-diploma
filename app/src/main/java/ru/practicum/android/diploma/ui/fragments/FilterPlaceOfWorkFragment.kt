@@ -84,7 +84,7 @@ class FilterPlaceOfWorkFragment : Fragment() {
     // Метод для обновления внешнего вида hint в зависимости от заполненности поля
     private fun updateCountryHintAppearance(isFilled: Boolean) {
         val isDarkTheme =
-            (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
+            resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
 
         if (isFilled) {
             // Если поле заполнено, уменьшаем hint и меняем его цвет в зависимости от темы
@@ -103,7 +103,7 @@ class FilterPlaceOfWorkFragment : Fragment() {
     // Метод для обновления внешнего вида hint в зависимости от заполненности поля regionTextInput
     private fun updateRegionHintAppearance(isFilled: Boolean) {
         val isDarkTheme =
-            (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
+            resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
 
         if (isFilled) {
             // Если поле заполнено, уменьшаем hint и меняем его цвет в зависимости от темы
@@ -120,46 +120,46 @@ class FilterPlaceOfWorkFragment : Fragment() {
     }
 
     // Установка состояния страны
-    private fun setCountry(country: String?) {
-        binding.countryLayout.apply {
-            setEndIconDrawable(
-                if (country.isNullOrEmpty()) {
-                    setEndIconOnClickListener {
-                        navigateToCountrySelection()
-                    }
-                    R.drawable.ic_arrow_forward_14px
-                } else {
-                    setEndIconOnClickListener {
-                        clearCountry()
-                    }
-                    R.drawable.ic_close_cross_14px
-                }
-            )
-        }
-        val countryText = country ?: ""
-        binding.countryTextInput.setText(countryText)
-    }
+    // private fun setCountry(country: String?) {
+    //     binding.countryLayout.apply {
+    //         setEndIconDrawable(
+    //             if (country.isNullOrEmpty()) {
+    //                 setEndIconOnClickListener {
+    //                     navigateToCountrySelection()
+    //                 }
+    //                 R.drawable.ic_arrow_forward_14px
+    //             } else {
+    //                 setEndIconOnClickListener {
+    //                     clearCountry()
+    //                 }
+    //                 R.drawable.ic_close_cross_14px
+    //             }
+    //         )
+    //     }
+    //     val countryText = country ?: ""
+    //     binding.countryTextInput.setText(countryText)
+    // }
 
     // Установка состояния региона
-    private fun setRegion(region: String?) {
-        binding.regionLayout.apply {
-            setEndIconDrawable(
-                if (region.isNullOrEmpty()) {
-                    setEndIconOnClickListener {
-                        navigateToRegionSelection()
-                    }
-                    R.drawable.ic_arrow_forward_14px
-                } else {
-                    setEndIconOnClickListener {
-                        clearRegion()
-                    }
-                    R.drawable.ic_close_cross_14px
-                }
-            )
-        }
-        val regionText = region ?: ""
-        binding.regionTextInput.setText(regionText)
-    }
+    // private fun setRegion(region: String?) {
+    //     binding.regionLayout.apply {
+    //         setEndIconDrawable(
+    //             if (region.isNullOrEmpty()) {
+    //                 setEndIconOnClickListener {
+    //                     navigateToRegionSelection()
+    //                 }
+    //                 R.drawable.ic_arrow_forward_14px
+    //             } else {
+    //                 setEndIconOnClickListener {
+    //                     clearRegion()
+    //                 }
+    //                 R.drawable.ic_close_cross_14px
+    //             }
+    //         )
+    //     }
+    //     val regionText = region ?: ""
+    //     binding.regionTextInput.setText(regionText)
+    // }
 
     // Переход на экран выбора страны
     fun navigateToCountrySelection() {
@@ -173,13 +173,13 @@ class FilterPlaceOfWorkFragment : Fragment() {
 
     // Очистка выбранной страны
     private fun clearCountry() {
-        //viewModel.setNewCountry(null)
+        // viewModel.setNewCountry(null)
         clearArguments(0)
     }
 
     // Очистка выбранного региона
     private fun clearRegion() {
-        //viewModel.setNewRegion(null)
+        // viewModel.setNewRegion(null)
         clearArguments(1)
     }
 
@@ -206,9 +206,9 @@ class FilterPlaceOfWorkFragment : Fragment() {
         // Логика сохранения данных, например, через ViewModel
     }
 
-    // Метод для отображения кнопки "Применить"
-    private fun applyButtonVisibility(visible: Boolean) {
-        binding.applyButton.isVisible = visible
-    }
+    //Метод для отображения кнопки "Применить"
+    //private fun applyButtonVisibility(visible: Boolean) {
+    //    binding.applyButton.isVisible = visible
+    //}
 
 }
