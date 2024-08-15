@@ -206,9 +206,9 @@ class FilterPlaceOfWorkFragment : Fragment() {
         // Логика сохранения данных, например, через ViewModel
     }
 
-    //Метод для отображения кнопки "Применить"
-    //private fun applyButtonVisibility(visible: Boolean) {
-    //    binding.applyButton.isVisible = visible
-    //}
+    // Метод для отображения кнопки "Применить"
+    // private fun applyButtonVisibility(visible: Boolean) {
+    //     binding.applyButton.isVisible = visible
+    // }
 
 }

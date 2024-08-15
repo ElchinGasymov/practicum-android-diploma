@@ -219,10 +219,14 @@ class FilterFragment : Fragment() {
     }
 
     // Переход на экран выбора места работы
-    fun navigateToPlaceOfWork() {}
+    fun navigateToPlaceOfWork() {
+        // Логика навигации к экрану выбора места работы
+    }
 
     // Переход на экран выбора индустрии
-    fun navigateToIndustry() {}
+    fun navigateToIndustry() {
+        // Логика навигации к экрану выбора отрасли
+    }
 
     // Очистка выбранного места работы
     private fun clearWorkPlace() {
