@@ -173,50 +173,50 @@ class FilterFragment : Fragment() {
     }
 
     // Установка состояния местоположения (страны и региона)
-    private fun setStateLocation(country: String?, region: String?) {
-        binding.workPlaceLayout.apply {
-            setEndIconDrawable(
-                if (country.isNullOrEmpty()) {
-                    setEndIconOnClickListener {
-                        navigateToPlaceOfWork()
-                    }
-                    R.drawable.ic_arrow_forward_14px
-                } else {
-                    setEndIconOnClickListener {
-                        clearWorkPlace()
-                    }
-                    R.drawable.ic_close_cross_14px
-                }
-            )
-        }
-        // Формирование текста для отображения страны и региона
-        val place = country + if (!region.isNullOrEmpty()) {
-            getString(R.string.separator) + " $region"
-        } else {
-            ""
-        }
-        binding.workTextInput.setText(place)
-    }
+    // private fun setStateLocation(country: String?, region: String?) {
+    //     binding.workPlaceLayout.apply {
+    //         setEndIconDrawable(
+    //             if (country.isNullOrEmpty()) {
+    //                 setEndIconOnClickListener {
+    //                     navigateToPlaceOfWork()
+    //                 }
+    //                 R.drawable.ic_arrow_forward_14px
+    //             } else {
+    //                 setEndIconOnClickListener {
+    //                     clearWorkPlace()
+    //                 }
+    //                 R.drawable.ic_close_cross_14px
+    //             }
+    //         )
+    //     }
+    //     // Формирование текста для отображения страны и региона
+    //     val place = country + if (!region.isNullOrEmpty()) {
+    //         getString(R.string.separator) + " $region"
+    //     } else {
+    //         ""
+    //     }
+    //     binding.workTextInput.setText(place)
+    // }
 
     // Установка состояния индустрии (напр. выбранная индустрия)
-    private fun setStateIndustry(industry: String?) {
-        binding.industryLayout.apply {
-            setEndIconDrawable(
-                if (industry.isNullOrEmpty()) {
-                    setOnClickListener {
-                        navigateToIndustry()
-                    }
-                    R.drawable.ic_arrow_forward_14px
-                } else {
-                    setEndIconOnClickListener {
-                        clearIndustry()
-                    }
-                    R.drawable.ic_close_cross_14px
-                }
-            )
-        }
-        binding.industryTextInput.setText(industry)
-    }
+    // private fun setStateIndustry(industry: String?) {
+    //     binding.industryLayout.apply {
+    //         setEndIconDrawable(
+    //             if (industry.isNullOrEmpty()) {
+    //                 setOnClickListener {
+    //                     navigateToIndustry()
+    //                 }
+    //                 R.drawable.ic_arrow_forward_14px
+    //             } else {
+    //                 setEndIconOnClickListener {
+    //                     clearIndustry()
+    //                 }
+    //                 R.drawable.ic_close_cross_14px
+    //             }
+    //         )
+    //     }
+    //     binding.industryTextInput.setText(industry)
+    // }
 
     // Переход на экран выбора места работы
     fun navigateToPlaceOfWork() {
@@ -229,16 +229,16 @@ class FilterFragment : Fragment() {
     }
 
     // Очистка выбранного места работы
-    private fun clearWorkPlace() {
-        // viewModel.setNewRegionCountry(region = null, country = null, countryId = null, regionId = null)
-        clearArguments(1)
-    }
+    // private fun clearWorkPlace() {
+    //     // viewModel.setNewRegionCountry(region = null, country = null, countryId = null, regionId = null)
+    //     clearArguments(1)
+    // }
 
     // Очистка выбранной индустрии
-    private fun clearIndustry() {
-        // viewModel.setNewIndustry(null)
-        clearArguments(0)
-    }
+    // private fun clearIndustry() {
+    //     // viewModel.setNewIndustry(null)
+    //     clearArguments(0)
+    // }
 
     // Очистка всех фильтров
     private fun clearFilters() {
@@ -250,12 +250,12 @@ class FilterFragment : Fragment() {
     }
 
     // Метод для скрытия элементов интерфейса в зависимости от типа
-    private fun clearArguments(type: Int) {
-        when (type) {
-            0 -> binding.industryTextInput.isVisible = false
-            1 -> binding.workTextInput.isVisible = false
-        }
-    }
+    // private fun clearArguments(type: Int) {
+    //     when (type) {
+    //         0 -> binding.industryTextInput.isVisible = false
+    //         1 -> binding.workTextInput.isVisible = false
+    //     }
+    // }
 
     // Сохранение настроек и возврат к предыдущему экрану
     private fun saveAndNavigateUp() {

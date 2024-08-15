@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -172,24 +171,24 @@ class FilterPlaceOfWorkFragment : Fragment() {
     }
 
     // Очистка выбранной страны
-    private fun clearCountry() {
-        // viewModel.setNewCountry(null)
-        clearArguments(0)
-    }
+    // private fun clearCountry() {
+    //     // viewModel.setNewCountry(null)
+    //     clearArguments(0)
+    // }
 
     // Очистка выбранного региона
-    private fun clearRegion() {
-        // viewModel.setNewRegion(null)
-        clearArguments(1)
-    }
+    // private fun clearRegion() {
+    //     // viewModel.setNewRegion(null)
+    //     clearArguments(1)
+    // }
 
     // Метод для скрытия элементов интерфейса в зависимости от типа
-    private fun clearArguments(type: Int) {
-        when (type) {
-            0 -> binding.countryTextInput.isVisible = false
-            1 -> binding.regionTextInput.isVisible = false
-        }
-    }
+    // private fun clearArguments(type: Int) {
+    //     when (type) {
+    //         0 -> binding.countryTextInput.isVisible = false
+    //         1 -> binding.regionTextInput.isVisible = false
+    //     }
+    // }
 
     // Сохранение настроек и возврат к предыдущему экрану
     private fun saveAndNavigateUp() {
