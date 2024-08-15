@@ -94,12 +94,12 @@
         app:layout_constraintTop_toBottomOf="@id/search_edit_frame" />
 
     <androidx.constraintlayout.widget.Group
-        android:id="@+id/placeholder_group"
+        android:id="@+id/no_list_placeholder_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
         app:constraint_referenced_ids="no_list_placeholder,no_list_placeholder_text"
-        tools:visibility="visible" />
+        tools:visibility="gone" />
 
     <ImageView
         android:id="@+id/no_list_placeholder"
@@ -122,5 +122,35 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/no_list_placeholder" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/no_region_placeholder_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="no_region_placeholder,no_region_placeholder_text"
+        tools:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/no_region_placeholder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/no_vacancy_list"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/no_region_placeholder_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/no_region"
+        android:textAppearance="@style/text_22_display_medium_500"
+        android:textColor="?attr/colorOnPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/no_region_placeholder" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
