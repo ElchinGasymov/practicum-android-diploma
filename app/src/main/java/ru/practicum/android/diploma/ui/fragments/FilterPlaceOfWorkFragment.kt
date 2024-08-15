@@ -38,6 +38,7 @@ class FilterPlaceOfWorkFragment : Fragment() {
             findNavController().navigateUp()
         }
 
+        initButtonListeners()
         initTextBehaviour()
     }
 
