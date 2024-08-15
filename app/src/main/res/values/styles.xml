@@ -65,7 +65,6 @@
 
     <style name="filter_screen_input_layout_style">
         <item name="boxStrokeWidth">@dimen/dimen_0dp</item>
-        <!--<item name="android:textColorHint">@color/gray</item>-->
         <item name="android:textAppearance">@style/text_16_regular_400</item>
         <item name="android:textAlignment">viewStart</item>
         <item name="android:inputType">textCapSentences</item>

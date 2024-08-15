@@ -45,7 +45,7 @@ class FilterFragment : Fragment() {
 
     private fun initButtonListeners() {
         binding.filterSettingsTitle.setNavigationOnClickListener { findNavController().navigateUp() }
-        binding.applyButton.setOnClickListener { saveAndNavigateUp() }
+        binding.applyButton.setOnClickListener { saveFilters() }
         binding.clearButton.setOnClickListener { clearFilters() }
         // Пример использования Checkbox, если включена опция показа только с зарплатой
         binding.salaryFlagCheckbox.setOnCheckedChangeListener { _, isChecked -> //
@@ -258,7 +258,7 @@ class FilterFragment : Fragment() {
     // }
 
     // Сохранение настроек и возврат к предыдущему экрану
-    private fun saveAndNavigateUp() {
+    private fun saveFilters() {
         lifecycleScope.launch(Dispatchers.IO) {
             savePrefs()
             withContext(Dispatchers.Main) {

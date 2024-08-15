@@ -43,7 +43,7 @@ class FilterPlaceOfWorkFragment : Fragment() {
 
     private fun initButtonListeners() {
         binding.selectPlaceOfWorkToolbar.setNavigationOnClickListener { findNavController().navigateUp() }
-        binding.applyButton.setOnClickListener { saveAndNavigateUp() }
+        binding.applyButton.setOnClickListener { saveFilters() }
         // Переход на экран выбора страны
         binding.countryTextInput.setOnClickListener {
             navigateToCountrySelection()
@@ -191,7 +191,7 @@ class FilterPlaceOfWorkFragment : Fragment() {
     // }
 
     // Сохранение настроек и возврат к предыдущему экрану
-    private fun saveAndNavigateUp() {
+    private fun saveFilters() {
         lifecycleScope.launch(Dispatchers.IO) {
             savePrefs()
             withContext(Dispatchers.Main) {
