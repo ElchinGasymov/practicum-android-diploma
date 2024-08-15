@@ -65,5 +65,6 @@
     </plurals>
 
     <string name="share_vacancy">Интересная вакансия \"%1$s\" %2$s</string>
+    <string name="separator">, </string>
 
 </resources>
