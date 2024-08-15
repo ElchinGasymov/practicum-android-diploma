@@ -6,7 +6,7 @@
     tools:context=".ui.fragments.FilterFragment">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/choose_place_of_work_toolbar"
+        android:id="@+id/filter_settings_title"
         style="@style/toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height_64dp"
@@ -33,7 +33,7 @@
         app:hintTextAppearance="@style/text_16_regular_400"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/choose_place_of_work_toolbar">
+        app:layout_constraintTop_toBottomOf="@id/filter_settings_title">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/work_text_input"

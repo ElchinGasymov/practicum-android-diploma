@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/industry_filter_toolbar"
+        android:id="@+id/select_region_toolbar"
         style="@style/toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height_64dp"
@@ -15,7 +15,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_arrow_back_16px"
-        app:title="@string/industry_header" />
+        app:title="@string/choosing_region" />
 
     <FrameLayout
         android:id="@+id/search_edit_frame"
@@ -23,10 +23,10 @@
         android:layout_height="@dimen/dimen_72dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/industry_filter_toolbar">
+        app:layout_constraintTop_toBottomOf="@id/select_region_toolbar">
 
         <EditText
-            android:id="@+id/industry_search_query"
+            android:id="@+id/region_search_query"
             style="@style/search_edittext_style"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_56dp"
@@ -37,7 +37,7 @@
             android:layout_gravity="center"
             android:layout_marginHorizontal="@dimen/margin_size_16"
             android:background="@drawable/shape_search_edit_text"
-            android:hint="@string/industry_edit_text_hint"
+            android:hint="@string/enter_region"
             android:paddingStart="@dimen/dimen_16dp"
             android:paddingTop="@dimen/dimen_4dp"
             android:paddingEnd="@dimen/dimen_8dp"
@@ -68,8 +68,21 @@
             tools:visibility="gone" />
     </FrameLayout>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/region_recycle_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_size_8"
+        android:visibility="visible"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/search_edit_frame"
+        tools:listitem="@layout/area_item_view"
+        tools:visibility="visible" />
+
     <ProgressBar
-        android:id="@+id/industry_center_progress_bar"
+        android:id="@+id/region_center_progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -79,19 +92,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/search_edit_frame" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/industry_recycle_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_size_8"
-        android:visibility="visible"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/search_edit_frame"
-        tools:listitem="@layout/industry_item_view"
-        tools:visibility="visible" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/placeholder_group"
@@ -123,21 +123,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/no_list_placeholder" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/apply_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/dimen_16dp"
-        android:layout_marginBottom="@dimen/margin_size_24"
-        android:background="@drawable/shape_text_under_search"
-        android:backgroundTint="@color/blue"
-        android:text="@string/choose"
-        android:textAppearance="@style/text_16_regular_400"
-        android:textColor="?attr/colorOnSurface"
-        android:visibility="gone"
-        app:cornerRadius="@dimen/dimen_12dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>
