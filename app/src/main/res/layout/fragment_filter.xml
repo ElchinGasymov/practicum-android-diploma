@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -6,30 +5,164 @@
     android:layout_height="match_parent"
     tools:context=".ui.fragments.FilterFragment">
 
-    <TextView
-        android:id="@+id/filter_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Экран Настройки фильтрации"
-        android:textAlignment="center"
-        android:textSize="@dimen/text_size_22"
-        app:layout_constraintBottom_toTopOf="@+id/button_back_to_search_from_filter"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/filter_settings_title"
+        style="@style/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height_64dp"
+        app:buttonGravity="center_vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:navigationIcon="@drawable/ic_arrow_back_16px"
+        app:title="@string/filter_settings_title" />
 
-    <Button
-        android:id="@+id/button_back_to_search_from_filter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dimen_8dp"
-        android:text="Вернуться к поиску"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/work_place_layout"
+        style="@style/filter_screen_input_layout_style"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_60dp"
+        android:layout_marginTop="@dimen/dimen_16dp"
+        android:hint="@string/work_place"
+        android:textColorHint="@color/gray"
+        app:buttonGravity="center_vertical"
+        app:endIconDrawable="@drawable/ic_arrow_forward_14px"
+        app:endIconMode="custom"
+        app:endIconTint="?attr/colorOnPrimary"
+        app:hintEnabled="true"
+        app:hintTextAppearance="@style/text_16_regular_400"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/filter_text" />
+        app:layout_constraintTop_toBottomOf="@id/filter_settings_title">
 
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/work_text_input"
+            style="@style/filter_screen_text_input_style"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="?attr/colorPrimary"
+            android:focusable="false" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/industry_layout"
+        style="@style/filter_screen_input_layout_style"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_60dp"
+        android:layout_marginTop="@dimen/dimen_16dp"
+        android:hint="@string/industry"
+        android:textColorHint="@color/gray"
+        app:buttonGravity="center_vertical"
+        app:endIconDrawable="@drawable/ic_arrow_forward_14px"
+        app:endIconMode="custom"
+        app:endIconTint="?attr/colorOnPrimary"
+        app:hintEnabled="true"
+        app:hintTextAppearance="@style/text_16_regular_400"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/work_place_layout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/industry_text_input"
+            style="@style/filter_screen_text_input_style"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="?attr/colorPrimary"
+            android:focusable="false" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/salary_layout"
+        style="@style/salary_layout_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_size_16"
+        android:layout_marginTop="@dimen/margin_size_24"
+        android:focusableInTouchMode="true"
+        android:hint="@string/salary_expectation"
+        app:cursorColor="@color/blue"
+        app:endIconDrawable="@drawable/ic_close_cross_14px"
+        app:endIconMode="none"
+        app:endIconTint="@color/black"
+        app:hintTextColor="@color/blue"
+        app:layout_constraintBottom_toTopOf="@id/show_salary_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/industry_layout"
+        app:placeholderText="Введите сумму">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/salary"
+            style="@style/salary_text_input_style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_search_edit_text"
+            android:focusableInTouchMode="true"
+            android:textCursorDrawable="@drawable/ic_edit_text_cursor" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/show_salary_text"
+        style="@style/text_16_regular_400"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_60dp"
+        android:layout_marginTop="@dimen/margin_size_24"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="@dimen/margin_size_16"
+        android:text="@string/show_only_with_salary"
+        android:textColor="?attr/colorOnPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/salary_layout" />
+
+    <CheckBox
+        android:id="@+id/salary_flag_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|end"
+        android:layout_marginHorizontal="4dp"
+        android:buttonTint="@color/blue"
+        app:layout_constraintBottom_toBottomOf="@id/show_salary_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/show_salary_text" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/apply_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dimen_16dp"
+        android:layout_marginBottom="@dimen/dimen_8dp"
+        android:background="@drawable/shape_text_under_search"
+        android:backgroundTint="@color/blue"
+        android:text="@string/apply"
+        android:textAppearance="@style/text_16_medium_500"
+        android:textColor="?attr/colorOnSurface"
+        app:cornerRadius="@dimen/dimen_12dp"
+        app:layout_constraintBottom_toTopOf="@id/clear_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/clear_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dimen_16dp"
+        android:layout_marginBottom="@dimen/margin_size_24"
+        android:background="?attr/colorPrimary"
+        android:stateListAnimator="@null"
+        android:text="@string/cancel"
+        android:textAppearance="@style/text_16_medium_500"
+        android:textColor="@color/red"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/btn_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:constraint_referenced_ids="apply_button,clear_button" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 

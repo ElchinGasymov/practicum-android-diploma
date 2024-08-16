@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/select_place_of_work_toolbar"
+        style="@style/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height_64dp"
+        app:buttonGravity="center_vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_arrow_back_16px"
+        app:title="@string/choose_place_of_work" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/country_layout"
+        style="@style/filter_screen_input_layout_style"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_60dp"
+        android:layout_marginTop="@dimen/dimen_16dp"
+        android:hint="@string/country"
+        android:textColorHint="@color/gray"
+        app:buttonGravity="center_vertical"
+        app:endIconDrawable="@drawable/ic_arrow_forward_14px"
+        app:endIconMode="custom"
+        app:endIconTint="?attr/colorOnPrimary"
+        app:hintEnabled="true"
+        app:hintTextAppearance="@style/text_16_regular_400"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/select_place_of_work_toolbar">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/country_text_input"
+            style="@style/filter_screen_text_input_style"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="?attr/colorPrimary"
+            android:focusable="false" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/region_layout"
+        style="@style/filter_screen_input_layout_style"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_60dp"
+        android:layout_marginTop="@dimen/dimen_12dp"
+        android:hint="@string/region"
+        android:textColorHint="@color/gray"
+        app:buttonGravity="center_vertical"
+        app:endIconDrawable="@drawable/ic_arrow_forward_14px"
+        app:endIconMode="custom"
+        app:endIconTint="?attr/colorOnPrimary"
+        app:hintEnabled="true"
+        app:hintTextAppearance="@style/text_16_regular_400"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/country_layout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/region_text_input"
+            style="@style/filter_screen_text_input_style"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="?attr/colorPrimary"
+            android:focusable="false" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/apply_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dimen_16dp"
+        android:layout_marginBottom="@dimen/dimen_24dp"
+        android:background="@drawable/shape_text_under_search"
+        android:backgroundTint="@color/blue"
+        android:text="@string/choose"
+        android:textAppearance="@style/text_16_medium_500"
+        android:textColor="?attr/colorOnSurface"
+        app:cornerRadius="@dimen/dimen_12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
