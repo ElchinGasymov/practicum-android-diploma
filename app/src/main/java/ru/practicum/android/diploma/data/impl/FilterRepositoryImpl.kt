@@ -4,13 +4,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.data.dto.CountriesRequest
 import ru.practicum.android.diploma.data.dto.CountriesResponse
+import ru.practicum.android.diploma.data.dto.IndustriesRequest
+import ru.practicum.android.diploma.data.dto.IndustriesResponse
 import ru.practicum.android.diploma.data.dto.RESULT_CODE_BAD_REQUEST
 import ru.practicum.android.diploma.data.dto.RESULT_CODE_NO_INTERNET
 import ru.practicum.android.diploma.data.dto.RegionsRequest
 import ru.practicum.android.diploma.data.dto.RegionsResponse
 import ru.practicum.android.diploma.data.dto.Response
-import ru.practicum.android.diploma.data.dto.IndustriesRequest
-import ru.practicum.android.diploma.data.dto.IndustriesResponse
 import ru.practicum.android.diploma.data.dto.toAllRegions
 import ru.practicum.android.diploma.data.dto.toCountryList
 import ru.practicum.android.diploma.data.dto.toRegionList
@@ -18,8 +18,8 @@ import ru.practicum.android.diploma.data.dto.toSectorList
 import ru.practicum.android.diploma.data.network.NetworkClient
 import ru.practicum.android.diploma.domain.api.FilterRepository
 import ru.practicum.android.diploma.domain.models.Country
-import ru.practicum.android.diploma.domain.models.Region
 import ru.practicum.android.diploma.domain.models.Industries
+import ru.practicum.android.diploma.domain.models.Region
 import ru.practicum.android.diploma.util.ResponseData
 
 class FilterRepositoryImpl(

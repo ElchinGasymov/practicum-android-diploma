@@ -7,8 +7,8 @@ import retrofit2.http.QueryMap
 import ru.practicum.android.diploma.data.dto.SearchResponse
 import ru.practicum.android.diploma.data.dto.VacancyResponse
 import ru.practicum.android.diploma.data.dto.components.CountryDto
-import ru.practicum.android.diploma.data.dto.components.RegionListDto
 import ru.practicum.android.diploma.data.dto.components.IndustriesDto
+import ru.practicum.android.diploma.data.dto.components.RegionListDto
 
 interface HHApiService {
     @GET("vacancies/{vacancy_id}")
