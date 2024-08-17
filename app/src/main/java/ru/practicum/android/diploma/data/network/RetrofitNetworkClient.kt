@@ -75,7 +75,7 @@ class RetrofitNetworkClient(
     }
 
     private suspend fun getRegionsResponse(dto: RegionsRequest): Response {
-        val networkResponse = hhApiService.getRegions(dto.id)
+        val networkResponse = hhApiService.getRegions(dto.id.toString())
         if (networkResponse.isSuccessful) {
             val regionsResponse = RegionsResponse(networkResponse.body()?.areas ?: emptyList())
             regionsResponse.resultCode = networkResponse.code()
