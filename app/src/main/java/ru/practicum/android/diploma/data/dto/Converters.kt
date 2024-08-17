@@ -12,10 +12,10 @@ import ru.practicum.android.diploma.data.dto.components.Phone
 import ru.practicum.android.diploma.data.dto.components.RegionDto
 import ru.practicum.android.diploma.data.dto.components.Salary
 import ru.practicum.android.diploma.data.dto.components.Schedule
-import ru.practicum.android.diploma.data.dto.components.SectorDto
+import ru.practicum.android.diploma.data.dto.components.IndustriesDto
 import ru.practicum.android.diploma.domain.models.Country
 import ru.practicum.android.diploma.domain.models.Region
-import ru.practicum.android.diploma.domain.models.Sector
+import ru.practicum.android.diploma.domain.models.Industries
 import ru.practicum.android.diploma.domain.models.VacanciesResponse
 import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.domain.models.VacancyDetails
@@ -97,9 +97,9 @@ fun RegionDto.toModel(): Region {
     )
 }
 
-fun List<SectorDto>.toSectorList(): List<Sector> {
+fun List<IndustriesDto>.toSectorList(): List<Industries> {
     return this.map {
-        Sector(
+        Industries(
             id = it.id,
             name = it.name,
             isChecked = false

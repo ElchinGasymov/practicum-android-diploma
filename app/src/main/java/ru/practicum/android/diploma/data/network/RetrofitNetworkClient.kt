@@ -14,8 +14,8 @@ import ru.practicum.android.diploma.data.dto.RegionsRequest
 import ru.practicum.android.diploma.data.dto.RegionsResponse
 import ru.practicum.android.diploma.data.dto.Response
 import ru.practicum.android.diploma.data.dto.SearchRequest
-import ru.practicum.android.diploma.data.dto.SectorsRequest
-import ru.practicum.android.diploma.data.dto.SectorsResponse
+import ru.practicum.android.diploma.data.dto.IndustriesRequest
+import ru.practicum.android.diploma.data.dto.IndustriesResponse
 import ru.practicum.android.diploma.data.dto.VacancyRequest
 import ru.practicum.android.diploma.util.isInternetAvailable
 
@@ -40,7 +40,7 @@ class RetrofitNetworkClient(
                     is SearchRequest -> getSearchResponse(dto)
                     is CountriesRequest -> getCountriesResponse()
                     is RegionsRequest -> getRegionsResponse(dto)
-                    is SectorsRequest -> getSectorsResponse()
+                    is IndustriesRequest -> getIndustriesResponse()
                     else -> {
                         Response().apply { resultCode = RESULT_CODE_BAD_REQUEST }
                     }
@@ -85,10 +85,10 @@ class RetrofitNetworkClient(
         }
     }
 
-    private suspend fun getSectorsResponse(): Response {
-        val networkResponse = hhApiService.getSectors()
+    private suspend fun getIndustriesResponse(): Response {
+        val networkResponse = hhApiService.getIndustries()
         if (networkResponse.isSuccessful) {
-            val sectorsResponse = SectorsResponse(networkResponse.body() ?: emptyList())
+            val sectorsResponse = IndustriesResponse(networkResponse.body() ?: emptyList())
             sectorsResponse.resultCode = networkResponse.code()
             return sectorsResponse
         } else {

@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.domain.models
 
-data class Country(
+data class Industries(
     val id: String,
-    val name: String
+    val name: String,
+    val isChecked: Boolean
 )

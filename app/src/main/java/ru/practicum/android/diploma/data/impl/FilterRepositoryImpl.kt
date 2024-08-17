@@ -9,8 +9,8 @@ import ru.practicum.android.diploma.data.dto.RESULT_CODE_NO_INTERNET
 import ru.practicum.android.diploma.data.dto.RegionsRequest
 import ru.practicum.android.diploma.data.dto.RegionsResponse
 import ru.practicum.android.diploma.data.dto.Response
-import ru.practicum.android.diploma.data.dto.SectorsRequest
-import ru.practicum.android.diploma.data.dto.SectorsResponse
+import ru.practicum.android.diploma.data.dto.IndustriesRequest
+import ru.practicum.android.diploma.data.dto.IndustriesResponse
 import ru.practicum.android.diploma.data.dto.toAllRegions
 import ru.practicum.android.diploma.data.dto.toCountryList
 import ru.practicum.android.diploma.data.dto.toRegionList
@@ -19,7 +19,7 @@ import ru.practicum.android.diploma.data.network.NetworkClient
 import ru.practicum.android.diploma.domain.api.FilterRepository
 import ru.practicum.android.diploma.domain.models.Country
 import ru.practicum.android.diploma.domain.models.Region
-import ru.practicum.android.diploma.domain.models.Sector
+import ru.practicum.android.diploma.domain.models.Industries
 import ru.practicum.android.diploma.util.ResponseData
 
 class FilterRepositoryImpl(
@@ -59,9 +59,9 @@ class FilterRepositoryImpl(
         }
     }
 
-    override fun getSectors(): Flow<ResponseData<List<Sector>>> = flow {
-        when (val response = networkClient.doRequest(SectorsRequest)) {
-            is SectorsResponse -> {
+    override fun getIndustries(): Flow<ResponseData<List<Industries>>> = flow {
+        when (val response = networkClient.doRequest(IndustriesRequest)) {
+            is IndustriesResponse -> {
                 val sectorsList = response.sectors.toSectorList()
                 emit(ResponseData.Data(sectorsList))
             }

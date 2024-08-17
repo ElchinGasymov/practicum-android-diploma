@@ -1,6 +1,6 @@
 package ru.practicum.android.diploma.data.dto.components
 
-data class SectorDto(
-    val id: Int,
+data class IndustriesDto(
+    val id: String,
     val name: String
 )

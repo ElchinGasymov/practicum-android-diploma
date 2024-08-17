@@ -8,7 +8,7 @@ import ru.practicum.android.diploma.data.dto.SearchResponse
 import ru.practicum.android.diploma.data.dto.VacancyResponse
 import ru.practicum.android.diploma.data.dto.components.CountryDto
 import ru.practicum.android.diploma.data.dto.components.RegionListDto
-import ru.practicum.android.diploma.data.dto.components.SectorDto
+import ru.practicum.android.diploma.data.dto.components.IndustriesDto
 
 interface HHApiService {
     @GET("vacancies/{vacancy_id}")
@@ -24,5 +24,5 @@ interface HHApiService {
     suspend fun getRegions(@Path("area_id") areaId: Int): Response<RegionListDto>
 
     @GET("industries")
-    suspend fun getSectors(): Response<List<SectorDto>>
+    suspend fun getIndustries(): Response<List<IndustriesDto>>
 }
