@@ -21,7 +21,7 @@ interface HHApiService {
     suspend fun getCountries(): Response<List<CountryDto>>
 
     @GET("areas/{area_id}")
-    suspend fun getRegions(@Path("area_id") areaId: Int): Response<RegionListDto>
+    suspend fun getRegions(@Path("area_id") areaId: String): Response<RegionListDto>
 
     @GET("industries")
     suspend fun getIndustries(): Response<List<IndustriesDto>>
