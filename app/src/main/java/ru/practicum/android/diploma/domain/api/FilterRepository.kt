@@ -8,7 +8,7 @@ import ru.practicum.android.diploma.util.ResponseData
 
 interface FilterRepository {
     fun getCountries(): Flow<ResponseData<List<Country>>>
-    fun getRegions(id: Int): Flow<ResponseData<List<Region>>>
+    fun getRegions(id: String): Flow<ResponseData<List<Region>>>
     fun getAllRegions(): Flow<ResponseData<List<Region>>>
     fun getIndustries(): Flow<ResponseData<List<Industries>>>
 }

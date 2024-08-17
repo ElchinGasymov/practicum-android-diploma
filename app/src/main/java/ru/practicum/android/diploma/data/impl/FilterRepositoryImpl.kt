@@ -37,7 +37,7 @@ class FilterRepositoryImpl(
         }
     }
 
-    override fun getRegions(id: Int): Flow<ResponseData<List<Region>>> = flow {
+    override fun getRegions(id: String): Flow<ResponseData<List<Region>>> = flow {
         when (val response = networkClient.doRequest(RegionsRequest(id))) {
             is RegionsResponse -> {
                 val regionsList = response.regions.toRegionList()
