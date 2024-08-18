@@ -13,10 +13,9 @@ import ru.practicum.android.diploma.domain.models.SaveFiltersSharedPrefs
 class SharedPrefsRepositoryImpl(
     private val sharedPrefs: SharedPrefsStorageFilters
 ) : SharedPrefsRepository {
-    override suspend fun read(): SaveFiltersSharedPrefs? {
-        val filters = sharedPrefs.read()
-        if (filters != null) {
-            return SaveFiltersSharedPrefs(
+    override suspend fun read() =
+        sharedPrefs.read()?.let { filters ->
+            SaveFiltersSharedPrefs(
                 industries = filters.industries?.let {
                     Industries(
                         id = it.id,
@@ -29,10 +28,7 @@ class SharedPrefsRepositoryImpl(
                 currency = filters.currency,
                 noCurrency = filters.noCurrency
             )
-        } else {
-            return null
         }
-    }
 
     override suspend fun write(filters: SaveFiltersSharedPrefs) {
         sharedPrefs.write(
