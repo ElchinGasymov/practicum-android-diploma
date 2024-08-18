@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.data.shared_prefs_storage
+package ru.practicum.android.diploma.data.sharedPrefs
 
 import android.content.SharedPreferences
 import com.google.gson.Gson

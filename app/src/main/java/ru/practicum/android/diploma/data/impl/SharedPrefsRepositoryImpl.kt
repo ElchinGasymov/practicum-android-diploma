@@ -5,7 +5,7 @@ import ru.practicum.android.diploma.data.dto.components.CountryDto
 import ru.practicum.android.diploma.data.dto.components.IndustriesDto
 import ru.practicum.android.diploma.data.dto.components.RegionDto
 import ru.practicum.android.diploma.data.dto.toModel
-import ru.practicum.android.diploma.data.shared_prefs_storage.SharedPrefsStorageFilters
+import ru.practicum.android.diploma.data.sharedPrefs.SharedPrefsStorageFilters
 import ru.practicum.android.diploma.domain.SharedPrefsRepository
 import ru.practicum.android.diploma.domain.models.Industries
 import ru.practicum.android.diploma.domain.models.SaveFiltersSharedPrefs
