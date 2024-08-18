@@ -231,14 +231,14 @@ class FilterFragment : Fragment() {
         }
     }
 
-    // Метод для получения цвета в зависимости от текущей темы приложения
+  /*  // Метод для получения цвета в зависимости от текущей темы приложения
     @ColorInt
     fun Context.getColorOnSecondaryFixed(): Int {
         val typedValue = TypedValue()
         val theme = theme
         theme.resolveAttribute(com.google.android.material.R.attr.colorOnSecondaryFixed, typedValue, true)
         return typedValue.data
-    }
+    }*/
 
     private fun setNoCountryEndIcon() {
         binding.workPlaceLayout.apply {
