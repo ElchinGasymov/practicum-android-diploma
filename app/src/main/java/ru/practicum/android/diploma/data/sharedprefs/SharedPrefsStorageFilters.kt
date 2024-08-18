@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.data.sharedPrefs
+package ru.practicum.android.diploma.data.sharedprefs
 
 import ru.practicum.android.diploma.data.dto.SaveFiltersSharedPrefsDto
 

@@ -16,8 +16,8 @@ import ru.practicum.android.diploma.data.interceptors.LoggingInterceptor
 import ru.practicum.android.diploma.data.network.HHApiService
 import ru.practicum.android.diploma.data.network.NetworkClient
 import ru.practicum.android.diploma.data.network.RetrofitNetworkClient
-import ru.practicum.android.diploma.data.sharedPrefs.SharedPrefsStorageFilters
-import ru.practicum.android.diploma.data.sharedPrefs.SharedPrefsStorageFiltersImpl
+import ru.practicum.android.diploma.data.sharedprefs.SharedPrefsStorageFilters
+import ru.practicum.android.diploma.data.sharedprefs.SharedPrefsStorageFiltersImpl
 
 const val HISTORY_MAIN = "historyMain"
 const val BASE_URL = "https://api.hh.ru/"
