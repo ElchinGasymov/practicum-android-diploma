@@ -2,14 +2,20 @@ package ru.practicum.android.diploma.data.dto
 
 import ru.practicum.android.diploma.data.dto.components.Area
 import ru.practicum.android.diploma.data.dto.components.Contacts
+import ru.practicum.android.diploma.data.dto.components.CountryDto
 import ru.practicum.android.diploma.data.dto.components.Employer
 import ru.practicum.android.diploma.data.dto.components.Employment
 import ru.practicum.android.diploma.data.dto.components.Experience
 import ru.practicum.android.diploma.data.dto.components.KeySkill
 import ru.practicum.android.diploma.data.dto.components.LogoUrls
 import ru.practicum.android.diploma.data.dto.components.Phone
+import ru.practicum.android.diploma.data.dto.components.RegionDto
 import ru.practicum.android.diploma.data.dto.components.Salary
 import ru.practicum.android.diploma.data.dto.components.Schedule
+import ru.practicum.android.diploma.data.dto.components.IndustriesDto
+import ru.practicum.android.diploma.domain.models.Country
+import ru.practicum.android.diploma.domain.models.Region
+import ru.practicum.android.diploma.domain.models.Industries
 import ru.practicum.android.diploma.domain.models.VacanciesResponse
 import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.domain.models.VacancyDetails
@@ -74,4 +80,41 @@ fun KeySkill.toModel() = KeySkillsModel(name)
 fun Contacts.toModel(): ContactsModel {
     val phones = phones?.map { it.toModel() }
     return ContactsModel(email, name, phones)
+}
+
+fun CountryDto.toModel(): Country {
+    return Country(
+        id = this.id,
+        name = this.name
+    )
+}
+
+fun RegionDto.toModel(): Region {
+    return Region(
+        id = this.id,
+        name = this.name,
+        parentId = this.parentId
+    )
+}
+
+fun List<IndustriesDto>.toSectorList(): List<Industries> {
+    return this.map {
+        Industries(
+            id = it.id,
+            name = it.name,
+            isChecked = false
+        )
+    }
+}
+
+fun List<CountryDto>.toCountryList(): List<Country> {
+    return this.map { it.toModel() }
+}
+
+fun List<RegionDto>.toRegionList(): List<Region> {
+    return this.map { it.toModel() }
+}
+
+fun List<CountryDto>.toAllRegions(): List<Region> {
+    return this.flatMap { it.areas.map { regionDto -> regionDto.toModel() } }
 }
