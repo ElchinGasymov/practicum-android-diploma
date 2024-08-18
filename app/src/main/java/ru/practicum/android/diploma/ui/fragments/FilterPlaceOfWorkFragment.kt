@@ -19,7 +19,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSelectPlaceOfWorkBinding
 import ru.practicum.android.diploma.presentation.viewmodels.FilterPlaceOfWorkViewModel
-import ru.practicum.android.diploma.ui.fragments.FilterCountryFragment.Companion.COUNTRY_ID_BUNDLE_KEY
+import ru.practicum.android.diploma.ui.fragments.FilterCountryFragment.Companion.COUNTRY_ID_KEY
 import ru.practicum.android.diploma.ui.fragments.FilterCountryFragment.Companion.COUNTRY_NAME_KEY
 import ru.practicum.android.diploma.ui.fragments.FilterCountryFragment.Companion.COUNTRY_REQUEST_KEY
 import ru.practicum.android.diploma.ui.fragments.FilterRegionFragment.Companion.REGION_NAME_KEY
@@ -34,6 +34,7 @@ class FilterPlaceOfWorkFragment : Fragment() {
         const val PLACE_OF_WORK_KEY = "PLACE_OF_WORK_KEY"
         const val PLACE_OF_WORK_COUNTRY_KEY = "PLACE_OF_WORK_COUNTRY_KEY"
         const val PLACE_OF_WORK_REGION_KEY = "PLACE_OF_WORK_REGION_KEY"
+        const val PLACE_OF_WORK_ID_KEY = "PLACE_OF_WORK_ID_KEY"
     }
 
     private val binding: FragmentSelectPlaceOfWorkBinding by viewBinding(CreateMethod.INFLATE)
@@ -64,6 +65,7 @@ class FilterPlaceOfWorkFragment : Fragment() {
                 is PlaceOfWorkScreenState.CountryName -> {
                     countryName = state.countryName
                     binding.countryTextInput.setText(countryName)
+                    countryId = state.countryId
                     setCountryEndIcon()
                     setApplyButtonVisible()
                 }
@@ -71,6 +73,7 @@ class FilterPlaceOfWorkFragment : Fragment() {
                 PlaceOfWorkScreenState.NoCountryName -> {
                     binding.countryTextInput.text?.clear()
                     countryName = ""
+                    countryId = ""
                     setNoCountryEndIcon()
                     checkFields()
                 }
@@ -78,6 +81,9 @@ class FilterPlaceOfWorkFragment : Fragment() {
                 PlaceOfWorkScreenState.NoRegionName -> {
                     binding.regionTextInput.text?.clear()
                     regionName = ""
+                    if (countryName.isEmpty()) {
+                        countryId = ""
+                    }
                     setNoRegionEndIcon()
                     checkFields()
                 }
@@ -90,10 +96,10 @@ class FilterPlaceOfWorkFragment : Fragment() {
                 }
 
                 is PlaceOfWorkScreenState.Saved -> {
-                    setFragmentResult(
-                        PLACE_OF_WORK_KEY, bundleOf(
+                    setFragmentResult(PLACE_OF_WORK_KEY, bundleOf(
                             PLACE_OF_WORK_COUNTRY_KEY to state.countryName,
-                            PLACE_OF_WORK_REGION_KEY to binding.regionTextInput.text.toString()
+                            PLACE_OF_WORK_REGION_KEY to binding.regionTextInput.text.toString(),
+                            PLACE_OF_WORK_ID_KEY to state.regionId
                         )
                     )
                     findNavController().navigateUp()
@@ -105,13 +111,15 @@ class FilterPlaceOfWorkFragment : Fragment() {
 
     private fun initResultListeners() {
         setFragmentResultListener(COUNTRY_REQUEST_KEY) { _, bundle ->
-            viewModel.setCountryName(bundle.getString(COUNTRY_NAME_KEY).toString())
-            countryId = bundle.getString(COUNTRY_ID_BUNDLE_KEY).toString()
+            countryId = bundle.getString(COUNTRY_ID_KEY).toString()
+            viewModel.setCountryName(bundle.getString(COUNTRY_NAME_KEY).toString(), countryId)
+
         }
 
         setFragmentResultListener(REGION_REQUEST_KEY) { _, bundle ->
-            viewModel.setRegionName(bundle.getString(REGION_NAME_KEY).toString())
             getCountryName(bundle.getInt(REGION_PARENT_ID_KEY).toString())
+            viewModel.setRegionName(bundle.getString(REGION_NAME_KEY).toString())
+
         }
     }
 
@@ -128,10 +136,7 @@ class FilterPlaceOfWorkFragment : Fragment() {
     }
 
     private fun getCountryName(countryId: String) {
-        if (countryName.isEmpty()) {
-            this.countryId = countryId
-            viewModel.getCountryName(countryId, false)
-        }
+        viewModel.getCountryName(countryId, false)
     }
 
     private fun initTextBehaviour() {
@@ -171,7 +176,7 @@ class FilterPlaceOfWorkFragment : Fragment() {
         binding.countryLayout.apply {
             setEndIconDrawable(R.drawable.ic_close_cross_14px)
             setEndIconOnClickListener {
-                viewModel.setCountryName("")
+                viewModel.setCountryName("", "")
             }
         }
     }
@@ -246,6 +251,7 @@ class FilterPlaceOfWorkFragment : Fragment() {
     }
 
     private fun navigateToRegionSelection() {
+        countryId
         setFragmentResult(REGION_ID_KEY, bundleOf(REGION_BUNDLE_KEY to countryId))
         findNavController().navigate(
             R.id.action_selectPlaceOfWorkFragment_to_filterRegionFragment

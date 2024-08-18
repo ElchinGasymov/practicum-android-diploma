@@ -8,7 +8,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.ui.state.FilterScreenState
 
-
 class FilterViewModel : ViewModel() {
 
     private val screenStateLiveData = MutableLiveData<FilterScreenState>()

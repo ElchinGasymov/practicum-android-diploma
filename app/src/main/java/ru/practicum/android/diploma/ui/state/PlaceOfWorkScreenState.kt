@@ -2,7 +2,8 @@ package ru.practicum.android.diploma.ui.state
 
 sealed interface PlaceOfWorkScreenState {
     data class CountryName(
-        val countryName: String
+        val countryName: String,
+        val countryId: String
     ) : PlaceOfWorkScreenState
 
     data object NoCountryName : PlaceOfWorkScreenState
@@ -13,6 +14,7 @@ sealed interface PlaceOfWorkScreenState {
 
     data object NoRegionName : PlaceOfWorkScreenState
     data class Saved(
-        val countryName: String
+        val countryName: String,
+        val regionId: String
     ) : PlaceOfWorkScreenState
 }

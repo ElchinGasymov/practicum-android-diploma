@@ -21,6 +21,7 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFilterBinding
 import ru.practicum.android.diploma.presentation.viewmodels.FilterViewModel
 import ru.practicum.android.diploma.ui.fragments.FilterPlaceOfWorkFragment.Companion.PLACE_OF_WORK_COUNTRY_KEY
+import ru.practicum.android.diploma.ui.fragments.FilterPlaceOfWorkFragment.Companion.PLACE_OF_WORK_ID_KEY
 import ru.practicum.android.diploma.ui.fragments.FilterPlaceOfWorkFragment.Companion.PLACE_OF_WORK_KEY
 import ru.practicum.android.diploma.ui.fragments.FilterPlaceOfWorkFragment.Companion.PLACE_OF_WORK_REGION_KEY
 import ru.practicum.android.diploma.ui.state.FilterScreenState
@@ -30,6 +31,7 @@ class FilterFragment : Fragment() {
     private val binding: FragmentFilterBinding by viewBinding(CreateMethod.INFLATE)
     private val viewModel by viewModel<FilterViewModel>()
 
+    private var regionId = ""
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -109,6 +111,7 @@ class FilterFragment : Fragment() {
 
     private fun initResultListeners() {
         setFragmentResultListener(PLACE_OF_WORK_KEY) { _, bundle ->
+            regionId = bundle.getString(PLACE_OF_WORK_ID_KEY).toString()
             val placeOfWork = StringBuilder()
             placeOfWork.append(bundle.getString(PLACE_OF_WORK_COUNTRY_KEY))
             if (bundle.getString(PLACE_OF_WORK_REGION_KEY)?.isNotEmpty() == true) {
@@ -116,6 +119,7 @@ class FilterFragment : Fragment() {
                     .append(bundle.getString(PLACE_OF_WORK_REGION_KEY))
             }
             viewModel.setPlaceOfWork(placeOfWork.toString())
+
         }
     }
 

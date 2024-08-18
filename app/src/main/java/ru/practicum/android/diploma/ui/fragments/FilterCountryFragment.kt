@@ -25,7 +25,7 @@ class FilterCountryFragment : Fragment() {
     companion object {
         const val COUNTRY_REQUEST_KEY = "COUNTRY_REQUEST_KEY"
         const val COUNTRY_NAME_KEY = "COUNTRY_BUNDLE_KEY"
-        const val COUNTRY_ID_BUNDLE_KEY = "COUNTRY_ID_BUNDLE_KEY"
+        const val COUNTRY_ID_KEY = "COUNTRY_ID_BUNDLE_KEY"
     }
 
     private val binding: FragmentSelectCountryBinding by viewBinding(CreateMethod.INFLATE)
@@ -91,8 +91,10 @@ class FilterCountryFragment : Fragment() {
 
     private fun onItemClicked(country: Country) {
         setFragmentResult(COUNTRY_REQUEST_KEY, bundleOf(
-            COUNTRY_NAME_KEY to country.name,
-            COUNTRY_ID_BUNDLE_KEY to country.id))
+                COUNTRY_NAME_KEY to country.name,
+                COUNTRY_ID_KEY to country.id
+            )
+        )
         findNavController().navigateUp()
     }
 
