@@ -91,7 +91,8 @@ class FilterCountryFragment : Fragment() {
 
     private fun onItemClicked(country: Country) {
         setFragmentResult(
-            COUNTRY_REQUEST_KEY, bundleOf(COUNTRY_NAME_KEY to country.name, COUNTRY_ID_KEY to country.id)
+            COUNTRY_REQUEST_KEY,
+            bundleOf(COUNTRY_NAME_KEY to country.name, COUNTRY_ID_KEY to country.id)
         )
         findNavController().navigateUp()
     }
