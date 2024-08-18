@@ -2,7 +2,6 @@ package ru.practicum.android.diploma.di
 
 import android.content.Context
 import androidx.room.Room
-import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
@@ -16,8 +15,6 @@ import ru.practicum.android.diploma.data.interceptors.LoggingInterceptor
 import ru.practicum.android.diploma.data.network.HHApiService
 import ru.practicum.android.diploma.data.network.NetworkClient
 import ru.practicum.android.diploma.data.network.RetrofitNetworkClient
-import ru.practicum.android.diploma.data.sharedprefs.SharedPrefsStorageFilters
-import ru.practicum.android.diploma.data.sharedprefs.SharedPrefsStorageFiltersImpl
 
 const val HISTORY_MAIN = "historyMain"
 const val BASE_URL = "https://api.hh.ru/"
@@ -56,13 +53,6 @@ val dataModule = module {
         ConverterIntoEntity()
     }
 
-    single<SharedPrefsStorageFilters> {
-        SharedPrefsStorageFiltersImpl(
-            gson = provideGson(),
-            sharedPreferences = get()
-        )
-    }
-
     single {
         androidContext().getSharedPreferences(
             HISTORY_MAIN,
@@ -71,5 +61,3 @@ val dataModule = module {
     }
 
 }
-
-private fun provideGson() = Gson()

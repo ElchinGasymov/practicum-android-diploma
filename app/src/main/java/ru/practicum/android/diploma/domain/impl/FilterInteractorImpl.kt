@@ -6,9 +6,13 @@ import ru.practicum.android.diploma.domain.api.FilterRepository
 import ru.practicum.android.diploma.domain.models.Country
 import ru.practicum.android.diploma.domain.models.Industries
 import ru.practicum.android.diploma.domain.models.Region
+import ru.practicum.android.diploma.domain.models.SaveFiltersSharedPrefs
 import ru.practicum.android.diploma.util.ResponseData
 
-class FilterInteractorImpl(private val repository: FilterRepository) : FilterInteractor {
+class FilterInteractorImpl(
+    private val repository: FilterRepository,
+
+    ) : FilterInteractor {
     override suspend fun getCountries(): Flow<ResponseData<List<Country>>> {
         return repository.getCountries()
     }
@@ -23,5 +27,17 @@ class FilterInteractorImpl(private val repository: FilterRepository) : FilterInt
 
     override suspend fun getIndustries(): Flow<ResponseData<List<Industries>>> {
         return repository.getIndustries()
+    }
+
+    override suspend fun readSharedPrefs(): SaveFiltersSharedPrefs? {
+        return repository.readSharedPrefs()
+    }
+
+    override suspend fun writeSharedPrefs(filters: SaveFiltersSharedPrefs) {
+        repository.writeSharedPrefs(filters)
+    }
+
+    override suspend fun clearSharedPrefs() {
+        repository.clearSharedPrefs()
     }
 }

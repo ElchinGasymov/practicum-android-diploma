@@ -1,5 +1,7 @@
 package ru.practicum.android.diploma.data.impl
 
+import android.content.SharedPreferences
+import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.data.dto.CountriesRequest
@@ -20,10 +22,13 @@ import ru.practicum.android.diploma.domain.api.FilterRepository
 import ru.practicum.android.diploma.domain.models.Country
 import ru.practicum.android.diploma.domain.models.Industries
 import ru.practicum.android.diploma.domain.models.Region
+import ru.practicum.android.diploma.domain.models.SaveFiltersSharedPrefs
 import ru.practicum.android.diploma.util.ResponseData
 
 class FilterRepositoryImpl(
-    private val networkClient: NetworkClient
+    private val networkClient: NetworkClient,
+    private val sharedPreferences: SharedPreferences,
+    private val gson: Gson
 ) : FilterRepository {
 
     override fun getCountries(): Flow<ResponseData<List<Country>>> = flow {
@@ -78,4 +83,21 @@ class FilterRepositoryImpl(
                 else -> ResponseData.ResponseError.SERVER_ERROR
             }
         )
+
+    override suspend fun readSharedPrefs(): SaveFiltersSharedPrefs? {
+        val json = sharedPreferences.getString(HISTORY, null) ?: return null
+        return gson.fromJson(json, SaveFiltersSharedPrefs::class.java)
+    }
+
+    override suspend fun writeSharedPrefs(filters: SaveFiltersSharedPrefs) {
+        sharedPreferences.edit().putString(HISTORY, gson.toJson(filters)).apply()
+    }
+
+    override suspend fun clearSharedPrefs() {
+        sharedPreferences.edit().remove(HISTORY).apply()
+    }
+
+    companion object {
+        private const val HISTORY = "history"
+    }
 }
