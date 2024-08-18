@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.databinding.FragmentSelectCountryBinding
 import ru.practicum.android.diploma.domain.models.Country
@@ -24,8 +25,7 @@ class FilterCountryFragment : Fragment() {
 
     companion object {
         const val COUNTRY_REQUEST_KEY = "COUNTRY_REQUEST_KEY"
-        const val COUNTRY_NAME_KEY = "COUNTRY_BUNDLE_KEY"
-        const val COUNTRY_ID_KEY = "COUNTRY_ID_BUNDLE_KEY"
+        const val COUNTRY_BUNDLE_KEY = "COUNTRY_BUNDLE_KEY"
     }
 
     private val binding: FragmentSelectCountryBinding by viewBinding(CreateMethod.INFLATE)
@@ -90,10 +90,8 @@ class FilterCountryFragment : Fragment() {
     }
 
     private fun onItemClicked(country: Country) {
-        setFragmentResult(
-            COUNTRY_REQUEST_KEY,
-            bundleOf(COUNTRY_NAME_KEY to country.name, COUNTRY_ID_KEY to country.id)
-        )
+        val json = Gson().toJson(country)
+        setFragmentResult(COUNTRY_REQUEST_KEY, bundleOf(COUNTRY_BUNDLE_KEY to json))
         findNavController().navigateUp()
     }
 

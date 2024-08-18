@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.databinding.FragmentSelectRegionBinding
 import ru.practicum.android.diploma.domain.models.Region
@@ -26,8 +27,7 @@ class FilterRegionFragment : Fragment() {
 
     companion object {
         const val REGION_REQUEST_KEY = "REGION_REQUEST_KEY"
-        const val REGION_NAME_KEY = "REGION_BUNDLE_KEY"
-        const val REGION_PARENT_ID_KEY = "REGION_PARENT_ID_KEY"
+        const val REGION_BUNDLE_KEY = "REGION_BUNDLE_KEY"
     }
 
     private val binding: FragmentSelectRegionBinding by viewBinding(CreateMethod.INFLATE)
@@ -48,7 +48,7 @@ class FilterRegionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setFragmentResultListener(REGION_ID_KEY) { _, bundle ->
-            val region = bundle.getString(REGION_NAME_KEY).toString()
+            val region = bundle.getString(REGION_BUNDLE_KEY).toString()
             viewModel.getRegions(region)
         }
         binding.selectRegionToolbar.setNavigationOnClickListener {
@@ -94,9 +94,10 @@ class FilterRegionFragment : Fragment() {
     }
 
     private fun onItemClicked(region: Region) {
+        val json = Gson().toJson(region)
         setFragmentResult(
             REGION_REQUEST_KEY,
-            bundleOf(REGION_NAME_KEY to region.name, REGION_PARENT_ID_KEY to region.parentId)
+            bundleOf(REGION_BUNDLE_KEY to json)
         )
         findNavController().navigateUp()
     }

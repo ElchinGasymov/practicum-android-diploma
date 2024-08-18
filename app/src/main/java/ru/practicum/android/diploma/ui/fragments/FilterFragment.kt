@@ -16,12 +16,15 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFilterBinding
+import ru.practicum.android.diploma.domain.models.Country
+import ru.practicum.android.diploma.domain.models.Region
 import ru.practicum.android.diploma.presentation.viewmodels.FilterViewModel
 import ru.practicum.android.diploma.ui.fragments.FilterPlaceOfWorkFragment.Companion.PLACE_OF_WORK_COUNTRY_KEY
-import ru.practicum.android.diploma.ui.fragments.FilterPlaceOfWorkFragment.Companion.PLACE_OF_WORK_ID_KEY
 import ru.practicum.android.diploma.ui.fragments.FilterPlaceOfWorkFragment.Companion.PLACE_OF_WORK_KEY
 import ru.practicum.android.diploma.ui.fragments.FilterPlaceOfWorkFragment.Companion.PLACE_OF_WORK_REGION_KEY
 import ru.practicum.android.diploma.ui.state.FilterScreenState
@@ -111,15 +114,22 @@ class FilterFragment : Fragment() {
 
     private fun initResultListeners() {
         setFragmentResultListener(PLACE_OF_WORK_KEY) { _, bundle ->
-            regionId = bundle.getString(PLACE_OF_WORK_ID_KEY).toString()
+
+            val countryJson = bundle.getString(PLACE_OF_WORK_COUNTRY_KEY).toString()
+            val type = object : TypeToken<Country>() {}.type
+            val country = Gson().fromJson<Country>(countryJson, type)
+
+            val regionJson = bundle.getString(PLACE_OF_WORK_REGION_KEY)
+            val typeRegion = object : TypeToken<Region>() {}.type
+            val region = Gson().fromJson<Region>(regionJson, typeRegion)
+
+            regionId = region.id
             val placeOfWork = StringBuilder()
-            placeOfWork.append(bundle.getString(PLACE_OF_WORK_COUNTRY_KEY))
-            if (bundle.getString(PLACE_OF_WORK_REGION_KEY)?.isNotEmpty() == true) {
-                placeOfWork.append(", ")
-                    .append(bundle.getString(PLACE_OF_WORK_REGION_KEY))
+            placeOfWork.append(country.name)
+            if (region.name.isNotEmpty()) {
+                placeOfWork.append(", ").append(region.name)
             }
             viewModel.setPlaceOfWork(placeOfWork.toString())
-
         }
     }
 

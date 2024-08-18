@@ -8,6 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.FilterInteractor
 import ru.practicum.android.diploma.domain.models.Country
+import ru.practicum.android.diploma.domain.models.Region
 import ru.practicum.android.diploma.ui.state.PlaceOfWorkScreenState
 import ru.practicum.android.diploma.util.ResponseData
 
@@ -21,7 +22,7 @@ class FilterPlaceOfWorkViewModel(
         return screenStateLiveData
     }
 
-    fun getCountryName(countryId: String, isSaving: Boolean) {
+    fun getCountryName(region: Region, isSaving: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
             filterInteractor
                 .getCountries()
@@ -29,8 +30,8 @@ class FilterPlaceOfWorkViewModel(
                     when (response) {
                         is ResponseData.Data -> {
                             response.value.forEach {
-                                if (it.id == countryId) {
-                                    setData(isSaving, it)
+                                if (it.id == region.parentId.toString()) {
+                                    setData(isSaving, it, region)
                                 }
                             }
                         }
@@ -41,25 +42,25 @@ class FilterPlaceOfWorkViewModel(
         }
     }
 
-    fun saveFields(countryName: String, regionId: String) {
-        if (countryName.isEmpty()) {
-            getCountryName(regionId, true)
+    fun saveFields(country: Country, region: Region) {
+        if (country.name.isEmpty()) {
+            getCountryName(region, true)
         } else {
-            setState(PlaceOfWorkScreenState.Saved(countryName, regionId))
+            setState(PlaceOfWorkScreenState.Saved(country, region))
         }
     }
 
-    private fun setData(isSaving: Boolean, country: Country) {
+    private fun setData(isSaving: Boolean, country: Country, region: Region) {
         if (isSaving) {
-            setState(PlaceOfWorkScreenState.Saved(country.name, country.id))
+            setState(PlaceOfWorkScreenState.Saved(country, region))
         } else {
-            setState(PlaceOfWorkScreenState.CountryName(country.name, country.id))
+            setState(PlaceOfWorkScreenState.CountryName(country))
         }
     }
 
-    fun setCountryName(countryName: String, countryId: String) {
-        if (countryName.isNotEmpty()) {
-            setState(PlaceOfWorkScreenState.CountryName(countryName, countryId))
+    fun setCountryName(country: Country) {
+        if (country.name.isNotEmpty()) {
+            setState(PlaceOfWorkScreenState.CountryName(country))
         } else {
             setState(PlaceOfWorkScreenState.NoCountryName)
         }
