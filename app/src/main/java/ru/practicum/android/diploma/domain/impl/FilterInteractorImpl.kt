@@ -11,7 +11,6 @@ import ru.practicum.android.diploma.util.ResponseData
 
 class FilterInteractorImpl(
     private val repository: FilterRepository,
-
     ) : FilterInteractor {
     override suspend fun getCountries(): Flow<ResponseData<List<Country>>> {
         return repository.getCountries()
