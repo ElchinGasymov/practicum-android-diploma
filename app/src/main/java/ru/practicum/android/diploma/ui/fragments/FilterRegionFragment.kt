@@ -94,10 +94,9 @@ class FilterRegionFragment : Fragment() {
     }
 
     private fun onItemClicked(region: Region) {
-        setFragmentResult(REGION_REQUEST_KEY, bundleOf(
-            REGION_NAME_KEY to region.name,
-            REGION_PARENT_ID_KEY to region.parentId
-            )
+        setFragmentResult(
+            REGION_REQUEST_KEY,
+            bundleOf(REGION_NAME_KEY to region.name, REGION_PARENT_ID_KEY to region.parentId)
         )
         findNavController().navigateUp()
     }

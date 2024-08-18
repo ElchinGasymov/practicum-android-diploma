@@ -97,7 +97,8 @@ class FilterPlaceOfWorkFragment : Fragment() {
 
                 is PlaceOfWorkScreenState.Saved -> {
                     setFragmentResult(
-                        PLACE_OF_WORK_KEY, bundleOf(
+                        PLACE_OF_WORK_KEY,
+                        bundleOf(
                             PLACE_OF_WORK_COUNTRY_KEY to state.countryName,
                             PLACE_OF_WORK_REGION_KEY to binding.regionTextInput.text.toString(),
                             PLACE_OF_WORK_ID_KEY to state.regionId
