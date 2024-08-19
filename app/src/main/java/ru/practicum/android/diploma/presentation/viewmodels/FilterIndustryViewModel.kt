@@ -17,35 +17,6 @@ class FilterIndustryViewModel(
     val industries: LiveData<List<Industries>>
         get() = _industries
 
-    fun updateListIndustries() {
-        viewModelScope.launch {
-            val industry = interactor.readSharedPrefs()?.industries
-            interactor.getIndustries().collect { list ->
-                when (list) {
-                    is ResponseData.Data -> {
-                        if (industry != null) {
-                            val newList = ArrayList<Industries>()
-                            list.value.forEach { industryItem ->
-                                if (industryItem.id == industry.id) {
-                                    newList.add(industryItem.copy(isChecked = true))
-                                    _selectedIndustry.postValue(industryItem)
-                                    _hasSelected.postValue(true)
-                                } else {
-                                    newList.add(industryItem)
-                                }
-                            }
-                            _industries.postValue(newList)
-                        } else {
-                            _industries.postValue(list.value)
-                        }
-                    }
-
-                    is ResponseData.Error -> {}
-                }
-            }
-        }
-    }
-
     private val _hasSelected = MutableLiveData(false)
     val hasSelected: LiveData<Boolean>
         get() = _hasSelected
@@ -80,6 +51,39 @@ class FilterIndustryViewModel(
             }
         }
         _industries.postValue(newList)
+    }
+
+    fun updateListIndustries() {
+        viewModelScope.launch {
+            val industry = interactor.readSharedPrefs()?.industries
+            interactor.getIndustries().collect { list ->
+                when (list) {
+                    is ResponseData.Data -> {
+                        whenList(industry, list)
+                    }
+
+                    is ResponseData.Error -> {}
+                }
+            }
+        }
+    }
+
+    fun whenList(industry: Industries?, list: ResponseData.Data<List<Industries>>) {
+        if (industry != null) {
+            val newList = ArrayList<Industries>()
+            list.value.forEach { industryItem ->
+                if (industryItem.id == industry.id) {
+                    newList.add(industryItem.copy(isChecked = true))
+                    _selectedIndustry.postValue(industryItem)
+                    _hasSelected.postValue(true)
+                } else {
+                    newList.add(industryItem)
+                }
+            }
+            _industries.postValue(newList)
+        } else {
+            _industries.postValue(list.value)
+        }
     }
 }
 
