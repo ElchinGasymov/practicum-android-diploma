@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
@@ -54,6 +55,9 @@ class FilterRegionFragment : Fragment() {
         binding.selectRegionToolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
+        binding.regionSearchQuery.doOnTextChanged { text, _, _, _ ->
+            search(text.toString())
+        }
         viewModel.render().observe(viewLifecycleOwner) { state ->
             when (state) {
                 RegionsScreenState.Default -> {}
@@ -82,7 +86,9 @@ class FilterRegionFragment : Fragment() {
 
                 is RegionsScreenState.Success -> {
                     stopProgressBar()
+                    removePlaceholders()
                     adapter.setRegions(state.regions)
+                    binding.regionRecycleView.isVisible = true
                 }
             }
 
@@ -102,6 +108,10 @@ class FilterRegionFragment : Fragment() {
         findNavController().navigateUp()
     }
 
+    private fun search(query: String) {
+        viewModel.search(query)
+    }
+
     private fun startProgressBar() {
         binding.progressBar.isVisible = true
     }
@@ -116,19 +126,23 @@ class FilterRegionFragment : Fragment() {
         binding.noConnectionPlaceholder.isVisible = false
         binding.noConnectionText.isVisible = false
         binding.noListPlaceholderGroup.isVisible = false
+        binding.regionRecycleView.isVisible = false
     }
 
     private fun setServerErrorState() {
+        binding.regionRecycleView.isVisible = false
         binding.serverError.isVisible = true
         binding.serverErrorText.isVisible = true
     }
 
     private fun setNoInternetState() {
+        binding.regionRecycleView.isVisible = false
         binding.noConnectionPlaceholder.isVisible = true
         binding.noConnectionText.isVisible = true
     }
 
     private fun setNoRegionsState() {
+        binding.regionRecycleView.isVisible = false
         binding.noListPlaceholderGroup.isVisible = true
     }
 

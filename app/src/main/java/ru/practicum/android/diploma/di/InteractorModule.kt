@@ -24,6 +24,9 @@ val interactorModule = module {
     }
 
     factory<FilterInteractor> {
-        FilterInteractorImpl(repository = get())
+        FilterInteractorImpl(
+            repository = get(),
+            repositorySharePrefs = get()
+        )
     }
 }
