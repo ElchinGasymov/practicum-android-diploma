@@ -16,7 +16,7 @@ class FilterRegionViewModel(
 ) : ViewModel() {
 
     private val regionsStateLiveData = MutableLiveData<RegionsScreenState>()
-    private lateinit var listOfRegions: List<Region>
+    private val listOfRegions = mutableListOf<Region>()
 
     fun render(): LiveData<RegionsScreenState> {
         return regionsStateLiveData
@@ -48,7 +48,7 @@ class FilterRegionViewModel(
                     .collect { response ->
                         when (response) {
                             is ResponseData.Data -> {
-                                listOfRegions = response.value.sortedBy { it.name }
+                                listOfRegions.addAll(response.value.sortedBy { it.name })
                                 setState(RegionsScreenState.Success(listOfRegions))
                             }
 
