@@ -25,7 +25,7 @@ val viewModelModule = module {
     }
 
     viewModel<FilterViewModel> {
-        FilterViewModel()
+        FilterViewModel(get())
     }
     viewModel<FilterPlaceOfWorkViewModel> {
         FilterPlaceOfWorkViewModel(get())
@@ -36,7 +36,7 @@ val viewModelModule = module {
     viewModel<FilterRegionViewModel> {
         FilterRegionViewModel(get())
     }
-    viewModel <FilterIndustryViewModel>{
+    viewModel<FilterIndustryViewModel> {
         FilterIndustryViewModel(get())
     }
 }

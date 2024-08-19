@@ -9,9 +9,17 @@ class SharedPrefsRepositoryImpl(
     private val sharedPreferences: SharedPreferences,
     private val gson: Gson
 ) : SharedPrefsRepository {
-    override suspend fun readSharedPrefs(): SaveFiltersSharedPrefs? {
-        val json = sharedPreferences.getString(HISTORY, null) ?: return null
+    override suspend fun readSharedPrefs(): SaveFiltersSharedPrefs {
+        val json = sharedPreferences.getString(HISTORY, null) ?: return SaveFiltersSharedPrefs(
+            null,
+            null,
+            null,
+            null,
+            null
+        )
         return gson.fromJson(json, SaveFiltersSharedPrefs::class.java)
+
+
     }
 
     override suspend fun writeSharedPrefs(filters: SaveFiltersSharedPrefs) {

@@ -16,6 +16,14 @@ class FilterIndustryViewModel(
     val industries: LiveData<List<Industries>>
         get() = _industries
 
+    private val _hasSelected = MutableLiveData(false)
+    val hasSelected: LiveData<Boolean>
+        get() = _hasSelected
+
+    private val _selectedIndustry = MutableLiveData<Industries>()
+    val selectedIndustry: LiveData<Industries>
+        get() = _selectedIndustry
+
     fun updateListIndustries() {
         viewModelScope.launch {
             interactor.getIndustries().collect { list ->
@@ -23,18 +31,34 @@ class FilterIndustryViewModel(
                     is ResponseData.Data -> {
                         _industries.postValue(list.value)
                     }
+
                     is ResponseData.Error -> {}
                 }
             }
         }
     }
 
-    private fun writeSharedPrefs(industries: Industries){
-
+    fun itemChecked(industries: Industries) {
+        val newList = ArrayList<Industries>()
+        _industries.value?.forEach { industry ->
+            if (industry.id == industries.id) {
+                newList.add(industry.copy(isChecked = !industry.isChecked))
+                _hasSelected.postValue(!industry.isChecked)
+                if (!industry.isChecked)
+                    _selectedIndustry.postValue(industry)
+            } else {
+                newList.add(industry.copy(isChecked = false))
+            }
+        }
+        _industries.postValue(newList)
     }
 
-    private fun readSharedPrefs(){
-        
+    fun readSharedPrefs() {
+        viewModelScope.launch {
+            val industry = interactor.readSharedPrefs()?.industries
+            if (industry != null)
+                itemChecked(industry)
+        }
     }
 }
 

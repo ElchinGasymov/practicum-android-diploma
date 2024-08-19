@@ -22,8 +22,11 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFilterBinding
 import ru.practicum.android.diploma.domain.models.Country
+import ru.practicum.android.diploma.domain.models.Industries
 import ru.practicum.android.diploma.domain.models.Region
 import ru.practicum.android.diploma.presentation.viewmodels.FilterViewModel
+import ru.practicum.android.diploma.ui.fragments.FilterIndustryFragment.Companion.INDUSTRY_ITEM_KEY
+import ru.practicum.android.diploma.ui.fragments.FilterIndustryFragment.Companion.INDUSTRY_KEY
 import ru.practicum.android.diploma.ui.fragments.FilterPlaceOfWorkFragment.Companion.PLACE_OF_WORK_COUNTRY_KEY
 import ru.practicum.android.diploma.ui.fragments.FilterPlaceOfWorkFragment.Companion.PLACE_OF_WORK_KEY
 import ru.practicum.android.diploma.ui.fragments.FilterPlaceOfWorkFragment.Companion.PLACE_OF_WORK_REGION_KEY
@@ -52,6 +55,7 @@ class FilterFragment : Fragment() {
         binding.salary.doOnTextChanged { text, _, _, _ ->
             if (!text.isNullOrEmpty()) {
                 binding.btnGroup.isVisible = true
+                viewModel.setCurrencySelected(text.toString().toInt())
             } else {
                 checkFields()
             }
@@ -71,9 +75,11 @@ class FilterFragment : Fragment() {
                     setNoIndustryEndIcon()
                     setNoCountryEndIcon()
                     setButtonsNotVisible()
+                    viewModel.clearSharedPrefs()
                 }
 
                 is FilterScreenState.Industry -> {
+                    binding.industryTextInput.setText(state.industry)
                     setIndustryEndIcon()
                 }
 
@@ -91,6 +97,39 @@ class FilterFragment : Fragment() {
             }
         }
 
+
+        viewModel.readSharedPrefs()
+        if (true) {
+            viewModel.sharedPrefs.observe(viewLifecycleOwner) { filters ->
+                if (filters.industries != null) {
+                    viewModel.setIndustry(filters.industries.name)
+                    viewModel.setIndustrySelected(filters.industries)
+                }
+
+                if (filters.noCurrency != null) {
+                    binding.salaryFlagCheckbox.isChecked = filters.noCurrency
+                    viewModel.setNoCurrencySelected(filters.noCurrency)
+                }
+
+                if (filters.currency != null) {
+                    binding.salary.setText(filters.currency.toString())
+                    viewModel.setCurrencySelected(filters.currency)
+                }
+
+                if (filters.country != null) {
+                    val placeOfWork = StringBuilder()
+                    placeOfWork.append(filters.country.name)
+                    if (filters.region != null) {
+                        placeOfWork.append(", ").append(filters.region.name)
+                        viewModel.setRegionSelected(filters.region)
+                    }
+                    viewModel.setPlaceOfWork(placeOfWork.toString())
+                    viewModel.setCountrySelected(filters.country)
+                }
+
+            }
+
+        }
     }
 
     private fun checkFields() {
@@ -128,17 +167,31 @@ class FilterFragment : Fragment() {
             placeOfWork.append(country.name)
             if (region.name.isNotEmpty()) {
                 placeOfWork.append(", ").append(region.name)
+                viewModel.setRegionSelected(region)
             }
             viewModel.setPlaceOfWork(placeOfWork.toString())
+            viewModel.setCountrySelected(country)
+        }
+
+        setFragmentResultListener(INDUSTRY_KEY) { _, bundle ->
+            val industryJson = bundle.getString(INDUSTRY_ITEM_KEY).toString()
+            val type = object : TypeToken<Industries>() {}.type
+            val industry = Gson().fromJson<Industries>(industryJson, type)
+            viewModel.setIndustry(industry.name.toString())
+            viewModel.setIndustrySelected(industry)
         }
     }
 
     private fun initButtonListeners() {
         binding.filterSettingsTitle.setNavigationOnClickListener { findNavController().navigateUp() }
-        binding.applyButton.setOnClickListener { viewModel.saveFilter() }
+        binding.applyButton.setOnClickListener {
+            viewModel.saveFilter()
+            findNavController().popBackStack()
+        }
         binding.clearButton.setOnClickListener { viewModel.clear() }
         // Пример использования Checkbox, если включена опция показа только с зарплатой
         binding.salaryFlagCheckbox.setOnCheckedChangeListener { _, isChecked -> //
+            viewModel.setNoCurrencySelected(isChecked)
             // viewModel.setSalaryOnlyCheckbox(isChecked)
         }
         binding.workTextInput.setOnClickListener {
