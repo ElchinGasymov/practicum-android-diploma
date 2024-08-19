@@ -104,6 +104,7 @@ class SearchFragment : Fragment() {
             when (state) {
                 SearchScreenState.Default -> {}
                 is SearchScreenState.Error -> {
+                    clearList()
                     when (state.error) {
                         ResponseData.ResponseError.NO_INTERNET -> {
                             showNoInternetState()
@@ -196,6 +197,10 @@ class SearchFragment : Fragment() {
                 viewModel.search(true)
             }
         }
+    }
+    private fun clearList() {
+        listOfVacancies.clear()
+        adapter.setVacancies(listOfVacancies)
     }
 
     private fun removePlaceholders() {

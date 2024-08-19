@@ -79,7 +79,7 @@ class SearchViewModel(
             setScreenState(SearchScreenState.Loading)
             this.mainRequest = request
             requestNextPage = request
-            options.searchText = request
+            getOptions()
             search(true)
         }
 
@@ -97,8 +97,7 @@ class SearchViewModel(
                         filter.region.id
                     } else {
                         filter.country?.id.toString()
-                    }
-                    ,
+                    },
                     filter.industries?.id.toString(),
                     filter.currency.toString(),
                     filter.noCurrency

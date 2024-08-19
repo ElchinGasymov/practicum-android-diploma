@@ -1,7 +1,7 @@
 package ru.practicum.android.diploma.util
 
 data class Options(
-    var searchText: String,
+    val searchText: String,
     val itemsPerPage: Int,
     val page: Int,
     val area: String?,

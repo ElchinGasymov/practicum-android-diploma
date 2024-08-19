@@ -53,10 +53,8 @@ class FilterPlaceOfWorkViewModel(
     fun getFilterSetting() {
         viewModelScope.launch {
             val filters = filterInteractor.readSharedPrefs()
-            if (filters != null) {
-                if (filters.country?.name?.isNotEmpty() == true) {
-                    setState(PlaceOfWorkScreenState.Loaded(filters))
-                }
+            if (filters != null && filters.country?.name?.isNotEmpty() == true) {
+                setState(PlaceOfWorkScreenState.Loaded(filters))
             }
         }
     }

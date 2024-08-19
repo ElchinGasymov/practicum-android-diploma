@@ -48,7 +48,6 @@ class FilterFragment : Fragment() {
     private var country = Country("", "")
     private var industries = Industries("", "", false)
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

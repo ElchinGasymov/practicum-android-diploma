@@ -228,7 +228,9 @@ class FilterPlaceOfWorkFragment : Fragment() {
         binding.regionLayout.apply {
             setEndIconDrawable(R.drawable.ic_close_cross_14px)
             setEndIconOnClickListener {
-                viewModel.setRegionName(Region("","",null))
+                viewModel.setRegionName(
+                    Region("", "", null)
+                )
             }
         }
     }
