@@ -85,6 +85,7 @@ class FilterFragment : Fragment() {
                     setNoIndustryEndIcon()
                     setNoCountryEndIcon()
                     setButtonsNotVisible()
+                    setFragmentResult(FILTER_REQUEST_KEY, bundleOf())
                 }
 
                 is FilterScreenState.Industry -> {

@@ -188,7 +188,6 @@ class SearchFragment : Fragment() {
         vacanciesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         vacanciesRecyclerView.adapter = adapter
         initResultListeners()
-
     }
 
     private fun initResultListeners() {

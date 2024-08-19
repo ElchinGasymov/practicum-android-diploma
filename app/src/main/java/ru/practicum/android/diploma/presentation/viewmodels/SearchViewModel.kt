@@ -102,10 +102,18 @@ class SearchViewModel(
                     filter.currency.toString(),
                     filter.noCurrency
                 )
+            } else {
+                options = Options(
+                    requestNextPage,
+                    ITEMS_PER_PAGE,
+                    currentPage,
+                    "",
+                    "",
+                    "",
+                    false
+                )
             }
-
         }
-
     }
 
     fun search(isNewRequest: Boolean) {
