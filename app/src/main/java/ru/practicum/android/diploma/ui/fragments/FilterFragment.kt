@@ -120,8 +120,8 @@ class FilterFragment : Fragment() {
                 if (filters.country != null) {
                     val placeOfWork = StringBuilder()
                     placeOfWork.append(filters.country.name)
-                    if (filters.region != null) {
-                        placeOfWork.append(", ").append(filters.region.name)
+                    if (filters.region?.name ?: "" != "") {
+                        placeOfWork.append(", ").append(filters.region!!.name )
                         viewModel.setRegionSelected(filters.region)
                     }
                     viewModel.setPlaceOfWork(placeOfWork.toString())
