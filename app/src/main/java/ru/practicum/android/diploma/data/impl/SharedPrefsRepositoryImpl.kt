@@ -18,8 +18,6 @@ class SharedPrefsRepositoryImpl(
             null
         )
         return gson.fromJson(json, SaveFiltersSharedPrefs::class.java)
-
-
     }
 
     override suspend fun writeSharedPrefs(filters: SaveFiltersSharedPrefs) {

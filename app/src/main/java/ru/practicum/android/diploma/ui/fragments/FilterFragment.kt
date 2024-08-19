@@ -98,7 +98,6 @@ class FilterFragment : Fragment() {
             }
         }
 
-
         viewModel.readSharedPrefs()
         if (init) {
             viewModel.sharedPrefs.observe(viewLifecycleOwner) { filters ->
@@ -121,7 +120,7 @@ class FilterFragment : Fragment() {
                     val placeOfWork = StringBuilder()
                     placeOfWork.append(filters.country.name)
                     if (filters.region?.name ?: "" != "") {
-                        placeOfWork.append(", ").append(filters.region!!.name )
+                        placeOfWork.append(", ").append(filters.region!!.name)
                         viewModel.setRegionSelected(filters.region)
                     }
                     viewModel.setPlaceOfWork(placeOfWork.toString())
