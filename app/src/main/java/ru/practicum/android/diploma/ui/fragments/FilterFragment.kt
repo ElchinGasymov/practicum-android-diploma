@@ -3,7 +3,6 @@ package ru.practicum.android.diploma.ui.fragments
 import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.Configuration
-import android.graphics.Color
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -13,21 +12,29 @@ import androidx.annotation.ColorInt
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.google.android.material.textfield.TextInputLayout
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFilterBinding
+import ru.practicum.android.diploma.domain.models.Country
+import ru.practicum.android.diploma.domain.models.Region
+import ru.practicum.android.diploma.presentation.viewmodels.FilterViewModel
+import ru.practicum.android.diploma.ui.fragments.FilterPlaceOfWorkFragment.Companion.PLACE_OF_WORK_COUNTRY_KEY
+import ru.practicum.android.diploma.ui.fragments.FilterPlaceOfWorkFragment.Companion.PLACE_OF_WORK_KEY
+import ru.practicum.android.diploma.ui.fragments.FilterPlaceOfWorkFragment.Companion.PLACE_OF_WORK_REGION_KEY
+import ru.practicum.android.diploma.ui.state.FilterScreenState
 
 class FilterFragment : Fragment() {
 
     private val binding: FragmentFilterBinding by viewBinding(CreateMethod.INFLATE)
+    private val viewModel by viewModel<FilterViewModel>()
 
+    private var regionId = ""
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -41,68 +48,143 @@ class FilterFragment : Fragment() {
 
         initButtonListeners() // Инициализация слушателей для кнопок и других элементов интерфейса
         initTextBehaviour() // Инициализация поведения текстовых полей
+        initResultListeners()
+        binding.salary.doOnTextChanged { text, _, _, _ ->
+            if (!text.isNullOrEmpty()) {
+                binding.btnGroup.isVisible = true
+            } else {
+                checkFields()
+            }
+        }
+        viewModel.render().observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is FilterScreenState.PlaceOfWork -> {
+                    binding.workTextInput.setText(state.countryName)
+                    setCountryEndIcon()
+                    setButtonsVisible()
+                }
+
+                FilterScreenState.ClearState -> {
+                    binding.workTextInput.text?.clear()
+                    binding.industryTextInput.text?.clear()
+                    binding.salary.text?.clear()
+                    setNoIndustryEndIcon()
+                    setNoCountryEndIcon()
+                    setButtonsNotVisible()
+                }
+
+                is FilterScreenState.Industry -> {
+                    setIndustryEndIcon()
+                }
+
+                FilterScreenState.NoIndustry -> {
+                    binding.industryTextInput.text?.clear()
+                    setNoIndustryEndIcon()
+                    checkFields()
+                }
+
+                FilterScreenState.NoPlaceOfWork -> {
+                    binding.workTextInput.text?.clear()
+                    setNoCountryEndIcon()
+                    checkFields()
+                }
+            }
+        }
+
+    }
+
+    private fun checkFields() {
+        if (binding.workTextInput.text?.isNotEmpty() == true ||
+            binding.industryTextInput.text?.isNotEmpty() == true ||
+            binding.salary.text?.isNotEmpty() == true
+        ) {
+            setButtonsVisible()
+        } else {
+            setButtonsNotVisible()
+        }
+    }
+
+    private fun setButtonsVisible() {
+        binding.btnGroup.isVisible = true
+    }
+
+    private fun setButtonsNotVisible() {
+        binding.btnGroup.isVisible = false
+    }
+
+    private fun initResultListeners() {
+        setFragmentResultListener(PLACE_OF_WORK_KEY) { _, bundle ->
+
+            val countryJson = bundle.getString(PLACE_OF_WORK_COUNTRY_KEY).toString()
+            val type = object : TypeToken<Country>() {}.type
+            val country = Gson().fromJson<Country>(countryJson, type)
+
+            val regionJson = bundle.getString(PLACE_OF_WORK_REGION_KEY)
+            val typeRegion = object : TypeToken<Region>() {}.type
+            val region = Gson().fromJson<Region>(regionJson, typeRegion)
+
+            regionId = region.id
+            val placeOfWork = StringBuilder()
+            placeOfWork.append(country.name)
+            if (region.name.isNotEmpty()) {
+                placeOfWork.append(", ").append(region.name)
+            }
+            viewModel.setPlaceOfWork(placeOfWork.toString())
+        }
     }
 
     private fun initButtonListeners() {
         binding.filterSettingsTitle.setNavigationOnClickListener { findNavController().navigateUp() }
-        binding.applyButton.setOnClickListener { saveFilters() }
-        binding.clearButton.setOnClickListener { clearFilters() }
+        binding.applyButton.setOnClickListener { viewModel.saveFilter() }
+        binding.clearButton.setOnClickListener { viewModel.clear() }
         // Пример использования Checkbox, если включена опция показа только с зарплатой
         binding.salaryFlagCheckbox.setOnCheckedChangeListener { _, isChecked -> //
             // viewModel.setSalaryOnlyCheckbox(isChecked)
         }
-        // Переход на экран выбора индустрии
-        binding.industryTextInput.setOnClickListener {
-            navigateToIndustry()
-        }
-        binding.industryLayout.setOnClickListener {
-            navigateToIndustry()
-        }
-        // Переход на экран выбора места работы
-        binding.workPlaceLayout.setOnClickListener {
-            navigateToPlaceOfWork()
-        }
         binding.workTextInput.setOnClickListener {
-            navigateToPlaceOfWork()
+            navigateToPlaceOfWorkScreen()
+        }
+        binding.industryTextInput.setOnClickListener {
+            navigateToIndustryScreen()
         }
     }
 
     private fun initTextBehaviour() {
-        initSalaryTextBehaviour()
+        //   initSalaryTextBehaviour()
         initWorkAndIndustryTextBehaviour()
     }
 
     // Настройка поведения поля salary при изменении текста
-    private fun initSalaryTextBehaviour() {
-        binding.salary.doOnTextChanged { text, _, _, _ ->
-            // viewModel.setExpectedSalary(text?.toString())
-            if (text.isNullOrEmpty()) {
-                // Если текст пустой, убираем иконку и меняем цвет hint
-                binding.salaryLayout.endIconMode = TextInputLayout.END_ICON_NONE
-                binding.salaryLayout.defaultHintTextColor = ColorStateList.valueOf(Color.RED)
-                if (binding.salary.isFocused) {
-                    binding.salaryLayout.defaultHintTextColor =
-                        ColorStateList.valueOf(requireContext().getColor(R.color.blue))
-                } else {
-                    binding.salaryLayout.defaultHintTextColor =
-                        ColorStateList.valueOf(requireContext().getColorOnSecondaryFixed())
-                }
-            } else {
-                // Если текст заполнен, показываем иконку и меняем цвет hint
-                if (binding.salary.isFocused) {
-                    binding.salaryLayout.defaultHintTextColor =
-                        ColorStateList.valueOf(requireContext().getColor(R.color.blue))
-                } else {
-                    binding.salaryLayout.defaultHintTextColor =
-                        ColorStateList.valueOf(requireContext().getColor(R.color.black))
-                }
-                binding.salaryLayout.endIconMode = TextInputLayout.END_ICON_CUSTOM
-                binding.salaryLayout.setEndIconOnClickListener {
-                    binding.salary.setText("")
-                }
-            }
-        }
-    }
+    /* private fun initSalaryTextBehaviour() {
+         binding.salary.doOnTextChanged { text, _, _, _ ->
+             // viewModel.setExpectedSalary(text?.toString())
+             if (text.isNullOrEmpty()) {
+                 // Если текст пустой, убираем иконку и меняем цвет hint
+                 binding.salaryLayout.endIconMode = TextInputLayout.END_ICON_NONE
+                 binding.salaryLayout.defaultHintTextColor = ColorStateList.valueOf(Color.RED)
+                 if (binding.salary.isFocused) {
+                     binding.salaryLayout.defaultHintTextColor =
+                         ColorStateList.valueOf(requireContext().getColor(R.color.blue))
+                 } else {
+                     binding.salaryLayout.defaultHintTextColor =
+                         ColorStateList.valueOf(requireContext().getColorOnSecondaryFixed())
+                 }
+             } else {
+                 // Если текст заполнен, показываем иконку и меняем цвет hint
+                 if (binding.salary.isFocused) {
+                     binding.salaryLayout.defaultHintTextColor =
+                         ColorStateList.valueOf(requireContext().getColor(R.color.blue))
+                 } else {
+                     binding.salaryLayout.defaultHintTextColor =
+                         ColorStateList.valueOf(requireContext().getColor(R.color.black))
+                 }
+                 binding.salaryLayout.endIconMode = TextInputLayout.END_ICON_CUSTOM
+                 binding.salaryLayout.setEndIconOnClickListener {
+                     binding.salary.text?.clear()
+                 }
+             }
+         }
+     }*/
 
     // Настройка поведения полей workTextInput и industryTextInput при изменении текста
     private fun initWorkAndIndustryTextBehaviour() {
@@ -172,81 +254,48 @@ class FilterFragment : Fragment() {
         return typedValue.data
     }
 
-    // Установка состояния местоположения (страны и региона)
-    // private fun setStateLocation(country: String?, region: String?) {
-    //     binding.workPlaceLayout.apply {
-    //         setEndIconDrawable(
-    //             if (country.isNullOrEmpty()) {
-    //                 setEndIconOnClickListener {
-    //                     navigateToPlaceOfWork()
-    //                 }
-    //                 R.drawable.ic_arrow_forward_14px
-    //             } else {
-    //                 setEndIconOnClickListener {
-    //                     clearWorkPlace()
-    //                 }
-    //                 R.drawable.ic_close_cross_14px
-    //             }
-    //         )
-    //     }
-    //     // Формирование текста для отображения страны и региона
-    //     val place = country + if (!region.isNullOrEmpty()) {
-    //         getString(R.string.separator) + " $region"
-    //     } else {
-    //         ""
-    //     }
-    //     binding.workTextInput.setText(place)
-    // }
-
-    // Установка состояния индустрии (напр. выбранная индустрия)
-    // private fun setStateIndustry(industry: String?) {
-    //     binding.industryLayout.apply {
-    //         setEndIconDrawable(
-    //             if (industry.isNullOrEmpty()) {
-    //                 setOnClickListener {
-    //                     navigateToIndustry()
-    //                 }
-    //                 R.drawable.ic_arrow_forward_14px
-    //             } else {
-    //                 setEndIconOnClickListener {
-    //                     clearIndustry()
-    //                 }
-    //                 R.drawable.ic_close_cross_14px
-    //             }
-    //         )
-    //     }
-    //     binding.industryTextInput.setText(industry)
-    // }
-
-    // Переход на экран выбора места работы
-    fun navigateToPlaceOfWork() {
-        // Логика навигации к экрану выбора места работы
-    }
-
-    // Переход на экран выбора индустрии
-    fun navigateToIndustry() {
-        // Логика навигации к экрану выбора отрасли
-    }
-
-    // Очистка выбранного места работы
-    // private fun clearWorkPlace() {
-    //     // viewModel.setNewRegionCountry(region = null, country = null, countryId = null, regionId = null)
-    //     clearArguments(1)
-    // }
-
-    // Очистка выбранной индустрии
-    // private fun clearIndustry() {
-    //     // viewModel.setNewIndustry(null)
-    //     clearArguments(0)
-    // }
-
-    // Очистка всех фильтров
-    private fun clearFilters() {
-        binding.apply {
-            clearButton.isVisible = false
-            salary.setText("")
+    private fun setNoCountryEndIcon() {
+        binding.workPlaceLayout.apply {
+            setEndIconDrawable(R.drawable.ic_arrow_forward_14px)
+            setEndIconOnClickListener {
+                navigateToPlaceOfWorkScreen()
+            }
         }
-        // viewModel.clearPrefs()
+    }
+
+    private fun setCountryEndIcon() {
+        binding.workPlaceLayout.apply {
+            setEndIconDrawable(R.drawable.ic_close_cross_14px)
+            setEndIconOnClickListener {
+                viewModel.setPlaceOfWork("")
+            }
+        }
+    }
+
+    private fun setNoIndustryEndIcon() {
+        binding.industryLayout.apply {
+            setEndIconDrawable(R.drawable.ic_arrow_forward_14px)
+            setEndIconOnClickListener {
+                navigateToIndustryScreen()
+            }
+        }
+    }
+
+    private fun setIndustryEndIcon() {
+        binding.industryLayout.apply {
+            setEndIconDrawable(R.drawable.ic_close_cross_14px)
+            setEndIconOnClickListener {
+                viewModel.setIndustry("")
+            }
+        }
+    }
+
+    private fun navigateToPlaceOfWorkScreen() {
+        findNavController().navigate(R.id.action_filterFragment_to_select_place_of_workFragment)
+    }
+
+    private fun navigateToIndustryScreen() {
+        findNavController().navigate(R.id.action_filterFragment_to_select_industryFragment)
     }
 
     // Метод для скрытия элементов интерфейса в зависимости от типа
@@ -257,28 +306,4 @@ class FilterFragment : Fragment() {
     //     }
     // }
 
-    // Сохранение настроек и возврат к предыдущему экрану
-    private fun saveFilters() {
-        lifecycleScope.launch(Dispatchers.IO) {
-            savePrefs()
-            withContext(Dispatchers.Main) {
-                findNavController().navigateUp()
-            }
-        }
-    }
-
-    // Метод для сохранения настроек фильтров
-    private fun savePrefs() {
-        // viewModel.savePrefs()
-    }
-
-    // Метод для отображения кнопки "Применить"
-    // private fun applyButtonVisibility(visible: Boolean) {
-    //     binding.applyButton.isVisible = visible
-    // }
-
-    // Метод для отображения кнопки "Сбросить"
-    // private fun clearButtonVisibility(visible: Boolean) {
-    //     binding.clearButton.isVisible = visible
-    // }
 }
