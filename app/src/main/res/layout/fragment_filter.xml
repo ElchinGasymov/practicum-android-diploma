@@ -78,18 +78,18 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_size_16"
         android:layout_marginTop="@dimen/margin_size_24"
-        android:focusableInTouchMode="true"
+
         android:hint="@string/salary_expectation"
         app:cursorColor="@color/blue"
         app:endIconDrawable="@drawable/ic_close_cross_14px"
-        app:endIconMode="none"
+        app:endIconMode="clear_text"
         app:endIconTint="@color/black"
         app:hintTextColor="@color/blue"
         app:layout_constraintBottom_toTopOf="@id/show_salary_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/industry_layout"
-        app:placeholderText="Введите сумму">
+        app:placeholderText="@string/enter_sum">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/salary"
@@ -161,7 +161,7 @@
         android:id="@+id/btn_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="visible"
+        android:visibility="gone"
         app:constraint_referenced_ids="apply_button,clear_button" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 

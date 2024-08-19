@@ -6,21 +6,46 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
+import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSelectPlaceOfWorkBinding
+import ru.practicum.android.diploma.domain.models.Country
+import ru.practicum.android.diploma.domain.models.Region
+import ru.practicum.android.diploma.presentation.viewmodels.FilterPlaceOfWorkViewModel
+import ru.practicum.android.diploma.ui.fragments.FilterCountryFragment.Companion.COUNTRY_BUNDLE_KEY
+import ru.practicum.android.diploma.ui.fragments.FilterCountryFragment.Companion.COUNTRY_REQUEST_KEY
+import ru.practicum.android.diploma.ui.fragments.FilterRegionFragment.Companion.REGION_REQUEST_KEY
+import ru.practicum.android.diploma.ui.state.PlaceOfWorkScreenState
 
 class FilterPlaceOfWorkFragment : Fragment() {
+    companion object {
+        const val REGION_ID_KEY = "REGION_ID_KEY"
+        const val REGION_BUNDLE_KEY = "REGION_BUNDLE_KEY"
+        const val PLACE_OF_WORK_KEY = "PLACE_OF_WORK_KEY"
+        const val PLACE_OF_WORK_COUNTRY_KEY = "PLACE_OF_WORK_COUNTRY_KEY"
+        const val PLACE_OF_WORK_REGION_KEY = "PLACE_OF_WORK_REGION_KEY"
+    }
 
     private val binding: FragmentSelectPlaceOfWorkBinding by viewBinding(CreateMethod.INFLATE)
+    private val viewModel by viewModel<FilterPlaceOfWorkViewModel>()
+
+    private var countryName = ""
+    private var regionName = ""
+    private var countryId = ""
+    private var country = Country("", "")
+    private var region = Region("", "", null)
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,31 +58,97 @@ class FilterPlaceOfWorkFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.selectPlaceOfWorkToolbar.setNavigationOnClickListener {
-            findNavController().navigateUp()
-        }
-
         initButtonListeners()
         initTextBehaviour()
+        initResultListeners()
+
+        viewModel.render().observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is PlaceOfWorkScreenState.CountryName -> {
+                    country = state.country
+                    countryName = state.country.name
+                    binding.countryTextInput.setText(countryName)
+                    countryId = state.country.id
+                    setCountryEndIcon()
+                    setApplyButtonVisible()
+                }
+
+                PlaceOfWorkScreenState.NoCountryName -> {
+                    binding.countryTextInput.text?.clear()
+                    countryName = ""
+                    countryId = ""
+                    country = Country("", "")
+                    setNoCountryEndIcon()
+                    checkFields()
+                }
+
+                PlaceOfWorkScreenState.NoRegionName -> {
+                    binding.regionTextInput.text?.clear()
+                    regionName = ""
+                    if (countryName.isEmpty()) {
+                        countryId = ""
+                    }
+                    region = Region(",", "", null)
+                    setNoRegionEndIcon()
+                    checkFields()
+                }
+
+                is PlaceOfWorkScreenState.RegionName -> {
+                    regionName = state.regionName
+                    binding.regionTextInput.setText(regionName)
+                    setRegionEndIcon()
+                    setApplyButtonVisible()
+                }
+
+                is PlaceOfWorkScreenState.Saved -> {
+                    val jsonCountry = Gson().toJson(state.country)
+                    val jsonRegion = Gson().toJson(state.region)
+                    setFragmentResult(
+                        PLACE_OF_WORK_KEY,
+                        bundleOf(
+                            PLACE_OF_WORK_COUNTRY_KEY to jsonCountry,
+                            PLACE_OF_WORK_REGION_KEY to jsonRegion,
+                        )
+                    )
+                    findNavController().navigateUp()
+                }
+            }
+
+        }
+    }
+
+    private fun initResultListeners() {
+        setFragmentResultListener(COUNTRY_REQUEST_KEY) { _, bundle ->
+            val json = bundle.getString(COUNTRY_BUNDLE_KEY).toString()
+            val type = object : TypeToken<Country>() {}.type
+            country = Gson().fromJson(json, type)
+            countryId = country.id
+            viewModel.setCountryName(country)
+        }
+
+        setFragmentResultListener(REGION_REQUEST_KEY) { _, bundle ->
+            val json = bundle.getString(REGION_BUNDLE_KEY).toString()
+            val type = object : TypeToken<Region>() {}.type
+            region = Gson().fromJson(json, type)
+            getCountryName(region)
+            viewModel.setRegionName(region.name)
+        }
     }
 
     private fun initButtonListeners() {
         binding.selectPlaceOfWorkToolbar.setNavigationOnClickListener { findNavController().navigateUp() }
         binding.applyButton.setOnClickListener { saveFilters() }
-        // Переход на экран выбора страны
+
         binding.countryTextInput.setOnClickListener {
             navigateToCountrySelection()
         }
-        binding.countryLayout.setOnClickListener {
-            navigateToCountrySelection()
-        }
-        // Переход на экран выбора региона
         binding.regionTextInput.setOnClickListener {
             navigateToRegionSelection()
         }
-        binding.regionLayout.setOnClickListener {
-            navigateToRegionSelection()
-        }
+    }
+
+    private fun getCountryName(region: Region) {
+        viewModel.getCountryName(region, false)
     }
 
     private fun initTextBehaviour() {
@@ -78,6 +169,55 @@ class FilterPlaceOfWorkFragment : Fragment() {
                 updateRegionHintAppearance(true)
             }
         }
+    }
+
+    private fun saveFilters() {
+        viewModel.saveFields(country, region)
+    }
+
+    private fun setNoCountryEndIcon() {
+        binding.countryLayout.apply {
+            setEndIconDrawable(R.drawable.ic_arrow_forward_14px)
+            setEndIconOnClickListener {
+                navigateToCountrySelection()
+            }
+        }
+    }
+
+    private fun setCountryEndIcon() {
+        binding.countryLayout.apply {
+            setEndIconDrawable(R.drawable.ic_close_cross_14px)
+            setEndIconOnClickListener {
+                viewModel.setCountryName(Country("", ""))
+            }
+        }
+    }
+
+    private fun setNoRegionEndIcon() {
+        binding.regionLayout.apply {
+            setEndIconDrawable(R.drawable.ic_arrow_forward_14px)
+            setEndIconOnClickListener {
+                navigateToRegionSelection()
+            }
+        }
+    }
+
+    private fun setRegionEndIcon() {
+        binding.regionLayout.apply {
+            setEndIconDrawable(R.drawable.ic_close_cross_14px)
+            setEndIconOnClickListener {
+                viewModel.setRegionName("")
+            }
+        }
+    }
+
+    private fun checkFields() {
+        binding.applyButton.isVisible = binding.countryTextInput.text?.isNotEmpty() == true ||
+            binding.regionTextInput.text?.isNotEmpty() == true
+    }
+
+    private fun setApplyButtonVisible() {
+        binding.applyButton.isVisible = true
     }
 
     // Метод для обновления внешнего вида hint в зависимости от заполненности поля
@@ -118,96 +258,15 @@ class FilterPlaceOfWorkFragment : Fragment() {
         }
     }
 
-    // Установка состояния страны
-    // private fun setCountry(country: String?) {
-    //     binding.countryLayout.apply {
-    //         setEndIconDrawable(
-    //             if (country.isNullOrEmpty()) {
-    //                 setEndIconOnClickListener {
-    //                     navigateToCountrySelection()
-    //                 }
-    //                 R.drawable.ic_arrow_forward_14px
-    //             } else {
-    //                 setEndIconOnClickListener {
-    //                     clearCountry()
-    //                 }
-    //                 R.drawable.ic_close_cross_14px
-    //             }
-    //         )
-    //     }
-    //     val countryText = country ?: ""
-    //     binding.countryTextInput.setText(countryText)
-    // }
-
-    // Установка состояния региона
-    // private fun setRegion(region: String?) {
-    //     binding.regionLayout.apply {
-    //         setEndIconDrawable(
-    //             if (region.isNullOrEmpty()) {
-    //                 setEndIconOnClickListener {
-    //                     navigateToRegionSelection()
-    //                 }
-    //                 R.drawable.ic_arrow_forward_14px
-    //             } else {
-    //                 setEndIconOnClickListener {
-    //                     clearRegion()
-    //                 }
-    //                 R.drawable.ic_close_cross_14px
-    //             }
-    //         )
-    //     }
-    //     val regionText = region ?: ""
-    //     binding.regionTextInput.setText(regionText)
-    // }
-
-    // Переход на экран выбора страны
-    fun navigateToCountrySelection() {
-        // Логика навигации к экрану выбора страны
+    private fun navigateToCountrySelection() {
+        findNavController().navigate(R.id.action_selectPlaceOfWorkFragment_to_filtersCountryFragment)
     }
 
-    // Переход на экран выбора региона
-    fun navigateToRegionSelection() {
-        // Логика навигации к экрану выбора региона
+    private fun navigateToRegionSelection() {
+        setFragmentResult(REGION_ID_KEY, bundleOf(REGION_BUNDLE_KEY to countryId))
+        findNavController().navigate(
+            R.id.action_selectPlaceOfWorkFragment_to_filterRegionFragment
+        )
     }
-
-    // Очистка выбранной страны
-    // private fun clearCountry() {
-    //     // viewModel.setNewCountry(null)
-    //     clearArguments(0)
-    // }
-
-    // Очистка выбранного региона
-    // private fun clearRegion() {
-    //     // viewModel.setNewRegion(null)
-    //     clearArguments(1)
-    // }
-
-    // Метод для скрытия элементов интерфейса в зависимости от типа
-    // private fun clearArguments(type: Int) {
-    //     when (type) {
-    //         0 -> binding.countryTextInput.isVisible = false
-    //         1 -> binding.regionTextInput.isVisible = false
-    //     }
-    // }
-
-    // Сохранение настроек и возврат к предыдущему экрану
-    private fun saveFilters() {
-        lifecycleScope.launch(Dispatchers.IO) {
-            savePrefs()
-            withContext(Dispatchers.Main) {
-                findNavController().navigateUp()
-            }
-        }
-    }
-
-    // Метод для сохранения настроек
-    private fun savePrefs() {
-        // Логика сохранения данных, например, через ViewModel
-    }
-
-    // Метод для отображения кнопки "Применить"
-    // private fun applyButtonVisibility(visible: Boolean) {
-    //     binding.applyButton.isVisible = visible
-    // }
 
 }
