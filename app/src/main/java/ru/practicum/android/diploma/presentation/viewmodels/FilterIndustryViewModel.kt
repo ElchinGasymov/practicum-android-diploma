@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.FilterInteractor
 import ru.practicum.android.diploma.domain.models.Industries
+import ru.practicum.android.diploma.domain.models.SaveFiltersSharedPrefs
 import ru.practicum.android.diploma.util.ResponseData
 
 class FilterIndustryViewModel(
@@ -26,15 +27,44 @@ class FilterIndustryViewModel(
 
     fun updateListIndustries() {
         viewModelScope.launch {
+            val industry = interactor.readSharedPrefs()?.industries
             interactor.getIndustries().collect { list ->
                 when (list) {
                     is ResponseData.Data -> {
-                        _industries.postValue(list.value)
+                        if (industry != null) {
+                            val newList = ArrayList<Industries>()
+                            list.value.forEach { industryItem ->
+                                if (industryItem.id == industry.id) {
+                                    newList.add(industryItem.copy(isChecked = true))
+                                    _selectedIndustry.postValue(industryItem)
+                                    _hasSelected.postValue(true)
+                                } else {
+                                    newList.add(industryItem)
+                                }
+                            }
+                            _industries.postValue(newList)
+                        } else {
+                            _industries.postValue(list.value)
+                        }
                     }
 
                     is ResponseData.Error -> {}
                 }
             }
+        }
+    }
+
+    fun writeSharedPrefs() {
+        viewModelScope.launch {
+            interactor.writeSharedPrefs(
+                SaveFiltersSharedPrefs(
+                    industries = _selectedIndustry.value,
+                    null,
+                    null,
+                    null,
+                    null
+                )
+            )
         }
     }
 
@@ -51,14 +81,6 @@ class FilterIndustryViewModel(
             }
         }
         _industries.postValue(newList)
-    }
-
-    fun readSharedPrefs() {
-        viewModelScope.launch {
-            val industry = interactor.readSharedPrefs()?.industries
-            if (industry != null)
-                itemChecked(industry)
-        }
     }
 }
 

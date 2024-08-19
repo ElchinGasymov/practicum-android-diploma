@@ -36,7 +36,7 @@ class FilterFragment : Fragment() {
 
     private val binding: FragmentFilterBinding by viewBinding(CreateMethod.INFLATE)
     private val viewModel by viewModel<FilterViewModel>()
-
+    private var init = true
     private var regionId = ""
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,6 +56,7 @@ class FilterFragment : Fragment() {
             if (!text.isNullOrEmpty()) {
                 binding.btnGroup.isVisible = true
                 viewModel.setCurrencySelected(text.toString().toInt())
+                viewModel.saveSharedPrefsCurrency(text.toString().toInt())
             } else {
                 checkFields()
             }
@@ -99,7 +100,7 @@ class FilterFragment : Fragment() {
 
 
         viewModel.readSharedPrefs()
-        if (true) {
+        if (init) {
             viewModel.sharedPrefs.observe(viewLifecycleOwner) { filters ->
                 if (filters.industries != null) {
                     viewModel.setIndustry(filters.industries.name)
@@ -126,9 +127,8 @@ class FilterFragment : Fragment() {
                     viewModel.setPlaceOfWork(placeOfWork.toString())
                     viewModel.setCountrySelected(filters.country)
                 }
-
             }
-
+            init = false
         }
     }
 
@@ -185,12 +185,12 @@ class FilterFragment : Fragment() {
     private fun initButtonListeners() {
         binding.filterSettingsTitle.setNavigationOnClickListener { findNavController().navigateUp() }
         binding.applyButton.setOnClickListener {
-            viewModel.saveFilter()
             findNavController().popBackStack()
         }
         binding.clearButton.setOnClickListener { viewModel.clear() }
         // Пример использования Checkbox, если включена опция показа только с зарплатой
         binding.salaryFlagCheckbox.setOnCheckedChangeListener { _, isChecked -> //
+            viewModel.saveSharedPrefsNoCurrency(isChecked)
             viewModel.setNoCurrencySelected(isChecked)
             // viewModel.setSalaryOnlyCheckbox(isChecked)
         }

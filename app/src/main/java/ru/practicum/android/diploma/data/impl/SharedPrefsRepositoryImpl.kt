@@ -23,7 +23,15 @@ class SharedPrefsRepositoryImpl(
     }
 
     override suspend fun writeSharedPrefs(filters: SaveFiltersSharedPrefs) {
-        sharedPreferences.edit().putString(HISTORY, gson.toJson(filters)).apply()
+        val oldShared = readSharedPrefs()
+        val newShared = oldShared.copy(
+            industries = filters.industries ?: oldShared.industries,
+            country = filters.country ?: oldShared.country,
+            region = filters.region ?: oldShared.region,
+            currency = filters.currency ?: oldShared.currency,
+            noCurrency = filters.noCurrency ?: oldShared.noCurrency,
+        )
+        sharedPreferences.edit().putString(HISTORY, gson.toJson(newShared)).apply()
     }
 
     override suspend fun clearSharedPrefs() {

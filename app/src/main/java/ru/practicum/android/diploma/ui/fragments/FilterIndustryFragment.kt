@@ -77,9 +77,8 @@ class FilterIndustryFragment : Fragment() {
         binding.applyButton.setOnClickListener {
             val json = Gson().toJson(viewModel.selectedIndustry.value)
             setFragmentResult(INDUSTRY_KEY, bundleOf(INDUSTRY_ITEM_KEY to json))
+            viewModel.writeSharedPrefs()
             findNavController().popBackStack()
         }
-        viewModel.readSharedPrefs()
     }
-
 }

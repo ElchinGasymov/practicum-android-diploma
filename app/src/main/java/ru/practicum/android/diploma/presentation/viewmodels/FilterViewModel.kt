@@ -45,20 +45,6 @@ class FilterViewModel(
         return screenStateLiveData
     }
 
-    fun saveFilter() {
-        viewModelScope.launch(Dispatchers.IO) {
-            interactor.writeSharedPrefs(
-                SaveFiltersSharedPrefs(
-                    industries = _industry.value,
-                    country = _country.value,
-                    region = _region.value,
-                    currency = _currency.value,
-                    noCurrency = _noCurrency.value
-                )
-            )
-        }
-    }
-
     fun clear() {
         setState(FilterScreenState.ClearState)
     }
@@ -95,6 +81,34 @@ class FilterViewModel(
 
     fun setCurrencySelected(currency: Int) {
         _currency.postValue(currency)
+    }
+
+    fun saveSharedPrefsCurrency(currency: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            interactor.writeSharedPrefs(
+                SaveFiltersSharedPrefs(
+                    industries = null,
+                    country = null,
+                    region = null,
+                    currency = currency,
+                    noCurrency = null
+                )
+            )
+        }
+    }
+
+    fun saveSharedPrefsNoCurrency(noCurrency: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            interactor.writeSharedPrefs(
+                SaveFiltersSharedPrefs(
+                    industries = null,
+                    country = null,
+                    region = null,
+                    currency = null,
+                    noCurrency = noCurrency
+                )
+            )
+        }
     }
 
     fun setNoCurrencySelected(answer: Boolean) {
