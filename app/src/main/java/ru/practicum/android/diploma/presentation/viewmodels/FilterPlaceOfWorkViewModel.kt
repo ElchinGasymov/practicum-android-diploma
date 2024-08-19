@@ -50,6 +50,17 @@ class FilterPlaceOfWorkViewModel(
         }
     }
 
+    fun getFilterSetting() {
+        viewModelScope.launch {
+            val filters = filterInteractor.readSharedPrefs()
+            if (filters != null) {
+                if (filters.country?.name?.isNotEmpty() == true) {
+                    setState(PlaceOfWorkScreenState.Loaded(filters))
+                }
+            }
+        }
+    }
+
     private fun setData(isSaving: Boolean, country: Country, region: Region) {
         if (isSaving) {
             setState(PlaceOfWorkScreenState.Saved(country, region))
@@ -66,9 +77,9 @@ class FilterPlaceOfWorkViewModel(
         }
     }
 
-    fun setRegionName(regionName: String) {
-        if (regionName.isNotEmpty()) {
-            setState(PlaceOfWorkScreenState.RegionName(regionName))
+    fun setRegionName(region: Region) {
+        if (region.name.isNotEmpty()) {
+            setState(PlaceOfWorkScreenState.RegionName(region))
         } else {
             setState(PlaceOfWorkScreenState.NoRegionName)
         }

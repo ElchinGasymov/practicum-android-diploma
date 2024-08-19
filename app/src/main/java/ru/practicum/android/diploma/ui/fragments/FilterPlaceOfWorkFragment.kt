@@ -25,6 +25,7 @@ import ru.practicum.android.diploma.domain.models.Region
 import ru.practicum.android.diploma.presentation.viewmodels.FilterPlaceOfWorkViewModel
 import ru.practicum.android.diploma.ui.fragments.FilterCountryFragment.Companion.COUNTRY_BUNDLE_KEY
 import ru.practicum.android.diploma.ui.fragments.FilterCountryFragment.Companion.COUNTRY_REQUEST_KEY
+import ru.practicum.android.diploma.ui.fragments.FilterFragment.Companion.FILTER_TO_PLACE_OF_WORK_KEY
 import ru.practicum.android.diploma.ui.fragments.FilterRegionFragment.Companion.REGION_REQUEST_KEY
 import ru.practicum.android.diploma.ui.state.PlaceOfWorkScreenState
 
@@ -94,7 +95,8 @@ class FilterPlaceOfWorkFragment : Fragment() {
                 }
 
                 is PlaceOfWorkScreenState.RegionName -> {
-                    regionName = state.regionName
+                    regionName = state.region.name
+                    region = state.region
                     binding.regionTextInput.setText(regionName)
                     setRegionEndIcon()
                     setApplyButtonVisible()
@@ -111,6 +113,23 @@ class FilterPlaceOfWorkFragment : Fragment() {
                         )
                     )
                     findNavController().navigateUp()
+                }
+
+                is PlaceOfWorkScreenState.Loaded -> {
+                    if (state.filters.country != null) {
+                        country = state.filters.country
+                        countryName = state.filters.country.name
+                        binding.countryTextInput.setText(countryName)
+                        countryId = state.filters.country.id
+                        setCountryEndIcon()
+                    }
+                    if (state.filters.region != null) {
+                        region = state.filters.region
+                        regionName = state.filters.region.name
+                        binding.regionTextInput.setText(regionName)
+                        setRegionEndIcon()
+                    }
+                    setApplyButtonVisible()
                 }
             }
 
@@ -131,7 +150,10 @@ class FilterPlaceOfWorkFragment : Fragment() {
             val type = object : TypeToken<Region>() {}.type
             region = Gson().fromJson(json, type)
             getCountryName(region)
-            viewModel.setRegionName(region.name)
+            viewModel.setRegionName(region)
+        }
+        setFragmentResultListener(FILTER_TO_PLACE_OF_WORK_KEY) { _, _ ->
+            viewModel.getFilterSetting()
         }
     }
 
@@ -206,7 +228,7 @@ class FilterPlaceOfWorkFragment : Fragment() {
         binding.regionLayout.apply {
             setEndIconDrawable(R.drawable.ic_close_cross_14px)
             setEndIconOnClickListener {
-                viewModel.setRegionName("")
+                viewModel.setRegionName(Region("","",null))
             }
         }
     }

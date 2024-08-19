@@ -12,6 +12,7 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,6 +25,7 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.presentation.viewmodels.SearchViewModel
+import ru.practicum.android.diploma.ui.fragments.FilterFragment.Companion.FILTER_REQUEST_KEY
 import ru.practicum.android.diploma.ui.state.SearchScreenState
 import ru.practicum.android.diploma.util.ResponseData
 import ru.practicum.android.diploma.util.adapter.VacancyAdapter
@@ -170,8 +172,8 @@ class SearchFragment : Fragment() {
 
         binding.searchQuery.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                val view = activity?.currentFocus
-                if (view != null) {
+                val viewEdit = activity?.currentFocus
+                if (viewEdit != null) {
                     val imm =
                         activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
                     imm?.hideSoftInputFromWindow(view.windowToken, 0)
@@ -179,11 +181,21 @@ class SearchFragment : Fragment() {
             }
             false
         }
+        viewModel.getOptions()
 
         val vacanciesRecyclerView = binding.searchRecycleView
         vacanciesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         vacanciesRecyclerView.adapter = adapter
+        initResultListeners()
 
+    }
+
+    private fun initResultListeners() {
+        setFragmentResultListener(FILTER_REQUEST_KEY) { _, _ ->
+            if (viewModel.getMainRequest().isNotEmpty()) {
+                viewModel.search(true)
+            }
+        }
     }
 
     private fun removePlaceholders() {
