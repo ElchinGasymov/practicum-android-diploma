@@ -34,7 +34,7 @@ class FilterViewModel(
     }
 
     fun getFilterSetting() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val filters = filterInteractor.readSharedPrefs()
             if (filters != null) {
                 setState(FilterScreenState.FiltersLoaded(filters))
@@ -43,7 +43,10 @@ class FilterViewModel(
     }
 
     fun clear() {
-        setState(FilterScreenState.ClearState)
+        viewModelScope.launch(Dispatchers.IO) {
+            filterInteractor.clearSharedPrefs()
+            setState(FilterScreenState.ClearState)
+        }
     }
 
     fun setIndustry(industry: String) {
@@ -52,7 +55,6 @@ class FilterViewModel(
         } else {
             setState(FilterScreenState.NoIndustry)
         }
-
     }
 
     private fun setState(state: FilterScreenState) {
