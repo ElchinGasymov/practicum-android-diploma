@@ -2,6 +2,7 @@ package ru.practicum.android.diploma.di
 
 import android.content.Context
 import androidx.room.Room
+import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
@@ -51,6 +52,10 @@ val dataModule = module {
 
     single<ConverterIntoEntity> {
         ConverterIntoEntity()
+    }
+
+    single {
+        Gson()
     }
 
     single {

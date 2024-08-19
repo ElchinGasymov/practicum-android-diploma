@@ -12,7 +12,4 @@ interface FilterRepository {
     fun getRegions(id: String): Flow<ResponseData<List<Region>>>
     fun getAllRegions(): Flow<ResponseData<List<Region>>>
     fun getIndustries(): Flow<ResponseData<List<Industries>>>
-    suspend fun readSharedPrefs(): SaveFiltersSharedPrefs?
-    suspend fun writeSharedPrefs(filters: SaveFiltersSharedPrefs)
-    suspend fun clearSharedPrefs()
 }

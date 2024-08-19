@@ -2,6 +2,7 @@ package ru.practicum.android.diploma.domain.impl
 
 import kotlinx.coroutines.flow.Flow
 import ru.practicum.android.diploma.domain.FilterInteractor
+import ru.practicum.android.diploma.domain.SharedPrefsRepository
 import ru.practicum.android.diploma.domain.api.FilterRepository
 import ru.practicum.android.diploma.domain.models.Country
 import ru.practicum.android.diploma.domain.models.Industries
@@ -11,6 +12,7 @@ import ru.practicum.android.diploma.util.ResponseData
 
 class FilterInteractorImpl(
     private val repository: FilterRepository,
+    private val repositorySharePrefs: SharedPrefsRepository
 ) : FilterInteractor {
     override suspend fun getCountries(): Flow<ResponseData<List<Country>>> {
         return repository.getCountries()
@@ -29,14 +31,14 @@ class FilterInteractorImpl(
     }
 
     override suspend fun readSharedPrefs(): SaveFiltersSharedPrefs? {
-        return repository.readSharedPrefs()
+        return repositorySharePrefs.readSharedPrefs()
     }
 
     override suspend fun writeSharedPrefs(filters: SaveFiltersSharedPrefs) {
-        repository.writeSharedPrefs(filters)
+        repositorySharePrefs.writeSharedPrefs(filters)
     }
 
     override suspend fun clearSharedPrefs() {
-        repository.clearSharedPrefs()
+        repositorySharePrefs.clearSharedPrefs()
     }
 }
