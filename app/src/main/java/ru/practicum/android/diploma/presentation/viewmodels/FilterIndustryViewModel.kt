@@ -28,5 +28,13 @@ class FilterIndustryViewModel(
             }
         }
     }
+
+    private fun writeSharedPrefs(industries: Industries){
+
+    }
+
+    private fun readSharedPrefs(){
+        
+    }
 }
 
