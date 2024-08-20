@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.domain.FilterInteractor
 import ru.practicum.android.diploma.domain.SearchInteractor
 import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.ui.state.SearchScreenState
@@ -14,7 +15,8 @@ import ru.practicum.android.diploma.util.ResponseData
 import ru.practicum.android.diploma.util.debounce
 
 class SearchViewModel(
-    private val searchInteractor: SearchInteractor
+    private val searchInteractor: SearchInteractor,
+    private val filterInteractor: FilterInteractor
 ) : ViewModel() {
     companion object {
         const val ITEMS_PER_PAGE = 20
@@ -29,6 +31,15 @@ class SearchViewModel(
     private var isNextPageLoading = false
     private var mainRequest = ""
     private var requestNextPage = ""
+    private var options = Options(
+        requestNextPage,
+        ITEMS_PER_PAGE,
+        currentPage,
+        "",
+        "",
+        "",
+        false
+    )
     private val _vacancyIsClickable = MutableLiveData(true)
     var vacancyIsClickable: LiveData<Boolean> = _vacancyIsClickable
 
@@ -58,21 +69,57 @@ class SearchViewModel(
         setScreenState(SearchScreenState.Default)
     }
 
+    fun getMainRequest(): String {
+        return mainRequest
+    }
+
     private fun searchVacancies(request: String) {
         if (request != this.mainRequest) {
             currentPage = 0
             setScreenState(SearchScreenState.Loading)
             this.mainRequest = request
             requestNextPage = request
+            getOptions()
             search(true)
         }
 
     }
 
-    private fun search(isNewRequest: Boolean) {
+    fun getOptions() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val filter = filterInteractor.readSharedPrefs()
+            if (filter != null) {
+                options = Options(
+                    requestNextPage,
+                    ITEMS_PER_PAGE,
+                    currentPage,
+                    if (filter.region?.id?.isNotEmpty() == true) {
+                        filter.region.id
+                    } else {
+                        filter.country?.id.toString()
+                    },
+                    filter.industries?.id.toString(),
+                    filter.currency.toString(),
+                    filter.noCurrency
+                )
+            } else {
+                options = Options(
+                    requestNextPage,
+                    ITEMS_PER_PAGE,
+                    currentPage,
+                    "",
+                    "",
+                    "",
+                    false
+                )
+            }
+        }
+    }
+
+    fun search(isNewRequest: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
             searchInteractor
-                .search(Options(requestNextPage, ITEMS_PER_PAGE, currentPage))
+                .search(options)
                 .collect { response ->
                     when (response) {
                         is ResponseData.Data -> {

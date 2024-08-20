@@ -6,9 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.domain.FilterInteractor
+import ru.practicum.android.diploma.domain.models.SaveFiltersSharedPrefs
 import ru.practicum.android.diploma.ui.state.FilterScreenState
 
-class FilterViewModel : ViewModel() {
+class FilterViewModel(
+    private val filterInteractor: FilterInteractor
+) : ViewModel() {
 
     private val screenStateLiveData = MutableLiveData<FilterScreenState>()
 
@@ -16,13 +20,33 @@ class FilterViewModel : ViewModel() {
         return screenStateLiveData
     }
 
-    fun saveFilter() {
+    fun saveFilterAndClose(filter: SaveFiltersSharedPrefs) {
         viewModelScope.launch(Dispatchers.IO) {
+            filterInteractor.writeSharedPrefs(filter)
+            setState(FilterScreenState.FiltersSaved(filter))
+        }
+    }
+
+    fun saveFilter(filter: SaveFiltersSharedPrefs) {
+        viewModelScope.launch(Dispatchers.IO) {
+            filterInteractor.writeSharedPrefs(filter)
+        }
+    }
+
+    fun getFilterSetting() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val filters = filterInteractor.readSharedPrefs()
+            if (filters != null) {
+                setState(FilterScreenState.FiltersLoaded(filters))
+            }
         }
     }
 
     fun clear() {
-        setState(FilterScreenState.ClearState)
+        viewModelScope.launch(Dispatchers.IO) {
+            filterInteractor.clearSharedPrefs()
+            setState(FilterScreenState.ClearState)
+        }
     }
 
     fun setIndustry(industry: String) {
@@ -31,7 +55,6 @@ class FilterViewModel : ViewModel() {
         } else {
             setState(FilterScreenState.NoIndustry)
         }
-
     }
 
     private fun setState(state: FilterScreenState) {
