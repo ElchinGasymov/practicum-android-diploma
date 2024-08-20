@@ -392,7 +392,8 @@ class FilterFragment : Fragment() {
         setFragmentResult(
             FILTER_TO_PLACE_OF_WORK_KEY,
             bundleOf(
-                FILTER_TO_PLACE_OF_WORK_COUNTRY_KEY to jsonCountry, FILTER_TO_PLACE_OF_WORK_REGION_KEY to jsonRegion
+                FILTER_TO_PLACE_OF_WORK_COUNTRY_KEY to jsonCountry,
+                FILTER_TO_PLACE_OF_WORK_REGION_KEY to jsonRegion
             )
         )
         findNavController().navigate(R.id.action_filterFragment_to_select_place_of_workFragment)
