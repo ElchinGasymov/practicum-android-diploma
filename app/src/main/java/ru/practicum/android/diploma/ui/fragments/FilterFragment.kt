@@ -185,8 +185,6 @@ class FilterFragment : Fragment() {
         return placeOfWork.toString()
     }
 
-
-
     private fun initButtonListeners() {
         binding.filterSettingsTitle.setNavigationOnClickListener { findNavController().navigateUp() }
         binding.applyButton.setOnClickListener { saveFilterSettings() }
