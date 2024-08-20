@@ -73,7 +73,6 @@ class FilterViewModel(
         }
     }
 
-
     fun setNoCurrencySelected(answer: Boolean) {
         _noCurrency.postValue(answer)
     }
@@ -81,5 +80,4 @@ class FilterViewModel(
     fun setIndustrySelected(industries: Industries?) {
         _industry.postValue(industries)
     }
-
 }
