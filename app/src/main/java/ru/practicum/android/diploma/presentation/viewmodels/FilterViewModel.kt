@@ -8,9 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.FilterInteractor
 import ru.practicum.android.diploma.domain.models.SaveFiltersSharedPrefs
-import ru.practicum.android.diploma.domain.models.Country
 import ru.practicum.android.diploma.domain.models.Industries
-import ru.practicum.android.diploma.domain.models.Region
 import ru.practicum.android.diploma.ui.state.FilterScreenState
 
 class FilterViewModel(
@@ -19,27 +17,8 @@ class FilterViewModel(
 
     private val screenStateLiveData = MutableLiveData<FilterScreenState>()
 
-    private val _filtersSave = MutableLiveData<SaveFiltersSharedPrefs>()
-    val sharedPrefs: LiveData<SaveFiltersSharedPrefs>
-        get() = _filtersSave
-
-    private val _country = MutableLiveData<Country?>()
-    private val _region = MutableLiveData<Region?>()
-    private val _currency = MutableLiveData<Int?>()
     private val _noCurrency = MutableLiveData<Boolean?>()
     private val _industry = MutableLiveData<Industries?>()
-
-    fun readSharedPrefs() {
-        viewModelScope.launch {
-            _filtersSave.postValue(filterInteractor.readSharedPrefs())
-        }
-    }
-
-    fun clearSharedPrefs() {
-        viewModelScope.launch {
-            filterInteractor.clearSharedPrefs()
-        }
-    }
 
     fun render(): LiveData<FilterScreenState> {
         return screenStateLiveData
@@ -92,48 +71,8 @@ class FilterViewModel(
         } else {
             setState(FilterScreenState.NoPlaceOfWork)
         }
-
     }
 
-    fun setCountrySelected(country: Country) {
-        _country.postValue(country)
-    }
-
-    fun setRegionSelected(region: Region) {
-        _region.postValue(region)
-    }
-
-    fun setCurrencySelected(currency: Int) {
-        _currency.postValue(currency)
-    }
-
-    fun saveSharedPrefsCurrency(currency: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            filterInteractor.writeSharedPrefs(
-                SaveFiltersSharedPrefs(
-                    industries = null,
-                    country = null,
-                    region = null,
-                    currency = currency.toString(),
-                    noCurrency = false
-                )
-            )
-        }
-    }
-
-    fun saveSharedPrefsNoCurrency(noCurrency: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
-            filterInteractor.writeSharedPrefs(
-                SaveFiltersSharedPrefs(
-                    industries = null,
-                    country = null,
-                    region = null,
-                    currency = null,
-                    noCurrency = noCurrency
-                )
-            )
-        }
-    }
 
     fun setNoCurrencySelected(answer: Boolean) {
         _noCurrency.postValue(answer)

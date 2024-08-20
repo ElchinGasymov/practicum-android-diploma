@@ -11,15 +11,17 @@ data class Options(
 ) {
     companion object {
         fun toMap(options: Options): Map<String, String> = with(options) {
-            listOfNotNull(
-                "text" to searchText,
-                "per_page" to itemsPerPage.toString(),
-                "page" to page.toString(),
-                if (area?.isNotEmpty() == true) "area" to area.toString() else null,
-                if (industry?.isNotEmpty() == true) "industry" to area.toString() else null,
-                if (salary?.isNotEmpty() == true) "salary" to area.toString() else null,
-                "only_with_salary" to withSalary.toString()
-            ).toMap()
+            buildMap {
+                put("text", searchText)
+                put("per_page", itemsPerPage.toString())
+                put("page", page.toString())
+                if (area?.isNotEmpty() == true) {
+                    put("area", area.toString())
+                }
+                if (industry?.isNotEmpty() == true) put("industry", industry.toString())
+                if (salary?.isNotEmpty() == true) put("salary", salary.toString())
+                put("only_with_salary", withSalary.toString())
+            }
         }
     }
 }

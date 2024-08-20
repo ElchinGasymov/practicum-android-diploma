@@ -67,8 +67,7 @@ class FilterFragment : Fragment() {
         binding.salary.doOnTextChanged { text, _, _, _ ->
             if (!text.isNullOrEmpty()) {
                 binding.btnGroup.isVisible = true
-                viewModel.setCurrencySelected(text.toString().toInt())
-                viewModel.saveSharedPrefsCurrency(text.toString().toInt())
+                viewModel.saveFilter(makeFilterSettings())
             } else {
                 checkFields()
             }
@@ -101,6 +100,7 @@ class FilterFragment : Fragment() {
                     binding.industryTextInput.text?.clear()
                     setNoIndustryEndIcon()
                     checkFields()
+                    industries = Industries("", "", false)
                 }
 
                 FilterScreenState.NoPlaceOfWork -> {
@@ -169,7 +169,8 @@ class FilterFragment : Fragment() {
             val industryJson = bundle.getString(INDUSTRY_ITEM_KEY).toString()
             val type = object : TypeToken<Industries>() {}.type
             val industry = Gson().fromJson<Industries>(industryJson, type)
-            viewModel.setIndustry(industry.name.toString())
+            industries = industry
+            viewModel.setIndustry(industry.name)
             viewModel.setIndustrySelected(industry)
         }
     }
@@ -191,7 +192,7 @@ class FilterFragment : Fragment() {
         binding.clearButton.setOnClickListener { viewModel.clear() }
         // Пример использования Checkbox, если включена опция показа только с зарплатой
         binding.salaryFlagCheckbox.setOnCheckedChangeListener { _, isChecked -> //
-            viewModel.saveSharedPrefsNoCurrency(isChecked)
+            viewModel.saveFilter(makeFilterSettings())
             viewModel.setNoCurrencySelected(isChecked)
             // viewModel.setSalaryOnlyCheckbox(isChecked)
         }
