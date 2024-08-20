@@ -128,16 +128,19 @@ class FilterFragment : Fragment() {
     private fun checkFields() {
         val newPrefs = makeFilterSettings()
         val loadedPrefs = viewModel.getPrefs()
-        if (newPrefs.currency != loadedPrefs.currency ||
-            newPrefs.noCurrency != loadedPrefs.noCurrency ||
-            newPrefs.country?.id != loadedPrefs.country?.id ||
-            newPrefs.region?.id != loadedPrefs.region?.id ||
-            newPrefs.industries?.id != loadedPrefs.industries?.id
-        ) {
+        if (checkPrefs(newPrefs, loadedPrefs)) {
             setButtonsVisible()
         } else {
             setButtonsNotVisible()
         }
+    }
+
+    private fun checkPrefs(newPrefs: SaveFiltersSharedPrefs, loadedPrefs: SaveFiltersSharedPrefs): Boolean {
+        return newPrefs.currency != loadedPrefs.currency ||
+            newPrefs.noCurrency != loadedPrefs.noCurrency ||
+            newPrefs.country?.id != loadedPrefs.country?.id ||
+            newPrefs.region?.id != loadedPrefs.region?.id ||
+            newPrefs.industries?.id != loadedPrefs.industries?.id
     }
 
     private fun setButtonsVisible() {
