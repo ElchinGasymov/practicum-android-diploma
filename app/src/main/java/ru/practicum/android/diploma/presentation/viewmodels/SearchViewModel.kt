@@ -161,10 +161,10 @@ class SearchViewModel(
     }
 
     fun isFilter(): Boolean {
-        return (options.area?.isNotEmpty() == true ||
+        return options.area?.isNotEmpty() == true ||
             options.industry?.isNotEmpty() == true ||
             options.salary?.isNotEmpty() == true ||
-            options.withSalary == true)
+            options.withSalary == true
     }
 
     fun onVacancyClicked() {

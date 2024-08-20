@@ -29,7 +29,6 @@ class FilterIndustryViewModel(
     val error: LiveData<ResponseError>
         get() = _error
 
-
     /*  fun writeSharedPrefs() {
           viewModelScope.launch {
               interactor.writeSharedPrefs(
