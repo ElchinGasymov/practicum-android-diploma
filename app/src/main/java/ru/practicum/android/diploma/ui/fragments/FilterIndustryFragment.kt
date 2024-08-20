@@ -68,7 +68,7 @@ class FilterIndustryFragment : Fragment() {
         }
 
         binding.clearCrossIc.setOnClickListener {
-            binding.industrySearchQuery.setText("")
+            binding.industrySearchQuery.text.clear()
         }
 
         binding.industryFilterToolbar.setNavigationOnClickListener {
