@@ -193,6 +193,7 @@ class SearchFragment : Fragment() {
     private fun initResultListeners() {
         setFragmentResultListener(FILTER_REQUEST_KEY) { _, _ ->
             if (viewModel.getMainRequest().isNotEmpty()) {
+                viewModel.setDefaultCurrentPage()
                 viewModel.search(true)
             }
         }

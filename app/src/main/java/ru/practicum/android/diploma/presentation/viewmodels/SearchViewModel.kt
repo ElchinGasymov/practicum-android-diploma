@@ -80,6 +80,9 @@ class SearchViewModel(
         }
 
     }
+    fun setDefaultCurrentPage() {
+        currentPage = 0
+    }
 
     fun getOptions() {
         viewModelScope.launch(Dispatchers.IO) {
