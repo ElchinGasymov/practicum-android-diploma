@@ -42,7 +42,8 @@ class FilterViewModel(
             setState(FilterScreenState.FiltersSaved(filter))
         }
     }
-    fun getPrefs():SaveFiltersSharedPrefs {
+
+    fun getPrefs(): SaveFiltersSharedPrefs {
         return saveFiltersSharedPrefs
     }
 
