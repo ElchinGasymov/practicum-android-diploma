@@ -88,7 +88,7 @@ class SearchViewModel(
                 options = Options(
                     requestNextPage,
                     ITEMS_PER_PAGE,
-                    currentPage,
+                    0,
                     if (filter.region?.id?.isNotEmpty() == true) {
                         filter.region.id
                     } else {
