@@ -14,9 +14,9 @@ class SharedPrefsRepositoryImpl(
 ) : SharedPrefsRepository {
     override suspend fun readSharedPrefs(): SaveFiltersSharedPrefs {
         val json = sharedPreferences.getString(HISTORY, null) ?: return SaveFiltersSharedPrefs(
-            Industries("","",false),
-            Country("",""),
-            Region("","",null),
+            Industries("", "", false),
+            Country("", ""),
+            Region("", "", null),
             "",
             false
         )
