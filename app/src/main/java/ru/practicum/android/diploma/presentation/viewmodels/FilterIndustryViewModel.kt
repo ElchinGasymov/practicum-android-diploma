@@ -25,7 +25,7 @@ class FilterIndustryViewModel(
     val selectedIndustry: LiveData<Industries>
         get() = _selectedIndustry
 
-    fun writeSharedPrefs() {
+  /*  fun writeSharedPrefs() {
         viewModelScope.launch {
             interactor.writeSharedPrefs(
                 SaveFiltersSharedPrefs(
@@ -37,7 +37,7 @@ class FilterIndustryViewModel(
                 )
             )
         }
-    }
+    }*/
 
     fun itemChecked(industries: Industries) {
         val newList = ArrayList<Industries>()

@@ -24,6 +24,13 @@ class FilterViewModel(
     private var region = Region("", "", null)
     private var country = Country("", "")
     private var industries = Industries("", "", false)
+    private var saveFiltersSharedPrefs = SaveFiltersSharedPrefs(
+        Industries("", "", false),
+        Country("", ""),
+        Region("", "", null),
+        "",
+        false
+    )
 
     fun render(): LiveData<FilterScreenState> {
         return screenStateLiveData
@@ -34,6 +41,9 @@ class FilterViewModel(
             filterInteractor.writeSharedPrefs(filter)
             setState(FilterScreenState.FiltersSaved(filter))
         }
+    }
+    fun getPrefs():SaveFiltersSharedPrefs {
+        return saveFiltersSharedPrefs
     }
 
     fun getRegion(): Region {
@@ -66,10 +76,12 @@ class FilterViewModel(
         }
     }
 
-    fun getFilterSetting() {
+    fun getFilterSettings() {
         viewModelScope.launch(Dispatchers.IO) {
             val filters = filterInteractor.readSharedPrefs()
+
             if (filters != null) {
+                saveFiltersSharedPrefs = filters
                 if (filters.region != null && filters.region.id.isNotEmpty()) {
                     region = filters.region
                 }
@@ -91,7 +103,7 @@ class FilterViewModel(
         }
     }
 
-    fun setIndustry(industry: String) {
+    fun setIndustryName(industry: String) {
         if (industry.isNotEmpty()) {
             setState(FilterScreenState.Industry(industry))
         } else {

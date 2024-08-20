@@ -61,21 +61,15 @@ class FilterFragment : Fragment() {
         initButtonListeners() // Инициализация слушателей для кнопок и других элементов интерфейса
         initTextBehaviour() // Инициализация поведения текстовых полей
         initResultListeners()
-        binding.salary.doOnTextChanged { text, _, _, _ ->
-            if (!text.isNullOrEmpty()) {
-                binding.btnGroup.isVisible = true
-                viewModel.saveFilter(makeFilterSettings())
-            } else {
-                checkFields()
-            }
+        binding.salary.doOnTextChanged { _, _, _, _ ->
+            checkFields()
         }
         viewModel.render().observe(viewLifecycleOwner) { state ->
             when (state) {
                 is FilterScreenState.PlaceOfWork -> {
                     binding.workTextInput.setText(state.countryName)
-                    viewModel.saveFilter(makeFilterSettings())
                     setCountryEndIcon()
-                    setButtonsVisible()
+                    checkFields()
                 }
 
                 FilterScreenState.ClearState -> {
@@ -84,15 +78,14 @@ class FilterFragment : Fragment() {
                     binding.salary.text?.clear()
                     setNoIndustryEndIcon()
                     setNoCountryEndIcon()
-                    setButtonsNotVisible()
+                    checkFields()
                     setFragmentResult(FILTER_REQUEST_KEY, bundleOf())
                 }
 
                 is FilterScreenState.Industry -> {
                     binding.industryTextInput.setText(state.industry)
-                    viewModel.saveFilter(makeFilterSettings())
                     setIndustryEndIcon()
-                    setButtonsVisible()
+                    checkFields()
                 }
 
                 FilterScreenState.NoIndustry -> {
@@ -126,18 +119,20 @@ class FilterFragment : Fragment() {
                     binding.industryTextInput.setText(state.filters.industries?.name)
                     binding.salary.setText(state.filters.currency)
                     binding.salaryFlagCheckbox.isChecked = state.filters.noCurrency
-                    checkFields()
                 }
             }
         }
-        viewModel.getFilterSetting()
+        viewModel.getFilterSettings()
     }
 
     private fun checkFields() {
-        if (binding.workTextInput.text?.isNotEmpty() == true ||
-            binding.industryTextInput.text?.isNotEmpty() == true ||
-            binding.salary.text?.isNotEmpty() == true ||
-            binding.salaryFlagCheckbox.isChecked
+        val newPrefs = makeFilterSettings()
+        val loadedPrefs = viewModel.getPrefs()
+        if (newPrefs.currency != loadedPrefs.currency ||
+            newPrefs.noCurrency != loadedPrefs.noCurrency ||
+            newPrefs.country?.id != loadedPrefs.country?.id ||
+            newPrefs.region?.id != loadedPrefs.region?.id ||
+            newPrefs.industries?.id != loadedPrefs.industries?.id
         ) {
             setButtonsVisible()
         } else {
@@ -173,7 +168,7 @@ class FilterFragment : Fragment() {
             val type = object : TypeToken<Industries>() {}.type
             val industry = Gson().fromJson<Industries>(industryJson, type)
             viewModel.setIndustry(industry)
-            viewModel.setIndustry(industry.name)
+            viewModel.setIndustryName(industry.name)
             viewModel.setIndustrySelected(industry)
         }
     }
@@ -358,7 +353,7 @@ class FilterFragment : Fragment() {
         binding.industryLayout.apply {
             setEndIconDrawable(R.drawable.ic_close_cross_14px)
             setEndIconOnClickListener {
-                viewModel.setIndustry("")
+                viewModel.setIndustryName("")
             }
         }
     }
