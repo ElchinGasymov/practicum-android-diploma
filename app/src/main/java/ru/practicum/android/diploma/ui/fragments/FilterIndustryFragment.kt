@@ -56,7 +56,7 @@ class FilterIndustryFragment : Fragment() {
             binding.applyButton.isVisible = it
         }
 
-        binding.industrySearchQuery.doOnTextChanged { text, start, before, count ->
+        binding.industrySearchQuery.doOnTextChanged { text, _, _, _ ->
             if (binding.industrySearchQuery.text.isNotEmpty()) {
                 binding.searchIconLoupe.isVisible = false
                 binding.clearCrossIc.isVisible = true
@@ -64,10 +64,11 @@ class FilterIndustryFragment : Fragment() {
                 binding.searchIconLoupe.isVisible = true
                 binding.clearCrossIc.isVisible = false
             }
+            viewModel.search(text.toString())
         }
 
         binding.clearCrossIc.setOnClickListener {
-            binding.industrySearchQuery.setText("")
+            binding.industrySearchQuery.text.clear()
         }
 
         binding.industryFilterToolbar.setNavigationOnClickListener {

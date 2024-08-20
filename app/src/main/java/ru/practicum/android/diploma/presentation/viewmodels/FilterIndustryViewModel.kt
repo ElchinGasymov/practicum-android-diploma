@@ -14,6 +14,8 @@ class FilterIndustryViewModel(
     private val interactor: FilterInteractor
 ) : ViewModel() {
     private val _industries = MutableLiveData<List<Industries>>()
+    private val listOfIndustries = mutableListOf<Industries>()
+    private var selectedId = ""
     val industries: LiveData<List<Industries>>
         get() = _industries
 
@@ -60,6 +62,8 @@ class FilterIndustryViewModel(
                 when (list) {
                     is ResponseData.Data -> {
                         whenList(industry, list)
+                        listOfIndustries.clear()
+                        listOfIndustries.addAll(list.value)
                     }
 
                     is ResponseData.Error -> {}
@@ -76,6 +80,7 @@ class FilterIndustryViewModel(
                     newList.add(industryItem.copy(isChecked = true))
                     _selectedIndustry.postValue(industryItem)
                     _hasSelected.postValue(true)
+                    selectedId = industryItem.id
                 } else {
                     newList.add(industryItem)
                 }
@@ -84,6 +89,25 @@ class FilterIndustryViewModel(
         } else {
             _industries.postValue(list.value)
         }
+    }
+
+    fun search(request: String) {
+        val sortedList = mutableListOf<Industries>()
+        val newSortedList = mutableListOf<Industries>()
+        sortedList.addAll(listOfIndustries)
+        sortedList.removeAll {
+            !it.name.contains(request, true)
+        }
+        sortedList.forEach {
+            if (it.id == selectedId) {
+                newSortedList.add(Industries(it.id, it.name, true))
+                _selectedIndustry.postValue(it)
+                _hasSelected.postValue(true)
+            } else {
+                newSortedList.add(it)
+            }
+        }
+        _industries.postValue(newSortedList)
     }
 }
 
