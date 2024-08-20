@@ -78,7 +78,6 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_size_16"
         android:layout_marginTop="@dimen/margin_size_24"
-
         android:hint="@string/salary_expectation"
         app:cursorColor="@color/blue"
         app:endIconDrawable="@drawable/ic_close_cross_14px"

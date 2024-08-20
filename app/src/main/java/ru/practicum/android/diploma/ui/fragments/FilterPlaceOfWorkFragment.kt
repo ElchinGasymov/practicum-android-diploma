@@ -46,6 +46,7 @@ class FilterPlaceOfWorkFragment : Fragment() {
     private var countryId = ""
     private var country = Country("", "")
     private var region = Region("", "", null)
+    private var init = true
 
 
     override fun onCreateView(
@@ -58,6 +59,21 @@ class FilterPlaceOfWorkFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel.readSharedPrefs()
+        if (init) {
+            viewModel.sharedPrefs.observe(viewLifecycleOwner) { filters ->
+                if (filters.country != null) {
+                    viewModel.setCountryName(country)
+                    if (filters.region != null) {
+                        region = filters.region
+                        viewModel.setRegionName(filters.region)
+                        getCountryName(region)
+                    }
+                }
+            }
+            init = false
+        }
 
         initButtonListeners()
         initTextBehaviour()
@@ -143,6 +159,8 @@ class FilterPlaceOfWorkFragment : Fragment() {
             country = Gson().fromJson(json, type)
             countryId = country.id
             viewModel.setCountryName(country)
+            setNoRegionEndIcon()
+            binding.regionTextInput.setText("")
         }
 
         setFragmentResultListener(REGION_REQUEST_KEY) { _, bundle ->
@@ -194,6 +212,7 @@ class FilterPlaceOfWorkFragment : Fragment() {
     }
 
     private fun saveFilters() {
+        viewModel.saveSharedPrefs(country, region)
         viewModel.saveFields(country, region)
     }
 

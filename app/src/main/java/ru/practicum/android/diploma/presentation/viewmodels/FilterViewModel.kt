@@ -8,6 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.FilterInteractor
 import ru.practicum.android.diploma.domain.models.SaveFiltersSharedPrefs
+import ru.practicum.android.diploma.domain.models.Industries
 import ru.practicum.android.diploma.ui.state.FilterScreenState
 
 class FilterViewModel(
@@ -15,6 +16,9 @@ class FilterViewModel(
 ) : ViewModel() {
 
     private val screenStateLiveData = MutableLiveData<FilterScreenState>()
+
+    private val _noCurrency = MutableLiveData<Boolean?>()
+    private val _industry = MutableLiveData<Industries?>()
 
     fun render(): LiveData<FilterScreenState> {
         return screenStateLiveData
@@ -67,7 +71,13 @@ class FilterViewModel(
         } else {
             setState(FilterScreenState.NoPlaceOfWork)
         }
-
     }
 
+    fun setNoCurrencySelected(answer: Boolean) {
+        _noCurrency.postValue(answer)
+    }
+
+    fun setIndustrySelected(industries: Industries?) {
+        _industry.postValue(industries)
+    }
 }

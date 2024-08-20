@@ -28,6 +28,8 @@ import ru.practicum.android.diploma.domain.models.Industries
 import ru.practicum.android.diploma.domain.models.Region
 import ru.practicum.android.diploma.domain.models.SaveFiltersSharedPrefs
 import ru.practicum.android.diploma.presentation.viewmodels.FilterViewModel
+import ru.practicum.android.diploma.ui.fragments.FilterIndustryFragment.Companion.INDUSTRY_ITEM_KEY
+import ru.practicum.android.diploma.ui.fragments.FilterIndustryFragment.Companion.INDUSTRY_KEY
 import ru.practicum.android.diploma.ui.fragments.FilterPlaceOfWorkFragment.Companion.PLACE_OF_WORK_COUNTRY_KEY
 import ru.practicum.android.diploma.ui.fragments.FilterPlaceOfWorkFragment.Companion.PLACE_OF_WORK_KEY
 import ru.practicum.android.diploma.ui.fragments.FilterPlaceOfWorkFragment.Companion.PLACE_OF_WORK_REGION_KEY
@@ -43,7 +45,7 @@ class FilterFragment : Fragment() {
 
     private val binding: FragmentFilterBinding by viewBinding(CreateMethod.INFLATE)
     private val viewModel by viewModel<FilterViewModel>()
-
+    private var init = true
     private var region = Region("", "", null)
     private var country = Country("", "")
     private var industries = Industries("", "", false)
@@ -65,6 +67,7 @@ class FilterFragment : Fragment() {
         binding.salary.doOnTextChanged { text, _, _, _ ->
             if (!text.isNullOrEmpty()) {
                 binding.btnGroup.isVisible = true
+                viewModel.saveFilter(makeFilterSettings())
             } else {
                 checkFields()
             }
@@ -89,6 +92,7 @@ class FilterFragment : Fragment() {
                 }
 
                 is FilterScreenState.Industry -> {
+                    binding.industryTextInput.setText(state.industry)
                     setIndustryEndIcon()
                 }
 
@@ -96,6 +100,7 @@ class FilterFragment : Fragment() {
                     binding.industryTextInput.text?.clear()
                     setNoIndustryEndIcon()
                     checkFields()
+                    industries = Industries("", "", false)
                 }
 
                 FilterScreenState.NoPlaceOfWork -> {
@@ -160,6 +165,14 @@ class FilterFragment : Fragment() {
             val countryName = setPlaceOfWorkName(country.name, region.name)
             viewModel.setPlaceOfWork(countryName)
         }
+        setFragmentResultListener(INDUSTRY_KEY) { _, bundle ->
+            val industryJson = bundle.getString(INDUSTRY_ITEM_KEY).toString()
+            val type = object : TypeToken<Industries>() {}.type
+            val industry = Gson().fromJson<Industries>(industryJson, type)
+            industries = industry
+            viewModel.setIndustry(industry.name)
+            viewModel.setIndustrySelected(industry)
+        }
     }
 
     private fun setPlaceOfWorkName(countryName: String, regionName: String): String {
@@ -179,6 +192,8 @@ class FilterFragment : Fragment() {
         binding.clearButton.setOnClickListener { viewModel.clear() }
         // Пример использования Checkbox, если включена опция показа только с зарплатой
         binding.salaryFlagCheckbox.setOnCheckedChangeListener { _, isChecked -> //
+            viewModel.saveFilter(makeFilterSettings())
+            viewModel.setNoCurrencySelected(isChecked)
             // viewModel.setSalaryOnlyCheckbox(isChecked)
         }
         binding.workTextInput.setOnClickListener {

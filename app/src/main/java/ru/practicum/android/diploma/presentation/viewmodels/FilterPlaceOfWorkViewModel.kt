@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.FilterInteractor
 import ru.practicum.android.diploma.domain.models.Country
 import ru.practicum.android.diploma.domain.models.Region
+import ru.practicum.android.diploma.domain.models.SaveFiltersSharedPrefs
 import ru.practicum.android.diploma.ui.state.PlaceOfWorkScreenState
 import ru.practicum.android.diploma.util.ResponseData
 
@@ -17,6 +18,9 @@ class FilterPlaceOfWorkViewModel(
 ) : ViewModel() {
 
     private val screenStateLiveData = MutableLiveData<PlaceOfWorkScreenState>()
+    private val _filtersSave = MutableLiveData<SaveFiltersSharedPrefs>()
+    val sharedPrefs: LiveData<SaveFiltersSharedPrefs>
+        get() = _filtersSave
 
     fun render(): LiveData<PlaceOfWorkScreenState> {
         return screenStateLiveData
@@ -39,6 +43,20 @@ class FilterPlaceOfWorkViewModel(
                         is ResponseData.Error -> {}
                     }
                 }
+        }
+    }
+
+    fun saveSharedPrefs(country: Country?, region: Region?) {
+        viewModelScope.launch {
+            filterInteractor.writeSharedPrefs(
+                SaveFiltersSharedPrefs(
+                    industries = null,
+                    country = country,
+                    region = region,
+                    currency = null,
+                    noCurrency = false
+                )
+            )
         }
     }
 
@@ -85,5 +103,11 @@ class FilterPlaceOfWorkViewModel(
 
     private fun setState(state: PlaceOfWorkScreenState) {
         screenStateLiveData.postValue(state)
+    }
+
+    fun readSharedPrefs() {
+        viewModelScope.launch {
+            _filtersSave.postValue(filterInteractor.readSharedPrefs())
+        }
     }
 }
