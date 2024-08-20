@@ -4,6 +4,6 @@ data class SaveFiltersSharedPrefs(
     val industries: Industries?,
     val country: Country?,
     val region: Region?,
-    val currency: Int?,
-    val noCurrency: Boolean?
+    val currency: String?,
+    val noCurrency: Boolean
 )

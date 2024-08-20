@@ -33,7 +33,7 @@ class FilterIndustryViewModel(
                     null,
                     null,
                     null,
-                    null
+                    false
                 )
             )
         }

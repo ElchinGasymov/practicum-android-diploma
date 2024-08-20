@@ -9,9 +9,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.ColorInt
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.CreateMethod
@@ -24,6 +26,7 @@ import ru.practicum.android.diploma.databinding.FragmentFilterBinding
 import ru.practicum.android.diploma.domain.models.Country
 import ru.practicum.android.diploma.domain.models.Industries
 import ru.practicum.android.diploma.domain.models.Region
+import ru.practicum.android.diploma.domain.models.SaveFiltersSharedPrefs
 import ru.practicum.android.diploma.presentation.viewmodels.FilterViewModel
 import ru.practicum.android.diploma.ui.fragments.FilterIndustryFragment.Companion.INDUSTRY_ITEM_KEY
 import ru.practicum.android.diploma.ui.fragments.FilterIndustryFragment.Companion.INDUSTRY_KEY
@@ -34,10 +37,19 @@ import ru.practicum.android.diploma.ui.state.FilterScreenState
 
 class FilterFragment : Fragment() {
 
+    companion object {
+        const val FILTER_REQUEST_KEY = "FILTER_REQUEST_KEY"
+        const val FILTER_BUNDLE_KEY = "FILTER_BUNDLE_KEY"
+        const val FILTER_TO_PLACE_OF_WORK_KEY = "FILTER_TO_PLACE_OF_WORK_KEY"
+    }
+
     private val binding: FragmentFilterBinding by viewBinding(CreateMethod.INFLATE)
     private val viewModel by viewModel<FilterViewModel>()
     private var init = true
-    private var regionId = ""
+    private var region = Region("", "", null)
+    private var country = Country("", "")
+    private var industries = Industries("", "", false)
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -65,6 +77,7 @@ class FilterFragment : Fragment() {
             when (state) {
                 is FilterScreenState.PlaceOfWork -> {
                     binding.workTextInput.setText(state.countryName)
+                    viewModel.saveFilter(makeFilterSettings())
                     setCountryEndIcon()
                     setButtonsVisible()
                 }
@@ -76,7 +89,7 @@ class FilterFragment : Fragment() {
                     setNoIndustryEndIcon()
                     setNoCountryEndIcon()
                     setButtonsNotVisible()
-                    viewModel.clearSharedPrefs()
+                    setFragmentResult(FILTER_REQUEST_KEY, bundleOf())
                 }
 
                 is FilterScreenState.Industry -> {
@@ -94,41 +107,30 @@ class FilterFragment : Fragment() {
                     binding.workTextInput.text?.clear()
                     setNoCountryEndIcon()
                     checkFields()
+                    country = Country("", "")
+                    region = Region("", "", null)
+                }
+
+                is FilterScreenState.FiltersSaved -> {
+                    val json = Gson().toJson(state.filters)
+                    setFragmentResult(FILTER_REQUEST_KEY, bundleOf(FILTER_BUNDLE_KEY to json))
+                    findNavController().navigateUp()
+                }
+
+                is FilterScreenState.FiltersLoaded -> {
+                    binding.workTextInput.setText(
+                        setPlaceOfWorkName(
+                            state.filters.country?.name.toString(),
+                            state.filters.region?.name.toString()
+                        )
+                    )
+                    binding.industryTextInput.setText(state.filters.industries?.name)
+                    binding.salary.setText(state.filters.currency)
+                    binding.salaryFlagCheckbox.isChecked = state.filters.noCurrency
                 }
             }
         }
-
-        viewModel.readSharedPrefs()
-        if (init) {
-            viewModel.sharedPrefs.observe(viewLifecycleOwner) { filters ->
-                if (filters.industries != null) {
-                    viewModel.setIndustry(filters.industries.name)
-                    viewModel.setIndustrySelected(filters.industries)
-                }
-
-                if (filters.noCurrency != null) {
-                    binding.salaryFlagCheckbox.isChecked = filters.noCurrency
-                    viewModel.setNoCurrencySelected(filters.noCurrency)
-                }
-
-                if (filters.currency != null) {
-                    binding.salary.setText(filters.currency.toString())
-                    viewModel.setCurrencySelected(filters.currency)
-                }
-
-                if (filters.country != null) {
-                    val placeOfWork = StringBuilder()
-                    placeOfWork.append(filters.country.name)
-                    if (filters.region?.name ?: "" != "") {
-                        placeOfWork.append(", ").append(filters.region!!.name)
-                        viewModel.setRegionSelected(filters.region)
-                    }
-                    viewModel.setPlaceOfWork(placeOfWork.toString())
-                    viewModel.setCountrySelected(filters.country)
-                }
-            }
-            init = false
-        }
+        viewModel.getFilterSetting()
     }
 
     private fun checkFields() {
@@ -155,23 +157,14 @@ class FilterFragment : Fragment() {
 
             val countryJson = bundle.getString(PLACE_OF_WORK_COUNTRY_KEY).toString()
             val type = object : TypeToken<Country>() {}.type
-            val country = Gson().fromJson<Country>(countryJson, type)
+            country = Gson().fromJson(countryJson, type)
 
             val regionJson = bundle.getString(PLACE_OF_WORK_REGION_KEY)
             val typeRegion = object : TypeToken<Region>() {}.type
-            val region = Gson().fromJson<Region>(regionJson, typeRegion)
-
-            regionId = region.id
-            val placeOfWork = StringBuilder()
-            placeOfWork.append(country.name)
-            if (region.name.isNotEmpty()) {
-                placeOfWork.append(", ").append(region.name)
-                viewModel.setRegionSelected(region)
-            }
-            viewModel.setPlaceOfWork(placeOfWork.toString())
-            viewModel.setCountrySelected(country)
+            region = Gson().fromJson(regionJson, typeRegion)
+            val countryName = setPlaceOfWorkName(country.name, region.name)
+            viewModel.setPlaceOfWork(countryName)
         }
-
         setFragmentResultListener(INDUSTRY_KEY) { _, bundle ->
             val industryJson = bundle.getString(INDUSTRY_ITEM_KEY).toString()
             val type = object : TypeToken<Industries>() {}.type
@@ -181,11 +174,22 @@ class FilterFragment : Fragment() {
         }
     }
 
+    private fun setPlaceOfWorkName(countryName: String, regionName: String): String {
+        val placeOfWork = StringBuilder()
+        if (countryName.isNotEmpty()) {
+            placeOfWork.append(countryName)
+            if (regionName.isNotEmpty()) {
+                placeOfWork.append(", ").append(regionName)
+            }
+        }
+        return placeOfWork.toString()
+    }
+
+
+
     private fun initButtonListeners() {
         binding.filterSettingsTitle.setNavigationOnClickListener { findNavController().navigateUp() }
-        binding.applyButton.setOnClickListener {
-            findNavController().popBackStack()
-        }
+        binding.applyButton.setOnClickListener { saveFilterSettings() }
         binding.clearButton.setOnClickListener { viewModel.clear() }
         // Пример использования Checkbox, если включена опция показа только с зарплатой
         binding.salaryFlagCheckbox.setOnCheckedChangeListener { _, isChecked -> //
@@ -204,6 +208,21 @@ class FilterFragment : Fragment() {
     private fun initTextBehaviour() {
         //   initSalaryTextBehaviour()
         initWorkAndIndustryTextBehaviour()
+    }
+
+    private fun saveFilterSettings() {
+        viewModel.saveFilterAndClose(makeFilterSettings())
+    }
+
+    private fun makeFilterSettings(): SaveFiltersSharedPrefs {
+        val filter = SaveFiltersSharedPrefs(
+            industries,
+            country,
+            region,
+            binding.salary.text.toString(),
+            binding.salaryFlagCheckbox.isChecked
+        )
+        return filter
     }
 
     // Настройка поведения поля salary при изменении текста
@@ -343,6 +362,7 @@ class FilterFragment : Fragment() {
     }
 
     private fun navigateToPlaceOfWorkScreen() {
+        setFragmentResult(FILTER_TO_PLACE_OF_WORK_KEY, bundleOf())
         findNavController().navigate(R.id.action_filterFragment_to_select_place_of_workFragment)
     }
 

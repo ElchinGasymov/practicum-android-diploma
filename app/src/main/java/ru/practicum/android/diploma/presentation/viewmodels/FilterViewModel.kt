@@ -7,14 +7,14 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.FilterInteractor
+import ru.practicum.android.diploma.domain.models.SaveFiltersSharedPrefs
 import ru.practicum.android.diploma.domain.models.Country
 import ru.practicum.android.diploma.domain.models.Industries
 import ru.practicum.android.diploma.domain.models.Region
-import ru.practicum.android.diploma.domain.models.SaveFiltersSharedPrefs
 import ru.practicum.android.diploma.ui.state.FilterScreenState
 
 class FilterViewModel(
-    private val interactor: FilterInteractor
+    private val filterInteractor: FilterInteractor
 ) : ViewModel() {
 
     private val screenStateLiveData = MutableLiveData<FilterScreenState>()
@@ -31,13 +31,13 @@ class FilterViewModel(
 
     fun readSharedPrefs() {
         viewModelScope.launch {
-            _filtersSave.postValue(interactor.readSharedPrefs())
+            _filtersSave.postValue(filterInteractor.readSharedPrefs())
         }
     }
 
     fun clearSharedPrefs() {
         viewModelScope.launch {
-            interactor.clearSharedPrefs()
+            filterInteractor.clearSharedPrefs()
         }
     }
 
@@ -45,8 +45,33 @@ class FilterViewModel(
         return screenStateLiveData
     }
 
+    fun saveFilterAndClose(filter: SaveFiltersSharedPrefs) {
+        viewModelScope.launch(Dispatchers.IO) {
+            filterInteractor.writeSharedPrefs(filter)
+            setState(FilterScreenState.FiltersSaved(filter))
+        }
+    }
+
+    fun saveFilter(filter: SaveFiltersSharedPrefs) {
+        viewModelScope.launch(Dispatchers.IO) {
+            filterInteractor.writeSharedPrefs(filter)
+        }
+    }
+
+    fun getFilterSetting() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val filters = filterInteractor.readSharedPrefs()
+            if (filters != null) {
+                setState(FilterScreenState.FiltersLoaded(filters))
+            }
+        }
+    }
+
     fun clear() {
-        setState(FilterScreenState.ClearState)
+        viewModelScope.launch(Dispatchers.IO) {
+            filterInteractor.clearSharedPrefs()
+            setState(FilterScreenState.ClearState)
+        }
     }
 
     fun setIndustry(industry: String) {
@@ -55,7 +80,6 @@ class FilterViewModel(
         } else {
             setState(FilterScreenState.NoIndustry)
         }
-
     }
 
     private fun setState(state: FilterScreenState) {
@@ -85,13 +109,13 @@ class FilterViewModel(
 
     fun saveSharedPrefsCurrency(currency: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            interactor.writeSharedPrefs(
+            filterInteractor.writeSharedPrefs(
                 SaveFiltersSharedPrefs(
                     industries = null,
                     country = null,
                     region = null,
-                    currency = currency,
-                    noCurrency = null
+                    currency = currency.toString(),
+                    noCurrency = false
                 )
             )
         }
@@ -99,7 +123,7 @@ class FilterViewModel(
 
     fun saveSharedPrefsNoCurrency(noCurrency: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
-            interactor.writeSharedPrefs(
+            filterInteractor.writeSharedPrefs(
                 SaveFiltersSharedPrefs(
                     industries = null,
                     country = null,

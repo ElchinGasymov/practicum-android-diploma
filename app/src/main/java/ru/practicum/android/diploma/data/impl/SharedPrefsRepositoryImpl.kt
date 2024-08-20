@@ -15,7 +15,7 @@ class SharedPrefsRepositoryImpl(
             null,
             null,
             null,
-            null
+            false
         )
         return gson.fromJson(json, SaveFiltersSharedPrefs::class.java)
     }
