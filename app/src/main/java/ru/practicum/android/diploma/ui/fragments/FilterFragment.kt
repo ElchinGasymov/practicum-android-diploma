@@ -45,10 +45,7 @@ class FilterFragment : Fragment() {
 
     private val binding: FragmentFilterBinding by viewBinding(CreateMethod.INFLATE)
     private val viewModel by viewModel<FilterViewModel>()
-    private var init = true
-    private var region = Region("", "", null)
-    private var country = Country("", "")
-    private var industries = Industries("", "", false)
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -93,22 +90,24 @@ class FilterFragment : Fragment() {
 
                 is FilterScreenState.Industry -> {
                     binding.industryTextInput.setText(state.industry)
+                    viewModel.saveFilter(makeFilterSettings())
                     setIndustryEndIcon()
+                    setButtonsVisible()
                 }
 
                 FilterScreenState.NoIndustry -> {
                     binding.industryTextInput.text?.clear()
                     setNoIndustryEndIcon()
                     checkFields()
-                    industries = Industries("", "", false)
+                    viewModel.setIndustry(Industries("", "", false))
                 }
 
                 FilterScreenState.NoPlaceOfWork -> {
                     binding.workTextInput.text?.clear()
                     setNoCountryEndIcon()
                     checkFields()
-                    country = Country("", "")
-                    region = Region("", "", null)
+                    viewModel.setCountry(Country("", ""))
+                    viewModel.setRegion(Region("", "", null))
                 }
 
                 is FilterScreenState.FiltersSaved -> {
@@ -127,6 +126,7 @@ class FilterFragment : Fragment() {
                     binding.industryTextInput.setText(state.filters.industries?.name)
                     binding.salary.setText(state.filters.currency)
                     binding.salaryFlagCheckbox.isChecked = state.filters.noCurrency
+                    checkFields()
                 }
             }
         }
@@ -136,7 +136,8 @@ class FilterFragment : Fragment() {
     private fun checkFields() {
         if (binding.workTextInput.text?.isNotEmpty() == true ||
             binding.industryTextInput.text?.isNotEmpty() == true ||
-            binding.salary.text?.isNotEmpty() == true
+            binding.salary.text?.isNotEmpty() == true ||
+            binding.salaryFlagCheckbox.isChecked
         ) {
             setButtonsVisible()
         } else {
@@ -157,11 +158,13 @@ class FilterFragment : Fragment() {
 
             val countryJson = bundle.getString(PLACE_OF_WORK_COUNTRY_KEY).toString()
             val type = object : TypeToken<Country>() {}.type
-            country = Gson().fromJson(countryJson, type)
+            viewModel.setCountry(Gson().fromJson(countryJson, type))
 
             val regionJson = bundle.getString(PLACE_OF_WORK_REGION_KEY)
             val typeRegion = object : TypeToken<Region>() {}.type
-            region = Gson().fromJson(regionJson, typeRegion)
+            viewModel.setRegion(Gson().fromJson(regionJson, typeRegion))
+            val country = viewModel.getCountry()
+            val region = viewModel.getRegion()
             val countryName = setPlaceOfWorkName(country.name, region.name)
             viewModel.setPlaceOfWork(countryName)
         }
@@ -169,7 +172,7 @@ class FilterFragment : Fragment() {
             val industryJson = bundle.getString(INDUSTRY_ITEM_KEY).toString()
             val type = object : TypeToken<Industries>() {}.type
             val industry = Gson().fromJson<Industries>(industryJson, type)
-            industries = industry
+            viewModel.setIndustry(industry)
             viewModel.setIndustry(industry.name)
             viewModel.setIndustrySelected(industry)
         }
@@ -215,9 +218,9 @@ class FilterFragment : Fragment() {
 
     private fun makeFilterSettings(): SaveFiltersSharedPrefs {
         val filter = SaveFiltersSharedPrefs(
-            industries,
-            country,
-            region,
+            viewModel.getIndustry(),
+            viewModel.getCountry(),
+            viewModel.getRegion(),
             binding.salary.text.toString(),
             binding.salaryFlagCheckbox.isChecked
         )

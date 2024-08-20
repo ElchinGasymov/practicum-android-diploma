@@ -18,8 +18,12 @@ data class Options(
                 if (area?.isNotEmpty() == true) {
                     put("area", area.toString())
                 }
-                if (industry?.isNotEmpty() == true) put("industry", industry.toString())
-                if (salary?.isNotEmpty() == true) put("salary", salary.toString())
+                if (industry?.isNotEmpty() == true) {
+                    put("industry", industry.toString())
+                }
+                if (salary?.isNotEmpty() == true) {
+                    put("salary", salary.toString())
+                }
                 put("only_with_salary", withSalary.toString())
             }
         }

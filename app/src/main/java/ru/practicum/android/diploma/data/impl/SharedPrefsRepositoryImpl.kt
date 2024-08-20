@@ -12,27 +12,28 @@ class SharedPrefsRepositoryImpl(
     private val sharedPreferences: SharedPreferences,
     private val gson: Gson
 ) : SharedPrefsRepository {
-    override suspend fun readSharedPrefs(): SaveFiltersSharedPrefs {
-        val json = sharedPreferences.getString(HISTORY, null) ?: return SaveFiltersSharedPrefs(
+    override suspend fun readSharedPrefs(): SaveFiltersSharedPrefs? {
+        val json = sharedPreferences.getString(HISTORY, null) ?: return null
+        /*SaveFiltersSharedPrefs(
             Industries("", "", false),
             Country("", ""),
             Region("", "", null),
             "",
             false
-        )
+        )*/
         return gson.fromJson(json, SaveFiltersSharedPrefs::class.java)
     }
 
     override suspend fun writeSharedPrefs(filters: SaveFiltersSharedPrefs) {
-        val oldShared = readSharedPrefs()
+       /* val oldShared = readSharedPrefs()
         val newShared = oldShared.copy(
             industries = filters.industries ?: oldShared.industries,
             country = filters.country ?: oldShared.country,
             region = filters.region ?: oldShared.region,
             currency = filters.currency ?: oldShared.currency,
             noCurrency = filters.noCurrency
-        )
-        sharedPreferences.edit().putString(HISTORY, gson.toJson(newShared)).apply()
+        )*/
+        sharedPreferences.edit().putString(HISTORY, gson.toJson(filters)).apply()
     }
 
     override suspend fun clearSharedPrefs() {

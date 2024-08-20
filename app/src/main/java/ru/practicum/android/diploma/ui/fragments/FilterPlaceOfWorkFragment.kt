@@ -43,10 +43,8 @@ class FilterPlaceOfWorkFragment : Fragment() {
 
     private var countryName = ""
     private var regionName = ""
-    private var countryId = ""
     private var country = Country("", "")
     private var region = Region("", "", null)
-    private var init = true
 
 
     override fun onCreateView(
@@ -60,21 +58,6 @@ class FilterPlaceOfWorkFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.readSharedPrefs()
-        if (init) {
-            viewModel.sharedPrefs.observe(viewLifecycleOwner) { filters ->
-                if (filters.country != null) {
-                    viewModel.setCountryName(country)
-                    if (filters.region != null) {
-                        region = filters.region
-                        viewModel.setRegionName(filters.region)
-                        getCountryName(region)
-                    }
-                }
-            }
-            init = false
-        }
-
         initButtonListeners()
         initTextBehaviour()
         initResultListeners()
@@ -85,7 +68,6 @@ class FilterPlaceOfWorkFragment : Fragment() {
                     country = state.country
                     countryName = state.country.name
                     binding.countryTextInput.setText(countryName)
-                    countryId = state.country.id
                     setCountryEndIcon()
                     setApplyButtonVisible()
                 }
@@ -93,7 +75,6 @@ class FilterPlaceOfWorkFragment : Fragment() {
                 PlaceOfWorkScreenState.NoCountryName -> {
                     binding.countryTextInput.text?.clear()
                     countryName = ""
-                    countryId = ""
                     country = Country("", "")
                     setNoCountryEndIcon()
                     checkFields()
@@ -102,10 +83,7 @@ class FilterPlaceOfWorkFragment : Fragment() {
                 PlaceOfWorkScreenState.NoRegionName -> {
                     binding.regionTextInput.text?.clear()
                     regionName = ""
-                    if (countryName.isEmpty()) {
-                        countryId = ""
-                    }
-                    region = Region(",", "", null)
+                    region = Region("", "", null)
                     setNoRegionEndIcon()
                     checkFields()
                 }
@@ -136,7 +114,6 @@ class FilterPlaceOfWorkFragment : Fragment() {
                         country = state.filters.country
                         countryName = state.filters.country.name
                         binding.countryTextInput.setText(countryName)
-                        countryId = state.filters.country.id
                         setCountryEndIcon()
                     }
                     if (state.filters.region != null) {
@@ -157,10 +134,9 @@ class FilterPlaceOfWorkFragment : Fragment() {
             val json = bundle.getString(COUNTRY_BUNDLE_KEY).toString()
             val type = object : TypeToken<Country>() {}.type
             country = Gson().fromJson(json, type)
-            countryId = country.id
             viewModel.setCountryName(country)
             setNoRegionEndIcon()
-            binding.regionTextInput.setText("")
+            binding.regionTextInput.text?.clear()
         }
 
         setFragmentResultListener(REGION_REQUEST_KEY) { _, bundle ->
@@ -212,7 +188,7 @@ class FilterPlaceOfWorkFragment : Fragment() {
     }
 
     private fun saveFilters() {
-        viewModel.saveSharedPrefs(country, region)
+       // viewModel.saveSharedPrefs(country, region)
         viewModel.saveFields(country, region)
     }
 
@@ -306,7 +282,7 @@ class FilterPlaceOfWorkFragment : Fragment() {
     }
 
     private fun navigateToRegionSelection() {
-        setFragmentResult(REGION_ID_KEY, bundleOf(REGION_BUNDLE_KEY to countryId))
+        setFragmentResult(REGION_ID_KEY, bundleOf(REGION_BUNDLE_KEY to country.id))
         findNavController().navigate(
             R.id.action_selectPlaceOfWorkFragment_to_filterRegionFragment
         )

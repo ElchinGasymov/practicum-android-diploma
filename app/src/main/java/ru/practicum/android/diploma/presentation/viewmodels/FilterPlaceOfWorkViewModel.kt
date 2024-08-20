@@ -19,11 +19,29 @@ class FilterPlaceOfWorkViewModel(
 
     private val screenStateLiveData = MutableLiveData<PlaceOfWorkScreenState>()
     private val _filtersSave = MutableLiveData<SaveFiltersSharedPrefs>()
+    private var country = Country("", "")
+    private var region = Region("", "", null)
     val sharedPrefs: LiveData<SaveFiltersSharedPrefs>
         get() = _filtersSave
 
     fun render(): LiveData<PlaceOfWorkScreenState> {
         return screenStateLiveData
+    }
+
+    fun setCountry(country: Country) {
+        this.country = country
+    }
+
+    fun setRegion(region: Region) {
+        this.region = region
+    }
+
+    fun getCountry(): Country {
+        return country
+    }
+
+    fun getRegion(): Region {
+        return region
     }
 
     fun getCountryName(region: Region, isSaving: Boolean) {
@@ -46,7 +64,7 @@ class FilterPlaceOfWorkViewModel(
         }
     }
 
-    fun saveSharedPrefs(country: Country?, region: Region?) {
+    /*fun saveSharedPrefs(country: Country?, region: Region?) {
         viewModelScope.launch {
             filterInteractor.writeSharedPrefs(
                 SaveFiltersSharedPrefs(
@@ -58,7 +76,7 @@ class FilterPlaceOfWorkViewModel(
                 )
             )
         }
-    }
+    }*/
 
     fun saveFields(country: Country, region: Region) {
         if (country.name.isEmpty()) {

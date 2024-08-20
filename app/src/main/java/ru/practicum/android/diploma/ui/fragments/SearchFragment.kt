@@ -54,8 +54,6 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.onStart()
-
         if (listOfVacancies.isNotEmpty()) {
             binding.searchDefaultPlaceholder.isVisible = false
             binding.textUnderSearch.text = getCorrectAmountText(amountVacancies)
@@ -105,6 +103,7 @@ class SearchFragment : Fragment() {
                 SearchScreenState.Default -> {}
                 is SearchScreenState.Error -> {
                     clearList()
+                    removePlaceholders()
                     when (state.error) {
                         ResponseData.ResponseError.NO_INTERNET -> {
                             showNoInternetState()
@@ -136,6 +135,7 @@ class SearchFragment : Fragment() {
                 }
 
                 is SearchScreenState.NothingFound -> {
+                    clearList()
                     showNothingFoundState()
                 }
 

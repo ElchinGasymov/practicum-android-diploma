@@ -65,10 +65,6 @@ class SearchViewModel(
         this.mainRequest = request
     }
 
-    fun onStart() {
-        setScreenState(SearchScreenState.Default)
-    }
-
     fun getMainRequest(): String {
         return mainRequest
     }
@@ -119,7 +115,17 @@ class SearchViewModel(
     fun search(isNewRequest: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
             searchInteractor
-                .search(options)
+                .search(
+                    Options(
+                        requestNextPage,
+                        ITEMS_PER_PAGE,
+                        currentPage,
+                        options.area,
+                        options.industry,
+                        options.salary,
+                        options.withSalary
+                    )
+                )
                 .collect { response ->
                     when (response) {
                         is ResponseData.Data -> {
