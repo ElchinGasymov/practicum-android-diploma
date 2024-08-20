@@ -85,5 +85,41 @@ class FilterIndustryViewModel(
             _industries.postValue(list.value)
         }
     }
+
+    fun editText(text: String) {
+        viewModelScope.launch {
+            val industry = interactor.readSharedPrefs()?.industries
+            interactor.getIndustries().collect { list ->
+                when (list) {
+                    is ResponseData.Data -> {
+                        searchList(industry, list, text)
+                    }
+
+                    is ResponseData.Error -> {}
+                }
+            }
+        }
+    }
+
+    fun searchList(industry: Industries?, list: ResponseData.Data<List<Industries>>, text: String) {
+        if (industry != null) {
+            val newList = ArrayList<Industries>()
+            list.value.forEach { industryItem ->
+                if (industryItem.name.contains(text, ignoreCase = true)) {
+                    if (industryItem.id == industry.id) {
+                        newList.add(industryItem.copy(isChecked = true))
+                        _selectedIndustry.postValue(industryItem)
+                        _hasSelected.postValue(true)
+                    } else {
+                        newList.add(industryItem)
+                    }
+                }
+            }
+            _industries.postValue(newList)
+        } else {
+            _industries.postValue(list.value)
+        }
+    }
+
 }
 

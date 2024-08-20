@@ -57,6 +57,7 @@ class FilterIndustryFragment : Fragment() {
         }
 
         binding.industrySearchQuery.doOnTextChanged { text, start, before, count ->
+            viewModel.editText(text.toString())
             if (binding.industrySearchQuery.text.isNotEmpty()) {
                 binding.searchIconLoupe.isVisible = false
                 binding.clearCrossIc.isVisible = true
