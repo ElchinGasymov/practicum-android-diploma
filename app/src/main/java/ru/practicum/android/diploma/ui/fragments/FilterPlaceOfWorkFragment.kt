@@ -188,7 +188,7 @@ class FilterPlaceOfWorkFragment : Fragment() {
     }
 
     private fun saveFilters() {
-       // viewModel.saveSharedPrefs(country, region)
+        // viewModel.saveSharedPrefs(country, region)
         viewModel.saveFields(country, region)
     }
 
