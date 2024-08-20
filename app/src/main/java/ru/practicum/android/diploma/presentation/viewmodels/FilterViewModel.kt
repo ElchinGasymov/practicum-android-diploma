@@ -43,6 +43,12 @@ class FilterViewModel(
         }
     }
 
+    fun saveFilterSettings(filter: SaveFiltersSharedPrefs) {
+        viewModelScope.launch(Dispatchers.IO) {
+            filterInteractor.writeSharedPrefs(filter)
+        }
+    }
+
     fun getPrefs(): SaveFiltersSharedPrefs {
         return saveFiltersSharedPrefs
     }
@@ -71,12 +77,6 @@ class FilterViewModel(
         this.industries = industries
     }
 
-    fun saveFilter(filter: SaveFiltersSharedPrefs) {
-        viewModelScope.launch(Dispatchers.IO) {
-            filterInteractor.writeSharedPrefs(filter)
-        }
-    }
-
     fun getFilterSettings() {
         viewModelScope.launch(Dispatchers.IO) {
             val filters = filterInteractor.readSharedPrefs()
@@ -100,6 +100,16 @@ class FilterViewModel(
     fun clear() {
         viewModelScope.launch(Dispatchers.IO) {
             filterInteractor.clearSharedPrefs()
+            industries = Industries("", "", false)
+            country = Country("", "")
+            region = Region("", "", null)
+            saveFiltersSharedPrefs = SaveFiltersSharedPrefs(
+                industries,
+                country,
+                region,
+                "",
+                false
+            )
             setState(FilterScreenState.ClearState)
         }
     }

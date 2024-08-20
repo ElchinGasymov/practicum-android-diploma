@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
@@ -100,7 +101,10 @@ class SearchFragment : Fragment() {
 
         viewModel.render().observe(viewLifecycleOwner) { state ->
             when (state) {
-                SearchScreenState.Default -> {}
+                SearchScreenState.Default -> {
+                    setFilterIcon()
+                }
+
                 is SearchScreenState.Error -> {
                     clearList()
                     removePlaceholders()
@@ -198,6 +202,7 @@ class SearchFragment : Fragment() {
             }
         }
     }
+
     private fun clearList() {
         listOfVacancies.clear()
         adapter.setVacancies(listOfVacancies)
@@ -211,6 +216,24 @@ class SearchFragment : Fragment() {
         binding.noConnectionPlaceholder.isVisible = false
         binding.serverError.isVisible = false
         binding.serverErrorText.isVisible = false
+    }
+
+    private fun setFilterIcon() {
+        if (viewModel.isFilter()) {
+            binding.filterIc.setImageDrawable(
+                AppCompatResources.getDrawable(
+                    requireContext(),
+                    R.drawable.ic_filter_on_24px
+                )
+            )
+        } else {
+            binding.filterIc.setImageDrawable(
+                AppCompatResources.getDrawable(
+                    requireContext(),
+                    R.drawable.ic_filter_off_12px
+                )
+            )
+        }
     }
 
     private fun startProgressBar() {

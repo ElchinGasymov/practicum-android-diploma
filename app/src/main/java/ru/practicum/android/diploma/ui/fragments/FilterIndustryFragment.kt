@@ -16,6 +16,7 @@ import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.databinding.FragmentSelectIndustryBinding
 import ru.practicum.android.diploma.presentation.viewmodels.FilterIndustryViewModel
+import ru.practicum.android.diploma.util.ResponseData
 import ru.practicum.android.diploma.util.adapter.industry.IndustryAdapter
 
 class FilterIndustryFragment : Fragment() {
@@ -49,7 +50,20 @@ class FilterIndustryFragment : Fragment() {
         binding.industryRecycleView.adapter = adapter
 
         viewModel.industries.observe(viewLifecycleOwner) { list ->
+            binding.placeholderGroup.isVisible = false
             adapter.industry = list
+        }
+        viewModel.error.observe(viewLifecycleOwner) { error ->
+            when (error) {
+                ResponseData.ResponseError.NO_INTERNET,
+                ResponseData.ResponseError.CLIENT_ERROR,
+                ResponseData.ResponseError.SERVER_ERROR,
+                ResponseData.ResponseError.NOT_FOUND -> {
+                    binding.placeholderGroup.isVisible = true
+                }
+
+                else -> {}
+            }
         }
 
         viewModel.hasSelected.observe(viewLifecycleOwner) {
@@ -77,7 +91,7 @@ class FilterIndustryFragment : Fragment() {
         binding.applyButton.setOnClickListener {
             val json = Gson().toJson(viewModel.selectedIndustry.value)
             setFragmentResult(INDUSTRY_KEY, bundleOf(INDUSTRY_ITEM_KEY to json))
-           // viewModel.writeSharedPrefs()
+            // viewModel.writeSharedPrefs()
             findNavController().popBackStack()
         }
     }

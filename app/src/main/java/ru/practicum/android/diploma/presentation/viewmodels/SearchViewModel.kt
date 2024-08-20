@@ -25,7 +25,7 @@ class SearchViewModel(
         const val TWO_SECONDS = 2000L
     }
 
-    private val screenStateLiveData = MutableLiveData<SearchScreenState>(SearchScreenState.Default)
+    private val screenStateLiveData = MutableLiveData<SearchScreenState>()
     private var currentPage = 0
     private var maxPages = 1
     private var isNextPageLoading = false
@@ -80,6 +80,7 @@ class SearchViewModel(
         }
 
     }
+
     fun setDefaultCurrentPage() {
         currentPage = 0
     }
@@ -101,6 +102,7 @@ class SearchViewModel(
                     filter.currency.toString(),
                     filter.noCurrency
                 )
+                setScreenState(SearchScreenState.Default)
             } else {
                 options = Options(
                     requestNextPage,
@@ -111,6 +113,7 @@ class SearchViewModel(
                     "",
                     false
                 )
+                setScreenState(SearchScreenState.Default)
             }
         }
     }
@@ -155,6 +158,13 @@ class SearchViewModel(
                 search(false)
             }
         }
+    }
+
+    fun isFilter(): Boolean {
+        return (options.area?.isNotEmpty() == true ||
+            options.industry?.isNotEmpty() == true ||
+            options.salary?.isNotEmpty() == true ||
+            options.withSalary == true)
     }
 
     fun onVacancyClicked() {

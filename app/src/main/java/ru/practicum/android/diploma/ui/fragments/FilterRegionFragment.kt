@@ -16,6 +16,7 @@ import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSelectRegionBinding
 import ru.practicum.android.diploma.domain.models.Region
 import ru.practicum.android.diploma.presentation.viewmodels.FilterRegionViewModel
@@ -55,7 +56,17 @@ class FilterRegionFragment : Fragment() {
         binding.selectRegionToolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
+        binding.clearCrossIc.setOnClickListener {
+            binding.regionSearchQuery.text.clear()
+        }
         binding.regionSearchQuery.doOnTextChanged { text, _, _, _ ->
+            if (text?.isNotEmpty() == true) {
+                binding.searchIconLoupe.isVisible = false
+                binding.clearCrossIc.isVisible = true
+            } else {
+                binding.searchIconLoupe.isVisible = true
+                binding.clearCrossIc.isVisible = false
+            }
             search(text.toString())
         }
         viewModel.render().observe(viewLifecycleOwner) { state ->
@@ -64,15 +75,9 @@ class FilterRegionFragment : Fragment() {
                 is RegionsScreenState.Error -> {
                     stopProgressBar()
                     when (state.error) {
-                        ResponseData.ResponseError.NO_INTERNET -> {
-                            setNoInternetState()
-                        }
-
+                        ResponseData.ResponseError.NO_INTERNET,
                         ResponseData.ResponseError.CLIENT_ERROR,
-                        ResponseData.ResponseError.SERVER_ERROR -> {
-                            setServerErrorState()
-                        }
-
+                        ResponseData.ResponseError.SERVER_ERROR,
                         ResponseData.ResponseError.NOT_FOUND -> {
                             setNoRegionsState()
                         }

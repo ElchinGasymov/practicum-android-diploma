@@ -4,10 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.FilterInteractor
 import ru.practicum.android.diploma.domain.models.Industries
 import ru.practicum.android.diploma.util.ResponseData
+import ru.practicum.android.diploma.util.ResponseData.ResponseError
 
 class FilterIndustryViewModel(
     private val interactor: FilterInteractor
@@ -23,20 +25,24 @@ class FilterIndustryViewModel(
     private val _selectedIndustry = MutableLiveData<Industries>()
     val selectedIndustry: LiveData<Industries>
         get() = _selectedIndustry
+    private val _error = MutableLiveData<ResponseError>()
+    val error: LiveData<ResponseError>
+        get() = _error
 
-  /*  fun writeSharedPrefs() {
-        viewModelScope.launch {
-            interactor.writeSharedPrefs(
-                SaveFiltersSharedPrefs(
-                    industries = _selectedIndustry.value,
-                    null,
-                    null,
-                    null,
-                    false
-                )
-            )
-        }
-    }*/
+
+    /*  fun writeSharedPrefs() {
+          viewModelScope.launch {
+              interactor.writeSharedPrefs(
+                  SaveFiltersSharedPrefs(
+                      industries = _selectedIndustry.value,
+                      null,
+                      null,
+                      null,
+                      false
+                  )
+              )
+          }
+      }*/
 
     fun itemChecked(industries: Industries) {
         val newList = ArrayList<Industries>()
@@ -53,7 +59,7 @@ class FilterIndustryViewModel(
     }
 
     fun updateListIndustries() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val industry = interactor.readSharedPrefs()?.industries
             interactor.getIndustries().collect { list ->
                 when (list) {
@@ -61,13 +67,15 @@ class FilterIndustryViewModel(
                         whenList(industry, list)
                     }
 
-                    is ResponseData.Error -> {}
+                    is ResponseData.Error -> {
+                        _error.postValue(list.error)
+                    }
                 }
             }
         }
     }
 
-    fun whenList(industry: Industries?, list: ResponseData.Data<List<Industries>>) {
+    private fun whenList(industry: Industries?, list: ResponseData.Data<List<Industries>>) {
         if (industry != null) {
             val newList = ArrayList<Industries>()
             list.value.forEach { industryItem ->

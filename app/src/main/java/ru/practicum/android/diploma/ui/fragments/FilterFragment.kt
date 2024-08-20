@@ -41,6 +41,8 @@ class FilterFragment : Fragment() {
         const val FILTER_REQUEST_KEY = "FILTER_REQUEST_KEY"
         const val FILTER_BUNDLE_KEY = "FILTER_BUNDLE_KEY"
         const val FILTER_TO_PLACE_OF_WORK_KEY = "FILTER_TO_PLACE_OF_WORK_KEY"
+        const val FILTER_TO_PLACE_OF_WORK_COUNTRY_KEY = "FILTER_TO_PLACE_OF_WORK_COUNTRY_KEY"
+        const val FILTER_TO_PLACE_OF_WORK_REGION_KEY = "FILTER_TO_PLACE_OF_WORK_REGION_KEY"
     }
 
     private val binding: FragmentFilterBinding by viewBinding(CreateMethod.INFLATE)
@@ -76,6 +78,7 @@ class FilterFragment : Fragment() {
                     binding.workTextInput.text?.clear()
                     binding.industryTextInput.text?.clear()
                     binding.salary.text?.clear()
+                    binding.salaryFlagCheckbox.isChecked = false
                     setNoIndustryEndIcon()
                     setNoCountryEndIcon()
                     checkFields()
@@ -119,6 +122,7 @@ class FilterFragment : Fragment() {
                     binding.industryTextInput.setText(state.filters.industries?.name)
                     binding.salary.setText(state.filters.currency)
                     binding.salaryFlagCheckbox.isChecked = state.filters.noCurrency
+                    setCountryAndIndustriesFields()
                 }
             }
         }
@@ -128,10 +132,27 @@ class FilterFragment : Fragment() {
     private fun checkFields() {
         val newPrefs = makeFilterSettings()
         val loadedPrefs = viewModel.getPrefs()
+        setResetButton()
         if (checkPrefs(newPrefs, loadedPrefs)) {
             setButtonsVisible()
         } else {
             setButtonsNotVisible()
+        }
+    }
+
+    private fun setResetButton() {
+        binding.clearButton.isVisible = binding.workTextInput.text?.isNotEmpty() == true ||
+            binding.industryTextInput.text?.isNotEmpty() == true ||
+            binding.salary.text?.isNotEmpty() == true ||
+            binding.salaryFlagCheckbox.isChecked
+    }
+
+    private fun setCountryAndIndustriesFields() {
+        if (binding.workTextInput.text?.isNotEmpty() == true) {
+            setCountryEndIcon()
+        }
+        if (binding.industryTextInput.text?.isNotEmpty() == true) {
+            setIndustryEndIcon()
         }
     }
 
@@ -144,11 +165,11 @@ class FilterFragment : Fragment() {
     }
 
     private fun setButtonsVisible() {
-        binding.btnGroup.isVisible = true
+        binding.applyButton.isVisible = true
     }
 
     private fun setButtonsNotVisible() {
-        binding.btnGroup.isVisible = false
+        binding.applyButton.isVisible = false
     }
 
     private fun initResultListeners() {
@@ -193,9 +214,8 @@ class FilterFragment : Fragment() {
         binding.clearButton.setOnClickListener { viewModel.clear() }
         // Пример использования Checkbox, если включена опция показа только с зарплатой
         binding.salaryFlagCheckbox.setOnCheckedChangeListener { _, isChecked -> //
-            viewModel.saveFilter(makeFilterSettings())
             viewModel.setNoCurrencySelected(isChecked)
-            // viewModel.setSalaryOnlyCheckbox(isChecked)
+            checkFields()
         }
         binding.workTextInput.setOnClickListener {
             navigateToPlaceOfWorkScreen()
@@ -223,6 +243,11 @@ class FilterFragment : Fragment() {
             binding.salaryFlagCheckbox.isChecked
         )
         return filter
+    }
+
+    override fun onStop() {
+        viewModel.saveFilterSettings(makeFilterSettings())
+        super.onStop()
     }
 
     // Настройка поведения поля salary при изменении текста
@@ -362,7 +387,14 @@ class FilterFragment : Fragment() {
     }
 
     private fun navigateToPlaceOfWorkScreen() {
-        setFragmentResult(FILTER_TO_PLACE_OF_WORK_KEY, bundleOf())
+        val jsonCountry = Gson().toJson(viewModel.getCountry())
+        val jsonRegion = Gson().toJson(viewModel.getRegion())
+        setFragmentResult(
+            FILTER_TO_PLACE_OF_WORK_KEY, bundleOf(
+                FILTER_TO_PLACE_OF_WORK_COUNTRY_KEY to jsonCountry,
+                FILTER_TO_PLACE_OF_WORK_REGION_KEY to jsonRegion
+            )
+        )
         findNavController().navigate(R.id.action_filterFragment_to_select_place_of_workFragment)
     }
 
