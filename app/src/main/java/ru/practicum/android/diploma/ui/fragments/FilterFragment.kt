@@ -28,18 +28,16 @@ import ru.practicum.android.diploma.presentation.viewmodels.FilterViewModel
 import ru.practicum.android.diploma.ui.fragments.FilterIndustryFragment.Companion.INDUSTRY_ITEM_KEY
 import ru.practicum.android.diploma.ui.fragments.FilterIndustryFragment.Companion.INDUSTRY_KEY
 import ru.practicum.android.diploma.ui.state.FilterScreenState
+import ru.practicum.android.diploma.util.FILTER_BUNDLE_KEY
+import ru.practicum.android.diploma.util.FILTER_REQUEST_KEY
+import ru.practicum.android.diploma.util.FILTER_TO_PLACE_OF_WORK_COUNTRY_KEY
+import ru.practicum.android.diploma.util.FILTER_TO_PLACE_OF_WORK_KEY
+import ru.practicum.android.diploma.util.FILTER_TO_PLACE_OF_WORK_REGION_KEY
 import ru.practicum.android.diploma.util.PLACE_OF_WORK_COUNTRY_KEY
 import ru.practicum.android.diploma.util.PLACE_OF_WORK_KEY
 import ru.practicum.android.diploma.util.PLACE_OF_WORK_REGION_KEY
 
 class FilterFragment : Fragment() {
-    companion object {
-        const val FILTER_REQUEST_KEY = "FILTER_REQUEST_KEY"
-        const val FILTER_BUNDLE_KEY = "FILTER_BUNDLE_KEY"
-        const val FILTER_TO_PLACE_OF_WORK_KEY = "FILTER_TO_PLACE_OF_WORK_KEY"
-        const val FILTER_TO_PLACE_OF_WORK_COUNTRY_KEY = "FILTER_TO_PLACE_OF_WORK_COUNTRY_KEY"
-        const val FILTER_TO_PLACE_OF_WORK_REGION_KEY = "FILTER_TO_PLACE_OF_WORK_REGION_KEY"
-    }
     private val binding: FragmentFilterBinding by viewBinding(CreateMethod.INFLATE)
     private val viewModel by viewModel<FilterViewModel>()
 

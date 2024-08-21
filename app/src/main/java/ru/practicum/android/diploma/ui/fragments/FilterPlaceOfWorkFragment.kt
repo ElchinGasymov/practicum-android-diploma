@@ -23,18 +23,18 @@ import ru.practicum.android.diploma.databinding.FragmentSelectPlaceOfWorkBinding
 import ru.practicum.android.diploma.domain.models.Country
 import ru.practicum.android.diploma.domain.models.Region
 import ru.practicum.android.diploma.presentation.viewmodels.FilterPlaceOfWorkViewModel
-import ru.practicum.android.diploma.ui.fragments.FilterCountryFragment.Companion.COUNTRY_BUNDLE_KEY
-import ru.practicum.android.diploma.ui.fragments.FilterCountryFragment.Companion.COUNTRY_REQUEST_KEY
-import ru.practicum.android.diploma.ui.fragments.FilterFragment.Companion.FILTER_TO_PLACE_OF_WORK_COUNTRY_KEY
-import ru.practicum.android.diploma.ui.fragments.FilterFragment.Companion.FILTER_TO_PLACE_OF_WORK_KEY
-import ru.practicum.android.diploma.ui.fragments.FilterFragment.Companion.FILTER_TO_PLACE_OF_WORK_REGION_KEY
-import ru.practicum.android.diploma.ui.fragments.FilterRegionFragment.Companion.REGION_BUNDLE_KEY
-import ru.practicum.android.diploma.ui.fragments.FilterRegionFragment.Companion.REGION_REQUEST_KEY
 import ru.practicum.android.diploma.ui.state.PlaceOfWorkScreenState
+import ru.practicum.android.diploma.util.COUNTRY_BUNDLE_KEY
+import ru.practicum.android.diploma.util.COUNTRY_REQUEST_KEY
+import ru.practicum.android.diploma.util.FILTER_TO_PLACE_OF_WORK_COUNTRY_KEY
+import ru.practicum.android.diploma.util.FILTER_TO_PLACE_OF_WORK_KEY
+import ru.practicum.android.diploma.util.FILTER_TO_PLACE_OF_WORK_REGION_KEY
 import ru.practicum.android.diploma.util.PLACE_OF_WORK_COUNTRY_KEY
 import ru.practicum.android.diploma.util.PLACE_OF_WORK_KEY
 import ru.practicum.android.diploma.util.PLACE_OF_WORK_REGION_KEY
+import ru.practicum.android.diploma.util.REGION_BUNDLE_KEY
 import ru.practicum.android.diploma.util.REGION_ID_KEY
+import ru.practicum.android.diploma.util.REGION_REQUEST_KEY
 
 class FilterPlaceOfWorkFragment : Fragment() {
     private val binding: FragmentSelectPlaceOfWorkBinding by viewBinding(CreateMethod.INFLATE)

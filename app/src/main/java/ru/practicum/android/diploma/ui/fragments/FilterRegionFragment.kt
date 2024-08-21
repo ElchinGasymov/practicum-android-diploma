@@ -21,15 +21,12 @@ import ru.practicum.android.diploma.domain.models.Region
 import ru.practicum.android.diploma.presentation.viewmodels.FilterRegionViewModel
 import ru.practicum.android.diploma.ui.state.RegionsScreenState
 import ru.practicum.android.diploma.util.App.Companion.REGION_ID_KEY
+import ru.practicum.android.diploma.util.REGION_BUNDLE_KEY
+import ru.practicum.android.diploma.util.REGION_REQUEST_KEY
 import ru.practicum.android.diploma.util.ResponseData
 import ru.practicum.android.diploma.util.adapter.region.RegionAdapter
 
 class FilterRegionFragment : Fragment() {
-    companion object {
-        const val REGION_REQUEST_KEY = "REGION_REQUEST_KEY"
-        const val REGION_BUNDLE_KEY = "REGION_BUNDLE_KEY"
-    }
-
     private val binding: FragmentSelectRegionBinding by viewBinding(CreateMethod.INFLATE)
     private val viewModel by viewModel<FilterRegionViewModel>()
     private val adapter = RegionAdapter {

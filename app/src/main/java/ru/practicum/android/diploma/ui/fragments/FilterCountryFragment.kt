@@ -18,16 +18,12 @@ import ru.practicum.android.diploma.databinding.FragmentSelectCountryBinding
 import ru.practicum.android.diploma.domain.models.Country
 import ru.practicum.android.diploma.presentation.viewmodels.FilterCountryViewModel
 import ru.practicum.android.diploma.ui.state.CountriesScreenState
+import ru.practicum.android.diploma.util.COUNTRY_BUNDLE_KEY
+import ru.practicum.android.diploma.util.COUNTRY_REQUEST_KEY
 import ru.practicum.android.diploma.util.ResponseData
 import ru.practicum.android.diploma.util.adapter.country.CountryAdapter
 
 class FilterCountryFragment : Fragment() {
-
-    companion object {
-        const val COUNTRY_REQUEST_KEY = "COUNTRY_REQUEST_KEY"
-        const val COUNTRY_BUNDLE_KEY = "COUNTRY_BUNDLE_KEY"
-    }
-
     private val binding: FragmentSelectCountryBinding by viewBinding(CreateMethod.INFLATE)
     private val viewModel by viewModel<FilterCountryViewModel>()
 
