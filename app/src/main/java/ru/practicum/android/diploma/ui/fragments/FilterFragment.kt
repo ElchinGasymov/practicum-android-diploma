@@ -30,10 +30,10 @@ import ru.practicum.android.diploma.domain.models.SaveFiltersSharedPrefs
 import ru.practicum.android.diploma.presentation.viewmodels.FilterViewModel
 import ru.practicum.android.diploma.ui.fragments.FilterIndustryFragment.Companion.INDUSTRY_ITEM_KEY
 import ru.practicum.android.diploma.ui.fragments.FilterIndustryFragment.Companion.INDUSTRY_KEY
-import ru.practicum.android.diploma.ui.fragments.FilterPlaceOfWorkFragment.Companion.PLACE_OF_WORK_COUNTRY_KEY
-import ru.practicum.android.diploma.ui.fragments.FilterPlaceOfWorkFragment.Companion.PLACE_OF_WORK_KEY
-import ru.practicum.android.diploma.ui.fragments.FilterPlaceOfWorkFragment.Companion.PLACE_OF_WORK_REGION_KEY
 import ru.practicum.android.diploma.ui.state.FilterScreenState
+import ru.practicum.android.diploma.util.App.Companion.PLACE_OF_WORK_COUNTRY_KEY
+import ru.practicum.android.diploma.util.App.Companion.PLACE_OF_WORK_KEY
+import ru.practicum.android.diploma.util.App.Companion.PLACE_OF_WORK_REGION_KEY
 
 class FilterFragment : Fragment() {
 
