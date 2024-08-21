@@ -144,7 +144,7 @@ class FilterPlaceOfWorkFragment : Fragment() {
             val json = bundle.getString(REGION_BUNDLE_KEY).toString()
             val type = object : TypeToken<Region>() {}.type
             region = Gson().fromJson(json, type)
-            getCountryName(region)
+            viewModel.getCountryName(region, false)
             viewModel.setRegionName(region)
         }
 
@@ -173,13 +173,9 @@ class FilterPlaceOfWorkFragment : Fragment() {
 
     private fun initButtonListeners() {
         binding.selectPlaceOfWorkToolbar.setNavigationOnClickListener { findNavController().navigateUp() }
-        binding.applyButton.setOnClickListener { saveFilters() }
+        binding.applyButton.setOnClickListener { viewModel.saveFields(country, region) }
         binding.countryTextInput.setOnClickListener { navigateToCountrySelection() }
         binding.regionTextInput.setOnClickListener { navigateToRegionSelection() }
-    }
-
-    private fun getCountryName(region: Region) {
-        viewModel.getCountryName(region, false)
     }
 
     private fun initTextBehaviour() {
@@ -189,10 +185,6 @@ class FilterPlaceOfWorkFragment : Fragment() {
         binding.regionTextInput.doOnTextChanged { text, _, _, _ ->
             updateRegionHintAppearance(text?.isNotEmpty() == true)
         }
-    }
-
-    private fun saveFilters() {
-        viewModel.saveFields(country, region)
     }
 
     private fun setNoCountryEndIcon() {
