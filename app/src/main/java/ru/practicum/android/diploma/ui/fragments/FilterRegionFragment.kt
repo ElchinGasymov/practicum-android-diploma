@@ -20,7 +20,7 @@ import ru.practicum.android.diploma.databinding.FragmentSelectRegionBinding
 import ru.practicum.android.diploma.domain.models.Region
 import ru.practicum.android.diploma.presentation.viewmodels.FilterRegionViewModel
 import ru.practicum.android.diploma.ui.state.RegionsScreenState
-import ru.practicum.android.diploma.util.REGION_ID_KEY
+import ru.practicum.android.diploma.util.App.Companion.REGION_ID_KEY
 import ru.practicum.android.diploma.util.ResponseData
 import ru.practicum.android.diploma.util.adapter.region.RegionAdapter
 
@@ -48,27 +48,13 @@ class FilterRegionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupFragmentResultListener()
-        setupToolbar()
-        setupSearchFunctionality()
-        observeViewModel()
-        setupRecyclerView()
-    }
-
-    private fun setupFragmentResultListener() {
         setFragmentResultListener(REGION_ID_KEY) { _, bundle ->
             val region = bundle.getString(REGION_BUNDLE_KEY).toString()
             viewModel.getRegions(region)
         }
-    }
-
-    private fun setupToolbar() {
         binding.selectRegionToolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
-    }
-
-    private fun setupSearchFunctionality() {
         binding.clearCrossIc.setOnClickListener {
             binding.regionSearchQuery.text.clear()
         }
@@ -82,22 +68,39 @@ class FilterRegionFragment : Fragment() {
             }
             search(text.toString())
         }
-    }
-
-    private fun observeViewModel() {
         viewModel.render().observe(viewLifecycleOwner) { state ->
             when (state) {
                 RegionsScreenState.Default -> {}
-                is RegionsScreenState.Error -> handleErrors(state.error)
-                RegionsScreenState.Loading -> handleLoadingState()
-                is RegionsScreenState.Success -> handleSuccessState(state.regions)
-            }
-        }
-    }
+                is RegionsScreenState.Error -> {
+                    stopProgressBar()
+                    when (state.error) {
+                        ResponseData.ResponseError.NO_INTERNET,
+                        ResponseData.ResponseError.CLIENT_ERROR,
+                        ResponseData.ResponseError.SERVER_ERROR,
+                        ResponseData.ResponseError.NOT_FOUND -> {
+                            setNoRegionsState()
+                        }
+                    }
+                }
 
-    private fun setupRecyclerView() {
-        binding.regionRecycleView.layoutManager = LinearLayoutManager(requireContext())
-        binding.regionRecycleView.adapter = adapter
+                RegionsScreenState.Loading -> {
+                    removePlaceholders()
+                    startProgressBar()
+                }
+
+                is RegionsScreenState.Success -> {
+                    stopProgressBar()
+                    removePlaceholders()
+                    adapter.setRegions(state.regions)
+                    binding.regionRecycleView.isVisible = true
+                }
+            }
+
+        }
+
+        val regionsRecyclerView = binding.regionRecycleView
+        regionsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        regionsRecyclerView.adapter = adapter
     }
 
     private fun onItemClicked(region: Region) {
@@ -111,28 +114,6 @@ class FilterRegionFragment : Fragment() {
 
     private fun search(query: String) {
         viewModel.search(query)
-    }
-
-    private fun handleLoadingState() {
-        removePlaceholders()
-        startProgressBar()
-    }
-
-    private fun handleSuccessState(regions: List<Region>) {
-        stopProgressBar()
-        removePlaceholders()
-        adapter.setRegions(regions)
-        binding.regionRecycleView.isVisible = true
-    }
-
-    private fun handleErrors(error: ResponseData.ResponseError) {
-        stopProgressBar()
-        when (error) {
-            ResponseData.ResponseError.NO_INTERNET,
-            ResponseData.ResponseError.CLIENT_ERROR,
-            ResponseData.ResponseError.SERVER_ERROR,
-            ResponseData.ResponseError.NOT_FOUND -> setNoRegionsState()
-        }
     }
 
     private fun startProgressBar() {
@@ -150,6 +131,18 @@ class FilterRegionFragment : Fragment() {
         binding.noConnectionText.isVisible = false
         binding.noListPlaceholderGroup.isVisible = false
         binding.regionRecycleView.isVisible = false
+    }
+
+    private fun setServerErrorState() {
+        binding.regionRecycleView.isVisible = false
+        binding.serverError.isVisible = true
+        binding.serverErrorText.isVisible = true
+    }
+
+    private fun setNoInternetState() {
+        binding.regionRecycleView.isVisible = false
+        binding.noConnectionPlaceholder.isVisible = true
+        binding.noConnectionText.isVisible = true
     }
 
     private fun setNoRegionsState() {

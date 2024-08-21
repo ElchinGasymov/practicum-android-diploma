@@ -1,11 +1,14 @@
 package ru.practicum.android.diploma.ui.fragments
 
+import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.ColorInt
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
@@ -28,9 +31,9 @@ import ru.practicum.android.diploma.presentation.viewmodels.FilterViewModel
 import ru.practicum.android.diploma.ui.fragments.FilterIndustryFragment.Companion.INDUSTRY_ITEM_KEY
 import ru.practicum.android.diploma.ui.fragments.FilterIndustryFragment.Companion.INDUSTRY_KEY
 import ru.practicum.android.diploma.ui.state.FilterScreenState
-import ru.practicum.android.diploma.util.PLACE_OF_WORK_COUNTRY_KEY
-import ru.practicum.android.diploma.util.PLACE_OF_WORK_KEY
-import ru.practicum.android.diploma.util.PLACE_OF_WORK_REGION_KEY
+import ru.practicum.android.diploma.util.App.Companion.PLACE_OF_WORK_COUNTRY_KEY
+import ru.practicum.android.diploma.util.App.Companion.PLACE_OF_WORK_KEY
+import ru.practicum.android.diploma.util.App.Companion.PLACE_OF_WORK_REGION_KEY
 
 class FilterFragment : Fragment() {
 
@@ -339,13 +342,13 @@ class FilterFragment : Fragment() {
     }
 
     // Метод для получения цвета в зависимости от текущей темы приложения
-    // @ColorInt
-    // fun Context.getColorOnSecondaryFixed(): Int {
-    //    val typedValue = TypedValue()
-    //    val theme = theme
-    //    theme.resolveAttribute(com.google.android.material.R.attr.colorOnSecondaryFixed, typedValue, true)
-    //    return typedValue.data
-    // }
+    @ColorInt
+    fun Context.getColorOnSecondaryFixed(): Int {
+        val typedValue = TypedValue()
+        val theme = theme
+        theme.resolveAttribute(com.google.android.material.R.attr.colorOnSecondaryFixed, typedValue, true)
+        return typedValue.data
+    }
 
     private fun setNoCountryEndIcon() {
         binding.workPlaceLayout.apply {
