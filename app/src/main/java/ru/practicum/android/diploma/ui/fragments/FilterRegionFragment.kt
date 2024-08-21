@@ -133,18 +133,6 @@ class FilterRegionFragment : Fragment() {
         binding.regionRecycleView.isVisible = false
     }
 
-    private fun setServerErrorState() {
-        binding.regionRecycleView.isVisible = false
-        binding.serverError.isVisible = true
-        binding.serverErrorText.isVisible = true
-    }
-
-    private fun setNoInternetState() {
-        binding.regionRecycleView.isVisible = false
-        binding.noConnectionPlaceholder.isVisible = true
-        binding.noConnectionText.isVisible = true
-    }
-
     private fun setNoRegionsState() {
         binding.regionRecycleView.isVisible = false
         binding.noListPlaceholderGroup.isVisible = true

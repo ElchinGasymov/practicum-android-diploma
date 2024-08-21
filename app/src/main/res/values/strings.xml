@@ -69,4 +69,7 @@
     <string name="separator" translatable="false">, </string>
     <string name="enter_sum">Enter sum</string>
 
+    <string name="industry_no_industry" translatable="false">Такой отрасли нет</string>
+
+
 </resources>

@@ -48,7 +48,6 @@ class FilterPlaceOfWorkFragment : Fragment() {
     private var country = Country("", "")
     private var region = Region("", "", null)
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

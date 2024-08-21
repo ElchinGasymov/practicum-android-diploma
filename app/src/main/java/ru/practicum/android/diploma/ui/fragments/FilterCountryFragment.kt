@@ -105,16 +105,6 @@ class FilterCountryFragment : Fragment() {
         binding.serverErrorText.isVisible = false
     }
 
-    private fun setNoInternetState() {
-        binding.noConnectionPlaceholder.isVisible = true
-        binding.noConnectionText.isVisible = true
-    }
-
-    private fun setServerErrorState() {
-        binding.serverError.isVisible = true
-        binding.serverErrorText.isVisible = true
-    }
-
     private fun setNoListState() {
         binding.placeholderGroup.isVisible = true
     }
