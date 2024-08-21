@@ -28,23 +28,18 @@ import ru.practicum.android.diploma.ui.fragments.FilterCountryFragment.Companion
 import ru.practicum.android.diploma.ui.fragments.FilterFragment.Companion.FILTER_TO_PLACE_OF_WORK_COUNTRY_KEY
 import ru.practicum.android.diploma.ui.fragments.FilterFragment.Companion.FILTER_TO_PLACE_OF_WORK_KEY
 import ru.practicum.android.diploma.ui.fragments.FilterFragment.Companion.FILTER_TO_PLACE_OF_WORK_REGION_KEY
+import ru.practicum.android.diploma.ui.fragments.FilterRegionFragment.Companion.REGION_BUNDLE_KEY
 import ru.practicum.android.diploma.ui.fragments.FilterRegionFragment.Companion.REGION_REQUEST_KEY
 import ru.practicum.android.diploma.ui.state.PlaceOfWorkScreenState
+import ru.practicum.android.diploma.util.App.Companion.PLACE_OF_WORK_COUNTRY_KEY
+import ru.practicum.android.diploma.util.App.Companion.PLACE_OF_WORK_KEY
+import ru.practicum.android.diploma.util.App.Companion.PLACE_OF_WORK_REGION_KEY
+import ru.practicum.android.diploma.util.App.Companion.REGION_ID_KEY
 
 class FilterPlaceOfWorkFragment : Fragment() {
-    companion object {
-        const val REGION_ID_KEY = "REGION_ID_KEY"
-        const val REGION_BUNDLE_KEY = "REGION_BUNDLE_KEY"
-        const val PLACE_OF_WORK_KEY = "PLACE_OF_WORK_KEY"
-        const val PLACE_OF_WORK_COUNTRY_KEY = "PLACE_OF_WORK_COUNTRY_KEY"
-        const val PLACE_OF_WORK_REGION_KEY = "PLACE_OF_WORK_REGION_KEY"
-    }
-
     private val binding: FragmentSelectPlaceOfWorkBinding by viewBinding(CreateMethod.INFLATE)
     private val viewModel by viewModel<FilterPlaceOfWorkViewModel>()
 
-    private var countryName = ""
-    private var regionName = ""
     private var country = Country("", "")
     private var region = Region("", "", null)
 
@@ -68,15 +63,13 @@ class FilterPlaceOfWorkFragment : Fragment() {
             when (state) {
                 is PlaceOfWorkScreenState.CountryName -> {
                     country = state.country
-                    countryName = state.country.name
-                    binding.countryTextInput.setText(countryName)
+                    binding.countryTextInput.setText(state.country.name)
                     setCountryEndIcon()
                     setApplyButtonVisible()
                 }
 
                 PlaceOfWorkScreenState.NoCountryName -> {
                     binding.countryTextInput.text?.clear()
-                    countryName = ""
                     country = Country("", "")
                     setNoCountryEndIcon()
                     checkFields()
@@ -84,16 +77,14 @@ class FilterPlaceOfWorkFragment : Fragment() {
 
                 PlaceOfWorkScreenState.NoRegionName -> {
                     binding.regionTextInput.text?.clear()
-                    regionName = ""
                     region = Region("", "", null)
                     setNoRegionEndIcon()
                     checkFields()
                 }
 
                 is PlaceOfWorkScreenState.RegionName -> {
-                    regionName = state.region.name
                     region = state.region
-                    binding.regionTextInput.setText(regionName)
+                    binding.regionTextInput.setText(state.region.name)
                     setRegionEndIcon()
                     setApplyButtonVisible()
                 }
@@ -114,14 +105,12 @@ class FilterPlaceOfWorkFragment : Fragment() {
                 is PlaceOfWorkScreenState.Loaded -> {
                     if (state.filters.country != null) {
                         country = state.filters.country
-                        countryName = state.filters.country.name
-                        binding.countryTextInput.setText(countryName)
+                        binding.countryTextInput.setText(state.filters.country.name)
                         setCountryEndIcon()
                     }
                     if (state.filters.region != null) {
                         region = state.filters.region
-                        regionName = state.filters.region.name
-                        binding.regionTextInput.setText(regionName)
+                        binding.regionTextInput.setText(state.filters.region.name)
                         setRegionEndIcon()
                     }
                     setApplyButtonVisible()
@@ -156,13 +145,11 @@ class FilterPlaceOfWorkFragment : Fragment() {
             val typeRegion = object : TypeToken<Region>() {}.type
             region = Gson().fromJson(jsonRegion, typeRegion)
             if (country.name.isNotEmpty()) {
-                countryName = country.name
-                binding.countryTextInput.setText(countryName)
+                binding.countryTextInput.setText(country.name)
                 setCountryEndIcon()
                 setApplyButtonVisible()
                 if (region.name.isNotEmpty()) {
-                    regionName = region.name
-                    binding.regionTextInput.setText(regionName)
+                    binding.regionTextInput.setText(region.name)
                     setRegionEndIcon()
                 }
             }
@@ -186,16 +173,13 @@ class FilterPlaceOfWorkFragment : Fragment() {
     }
 
     private fun initTextBehaviour() {
-        // Настройка поведения поля countryTextInput при изменении текста
         binding.countryTextInput.doOnTextChanged { text, _, _, _ ->
             if (text.isNullOrEmpty()) {
-                updateCountryHintAppearance(false) // Если текст пустой, hint остаётся стандартным
+                updateCountryHintAppearance(false)
             } else {
-                updateCountryHintAppearance(true) // Если текст заполнен, hint уменьшается и меняет цвет
+                updateCountryHintAppearance(true)
             }
         }
-
-        // Настройка поведения поля regionTextInput при изменении текста
         binding.regionTextInput.doOnTextChanged { text, _, _, _ ->
             if (text.isNullOrEmpty()) {
                 updateRegionHintAppearance(false)
@@ -206,7 +190,6 @@ class FilterPlaceOfWorkFragment : Fragment() {
     }
 
     private fun saveFilters() {
-        // viewModel.saveSharedPrefs(country, region)
         viewModel.saveFields(country, region)
     }
 
@@ -257,38 +240,31 @@ class FilterPlaceOfWorkFragment : Fragment() {
         binding.applyButton.isVisible = true
     }
 
-    // Метод для обновления внешнего вида hint в зависимости от заполненности поля
     private fun updateCountryHintAppearance(isFilled: Boolean) {
         val isDarkTheme =
             resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
 
         if (isFilled) {
-            // Если поле заполнено, уменьшаем hint и меняем его цвет в зависимости от темы
             binding.countryLayout.setHintTextAppearance(R.style.text_12_regular_400)
             binding.countryLayout.defaultHintTextColor = ColorStateList.valueOf(
                 if (isDarkTheme) requireContext().getColor(R.color.white) else requireContext().getColor(R.color.black)
             )
         } else {
-            // Если поле пустое, оставляем стандартный размер и серый цвет hint
             binding.countryLayout.setHintTextAppearance(R.style.text_16_regular_400)
             binding.countryLayout.defaultHintTextColor =
                 ColorStateList.valueOf(requireContext().getColor(R.color.gray))
         }
     }
 
-    // Метод для обновления внешнего вида hint в зависимости от заполненности поля regionTextInput
     private fun updateRegionHintAppearance(isFilled: Boolean) {
         val isDarkTheme =
             resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
-
         if (isFilled) {
-            // Если поле заполнено, уменьшаем hint и меняем его цвет в зависимости от темы
             binding.regionLayout.setHintTextAppearance(R.style.text_12_regular_400)
             binding.regionLayout.defaultHintTextColor = ColorStateList.valueOf(
                 if (isDarkTheme) requireContext().getColor(R.color.white) else requireContext().getColor(R.color.black)
             )
         } else {
-            // Если поле пустое, оставляем стандартный размер и серый цвет hint
             binding.regionLayout.setHintTextAppearance(R.style.text_16_regular_400)
             binding.regionLayout.defaultHintTextColor =
                 ColorStateList.valueOf(requireContext().getColor(R.color.gray))
@@ -305,5 +281,4 @@ class FilterPlaceOfWorkFragment : Fragment() {
             R.id.action_selectPlaceOfWorkFragment_to_filterRegionFragment
         )
     }
-
 }

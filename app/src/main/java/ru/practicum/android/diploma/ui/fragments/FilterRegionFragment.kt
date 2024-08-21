@@ -19,8 +19,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.databinding.FragmentSelectRegionBinding
 import ru.practicum.android.diploma.domain.models.Region
 import ru.practicum.android.diploma.presentation.viewmodels.FilterRegionViewModel
-import ru.practicum.android.diploma.ui.fragments.FilterPlaceOfWorkFragment.Companion.REGION_ID_KEY
 import ru.practicum.android.diploma.ui.state.RegionsScreenState
+import ru.practicum.android.diploma.util.App.Companion.REGION_ID_KEY
 import ru.practicum.android.diploma.util.ResponseData
 import ru.practicum.android.diploma.util.adapter.region.RegionAdapter
 
