@@ -9,7 +9,6 @@ import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.FilterInteractor
 import ru.practicum.android.diploma.domain.models.Country
 import ru.practicum.android.diploma.domain.models.Region
-import ru.practicum.android.diploma.domain.models.SaveFiltersSharedPrefs
 import ru.practicum.android.diploma.ui.state.PlaceOfWorkScreenState
 import ru.practicum.android.diploma.util.ResponseData
 
@@ -18,30 +17,9 @@ class FilterPlaceOfWorkViewModel(
 ) : ViewModel() {
 
     private val screenStateLiveData = MutableLiveData<PlaceOfWorkScreenState>()
-    private val _filtersSave = MutableLiveData<SaveFiltersSharedPrefs>()
-    private var country = Country("", "")
-    private var region = Region("", "", null)
-    val sharedPrefs: LiveData<SaveFiltersSharedPrefs>
-        get() = _filtersSave
 
     fun render(): LiveData<PlaceOfWorkScreenState> {
         return screenStateLiveData
-    }
-
-    fun setCountry(country: Country) {
-        this.country = country
-    }
-
-    fun setRegion(region: Region) {
-        this.region = region
-    }
-
-    fun getCountry(): Country {
-        return country
-    }
-
-    fun getRegion(): Region {
-        return region
     }
 
     fun getCountryName(region: Region, isSaving: Boolean) {
@@ -64,34 +42,11 @@ class FilterPlaceOfWorkViewModel(
         }
     }
 
-    /*fun saveSharedPrefs(country: Country?, region: Region?) {
-        viewModelScope.launch {
-            filterInteractor.writeSharedPrefs(
-                SaveFiltersSharedPrefs(
-                    industries = null,
-                    country = country,
-                    region = region,
-                    currency = null,
-                    noCurrency = false
-                )
-            )
-        }
-    }*/
-
     fun saveFields(country: Country, region: Region) {
         if (country.name.isEmpty()) {
             getCountryName(region, true)
         } else {
             setState(PlaceOfWorkScreenState.Saved(country, region))
-        }
-    }
-
-    fun getFilterSetting() {
-        viewModelScope.launch {
-            val filters = filterInteractor.readSharedPrefs()
-            if (filters != null && filters.country?.name?.isNotEmpty() == true) {
-                setState(PlaceOfWorkScreenState.Loaded(filters))
-            }
         }
     }
 
@@ -123,9 +78,4 @@ class FilterPlaceOfWorkViewModel(
         screenStateLiveData.postValue(state)
     }
 
-    fun readSharedPrefs() {
-        viewModelScope.launch {
-            _filtersSave.postValue(filterInteractor.readSharedPrefs())
-        }
-    }
 }
