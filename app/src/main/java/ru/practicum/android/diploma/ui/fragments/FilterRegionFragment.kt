@@ -48,13 +48,27 @@ class FilterRegionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupFragmentResultListener()
+        setupToolbar()
+        setupSearchFunctionality()
+        observeViewModel()
+        setupRecyclerView()
+    }
+
+    private fun setupFragmentResultListener() {
         setFragmentResultListener(REGION_ID_KEY) { _, bundle ->
             val region = bundle.getString(REGION_BUNDLE_KEY).toString()
             viewModel.getRegions(region)
         }
+    }
+
+    private fun setupToolbar() {
         binding.selectRegionToolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
+    }
+
+    private fun setupSearchFunctionality() {
         binding.clearCrossIc.setOnClickListener {
             binding.regionSearchQuery.text.clear()
         }
@@ -68,39 +82,22 @@ class FilterRegionFragment : Fragment() {
             }
             search(text.toString())
         }
+    }
+
+    private fun observeViewModel() {
         viewModel.render().observe(viewLifecycleOwner) { state ->
             when (state) {
                 RegionsScreenState.Default -> {}
-                is RegionsScreenState.Error -> {
-                    stopProgressBar()
-                    when (state.error) {
-                        ResponseData.ResponseError.NO_INTERNET,
-                        ResponseData.ResponseError.CLIENT_ERROR,
-                        ResponseData.ResponseError.SERVER_ERROR,
-                        ResponseData.ResponseError.NOT_FOUND -> {
-                            setNoRegionsState()
-                        }
-                    }
-                }
-
-                RegionsScreenState.Loading -> {
-                    removePlaceholders()
-                    startProgressBar()
-                }
-
-                is RegionsScreenState.Success -> {
-                    stopProgressBar()
-                    removePlaceholders()
-                    adapter.setRegions(state.regions)
-                    binding.regionRecycleView.isVisible = true
-                }
+                is RegionsScreenState.Error -> handleErrors(state.error)
+                RegionsScreenState.Loading -> handleLoadingState()
+                is RegionsScreenState.Success -> handleSuccessState(state.regions)
             }
-
         }
+    }
 
-        val regionsRecyclerView = binding.regionRecycleView
-        regionsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        regionsRecyclerView.adapter = adapter
+    private fun setupRecyclerView() {
+        binding.regionRecycleView.layoutManager = LinearLayoutManager(requireContext())
+        binding.regionRecycleView.adapter = adapter
     }
 
     private fun onItemClicked(region: Region) {
@@ -114,6 +111,28 @@ class FilterRegionFragment : Fragment() {
 
     private fun search(query: String) {
         viewModel.search(query)
+    }
+
+    private fun handleLoadingState() {
+        removePlaceholders()
+        startProgressBar()
+    }
+
+    private fun handleSuccessState(regions: List<Region>) {
+        stopProgressBar()
+        removePlaceholders()
+        adapter.setRegions(regions)
+        binding.regionRecycleView.isVisible = true
+    }
+
+    private fun handleErrors(error: ResponseData.ResponseError) {
+        stopProgressBar()
+        when (error) {
+            ResponseData.ResponseError.NO_INTERNET,
+            ResponseData.ResponseError.CLIENT_ERROR,
+            ResponseData.ResponseError.SERVER_ERROR,
+            ResponseData.ResponseError.NOT_FOUND -> setNoRegionsState()
+        }
     }
 
     private fun startProgressBar() {

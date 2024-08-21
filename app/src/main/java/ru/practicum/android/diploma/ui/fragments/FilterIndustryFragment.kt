@@ -46,13 +46,24 @@ class FilterIndustryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupRecyclerView()
+        observeViewModel()
+        setupSearchFunctionality()
+        setupToolbar()
+        setupApplyButton()
+    }
+
+    private fun setupRecyclerView() {
         viewModel.updateListIndustries()
         binding.industryRecycleView.adapter = adapter
+    }
 
+    private fun observeViewModel() {
         viewModel.industries.observe(viewLifecycleOwner) { list ->
             binding.placeholderGroup.isVisible = false
             adapter.industry = list
         }
+
         viewModel.error.observe(viewLifecycleOwner) { error ->
             when (error) {
                 ResponseData.ResponseError.NO_INTERNET,
@@ -69,7 +80,9 @@ class FilterIndustryFragment : Fragment() {
         viewModel.hasSelected.observe(viewLifecycleOwner) {
             binding.applyButton.isVisible = it
         }
+    }
 
+    private fun setupSearchFunctionality() {
         binding.industrySearchQuery.doOnTextChanged { text, _, _, _ ->
             if (binding.industrySearchQuery.text.isNotEmpty()) {
                 binding.searchIconLoupe.isVisible = false
@@ -84,15 +97,18 @@ class FilterIndustryFragment : Fragment() {
         binding.clearCrossIc.setOnClickListener {
             binding.industrySearchQuery.text.clear()
         }
+    }
 
+    private fun setupToolbar() {
         binding.industryFilterToolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
+    }
 
+    private fun setupApplyButton() {
         binding.applyButton.setOnClickListener {
             val json = Gson().toJson(viewModel.selectedIndustry.value)
             setFragmentResult(INDUSTRY_KEY, bundleOf(INDUSTRY_ITEM_KEY to json))
-            // viewModel.writeSharedPrefs()
             findNavController().popBackStack()
         }
     }
