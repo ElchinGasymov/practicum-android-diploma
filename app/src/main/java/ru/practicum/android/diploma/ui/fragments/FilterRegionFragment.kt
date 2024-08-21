@@ -84,9 +84,7 @@ class FilterRegionFragment : Fragment() {
             }
 
         }
-        val regionsRecyclerView = binding.regionRecycleView
-        regionsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        regionsRecyclerView.adapter = adapter
+        setAdapter()
     }
 
     private fun handleErrorState(state: RegionsScreenState.Error) {
@@ -106,6 +104,11 @@ class FilterRegionFragment : Fragment() {
         removePlaceholders()
         adapter.setRegions(state.regions)
         binding.regionRecycleView.isVisible = true
+    }
+    private fun setAdapter() {
+        val regionsRecyclerView = binding.regionRecycleView
+        regionsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        regionsRecyclerView.adapter = adapter
     }
 
     private fun onItemClicked(region: Region) {
