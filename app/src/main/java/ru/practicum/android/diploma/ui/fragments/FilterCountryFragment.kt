@@ -55,15 +55,9 @@ class FilterCountryFragment : Fragment() {
                 is CountriesScreenState.Error -> {
                     stopProgressBar()
                     when (state.error) {
-                        ResponseData.ResponseError.NO_INTERNET -> {
-                            setNoInternetState()
-                        }
-
+                        ResponseData.ResponseError.NO_INTERNET,
                         ResponseData.ResponseError.CLIENT_ERROR,
-                        ResponseData.ResponseError.SERVER_ERROR -> {
-                            setServerErrorState()
-                        }
-
+                        ResponseData.ResponseError.SERVER_ERROR,
                         ResponseData.ResponseError.NOT_FOUND -> {
                             setNoListState()
                         }

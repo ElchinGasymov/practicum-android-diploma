@@ -25,7 +25,9 @@ import ru.practicum.android.diploma.domain.models.Region
 import ru.practicum.android.diploma.presentation.viewmodels.FilterPlaceOfWorkViewModel
 import ru.practicum.android.diploma.ui.fragments.FilterCountryFragment.Companion.COUNTRY_BUNDLE_KEY
 import ru.practicum.android.diploma.ui.fragments.FilterCountryFragment.Companion.COUNTRY_REQUEST_KEY
+import ru.practicum.android.diploma.ui.fragments.FilterFragment.Companion.FILTER_TO_PLACE_OF_WORK_COUNTRY_KEY
 import ru.practicum.android.diploma.ui.fragments.FilterFragment.Companion.FILTER_TO_PLACE_OF_WORK_KEY
+import ru.practicum.android.diploma.ui.fragments.FilterFragment.Companion.FILTER_TO_PLACE_OF_WORK_REGION_KEY
 import ru.practicum.android.diploma.ui.fragments.FilterRegionFragment.Companion.REGION_REQUEST_KEY
 import ru.practicum.android.diploma.ui.state.PlaceOfWorkScreenState
 
@@ -146,8 +148,24 @@ class FilterPlaceOfWorkFragment : Fragment() {
             getCountryName(region)
             viewModel.setRegionName(region)
         }
-        setFragmentResultListener(FILTER_TO_PLACE_OF_WORK_KEY) { _, _ ->
-            viewModel.getFilterSetting()
+        setFragmentResultListener(FILTER_TO_PLACE_OF_WORK_KEY) { _, bundle ->
+            val json = bundle.getString(FILTER_TO_PLACE_OF_WORK_COUNTRY_KEY).toString()
+            val type = object : TypeToken<Country>() {}.type
+            country = Gson().fromJson(json, type)
+            val jsonRegion = bundle.getString(FILTER_TO_PLACE_OF_WORK_REGION_KEY).toString()
+            val typeRegion = object : TypeToken<Region>() {}.type
+            region = Gson().fromJson(jsonRegion, typeRegion)
+            if (country.name.isNotEmpty()) {
+                countryName = country.name
+                binding.countryTextInput.setText(countryName)
+                setCountryEndIcon()
+                setApplyButtonVisible()
+                if (region.name.isNotEmpty()) {
+                    regionName = region.name
+                    binding.regionTextInput.setText(regionName)
+                    setRegionEndIcon()
+                }
+            }
         }
     }
 

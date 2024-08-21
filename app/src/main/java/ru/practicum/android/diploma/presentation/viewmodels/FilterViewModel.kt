@@ -24,6 +24,13 @@ class FilterViewModel(
     private var region = Region("", "", null)
     private var country = Country("", "")
     private var industries = Industries("", "", false)
+    private var saveFiltersSharedPrefs = SaveFiltersSharedPrefs(
+        Industries("", "", false),
+        Country("", ""),
+        Region("", "", null),
+        "",
+        false
+    )
 
     fun render(): LiveData<FilterScreenState> {
         return screenStateLiveData
@@ -34,6 +41,16 @@ class FilterViewModel(
             filterInteractor.writeSharedPrefs(filter)
             setState(FilterScreenState.FiltersSaved(filter))
         }
+    }
+
+    fun saveFilterSettings(filter: SaveFiltersSharedPrefs) {
+        viewModelScope.launch(Dispatchers.IO) {
+            filterInteractor.writeSharedPrefs(filter)
+        }
+    }
+
+    fun getPrefs(): SaveFiltersSharedPrefs {
+        return saveFiltersSharedPrefs
     }
 
     fun getRegion(): Region {
@@ -60,16 +77,12 @@ class FilterViewModel(
         this.industries = industries
     }
 
-    fun saveFilter(filter: SaveFiltersSharedPrefs) {
-        viewModelScope.launch(Dispatchers.IO) {
-            filterInteractor.writeSharedPrefs(filter)
-        }
-    }
-
-    fun getFilterSetting() {
+    fun getFilterSettings() {
         viewModelScope.launch(Dispatchers.IO) {
             val filters = filterInteractor.readSharedPrefs()
+
             if (filters != null) {
+                saveFiltersSharedPrefs = filters
                 if (filters.region != null && filters.region.id.isNotEmpty()) {
                     region = filters.region
                 }
@@ -87,11 +100,21 @@ class FilterViewModel(
     fun clear() {
         viewModelScope.launch(Dispatchers.IO) {
             filterInteractor.clearSharedPrefs()
+            industries = Industries("", "", false)
+            country = Country("", "")
+            region = Region("", "", null)
+            saveFiltersSharedPrefs = SaveFiltersSharedPrefs(
+                industries,
+                country,
+                region,
+                "",
+                false
+            )
             setState(FilterScreenState.ClearState)
         }
     }
 
-    fun setIndustry(industry: String) {
+    fun setIndustryName(industry: String) {
         if (industry.isNotEmpty()) {
             setState(FilterScreenState.Industry(industry))
         } else {

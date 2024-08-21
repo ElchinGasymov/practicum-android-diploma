@@ -63,7 +63,7 @@ class FilterRegionViewModel(
                     .collect { response ->
                         when (response) {
                             is ResponseData.Data -> {
-                                val listOfRegions = response.value.sortedBy { it.name }
+                                listOfRegions.addAll(response.value.sortedBy { it.name })
                                 setState(RegionsScreenState.Success(listOfRegions))
                             }
 
