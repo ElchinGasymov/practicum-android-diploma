@@ -32,9 +32,7 @@ import ru.practicum.android.diploma.util.PLACE_OF_WORK_COUNTRY_KEY
 import ru.practicum.android.diploma.util.PLACE_OF_WORK_KEY
 import ru.practicum.android.diploma.util.PLACE_OF_WORK_REGION_KEY
 
-
 class FilterFragment : Fragment() {
-
     companion object {
         const val FILTER_REQUEST_KEY = "FILTER_REQUEST_KEY"
         const val FILTER_BUNDLE_KEY = "FILTER_BUNDLE_KEY"
@@ -42,7 +40,6 @@ class FilterFragment : Fragment() {
         const val FILTER_TO_PLACE_OF_WORK_COUNTRY_KEY = "FILTER_TO_PLACE_OF_WORK_COUNTRY_KEY"
         const val FILTER_TO_PLACE_OF_WORK_REGION_KEY = "FILTER_TO_PLACE_OF_WORK_REGION_KEY"
     }
-
     private val binding: FragmentFilterBinding by viewBinding(CreateMethod.INFLATE)
     private val viewModel by viewModel<FilterViewModel>()
 
