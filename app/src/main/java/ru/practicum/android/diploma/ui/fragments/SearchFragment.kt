@@ -36,10 +36,10 @@ class SearchFragment : Fragment() {
     private val binding: FragmentSearchBinding by viewBinding(CreateMethod.INFLATE)
     private val viewModel by viewModel<SearchViewModel>()
 
-    private val listOfVacancies = ArrayList<Vacancy>()
+    //private val listOfVacancies = ArrayList<Vacancy>()
     private val adapter = VacancyAdapter({ setOnItemClicked(it) })
 
-    private var amountVacancies = 0
+    //private var amountVacancies = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,11 +54,24 @@ class SearchFragment : Fragment() {
 
         viewModel.onStart()
 
-        if (listOfVacancies.isNotEmpty()) {
-            binding.searchDefaultPlaceholder.isVisible = false
-            binding.textUnderSearch.text = getCorrectAmountText(amountVacancies)
-            binding.textUnderSearch.isVisible = true
+//        if (listOfVacancies.isNotEmpty()) {
+//            binding.searchDefaultPlaceholder.isVisible = false
+//            binding.textUnderSearch.text = getCorrectAmountText(amountVacancies)
+//            binding.textUnderSearch.isVisible = true
+//        }
+
+        viewModel.vacancies.observe(viewLifecycleOwner) { vacancies ->
+            if (vacancies.isNotEmpty()) {
+                binding.searchDefaultPlaceholder.isVisible = false
+                binding.textUnderSearch.text = getCorrectAmountText(viewModel.amountVacancies)
+                binding.textUnderSearch.isVisible = true
+            } else {
+                binding.searchDefaultPlaceholder.isVisible = true
+                binding.textUnderSearch.isVisible = false
+            }
+            adapter.setVacancies(vacancies)
         }
+
 
         binding.filterIc.setOnClickListener {
             findNavController().navigate(R.id.action_searchFragment_to_filterFragment)
@@ -120,14 +133,15 @@ class SearchFragment : Fragment() {
 
                 is SearchScreenState.LoadNextPage -> {
                     binding.progressBarNextPage.isVisible = false
-                    listOfVacancies.addAll(state.vacancies)
-                    adapter.setVacancies(listOfVacancies)
+//                    listOfVacancies.addAll(state.vacancies)
+//                    adapter.setVacancies(listOfVacancies)
                 }
 
                 SearchScreenState.Loading -> {
-                    amountVacancies = 0
-                    listOfVacancies.clear()
-                    adapter.setVacancies(listOfVacancies)
+                    //viewModel.amountVacancies = 0
+//                    listOfVacancies.clear()
+//                    adapter.setVacancies(listOfVacancies)
+                    viewModel.clearVacancies()
                     removePlaceholders()
                     startProgressBar()
                 }
@@ -137,13 +151,13 @@ class SearchFragment : Fragment() {
                 }
 
                 is SearchScreenState.Success -> {
-                    listOfVacancies.clear()
+                    //listOfVacancies.clear()
                     stopProgressBar()
                     removePlaceholders()
-                    listOfVacancies.addAll(state.vacancies)
-                    adapter.setVacancies(listOfVacancies)
-                    amountVacancies = state.found
-                    binding.textUnderSearch.text = getCorrectAmountText(amountVacancies)
+                    //listOfVacancies.addAll(state.vacancies)
+                    //adapter.setVacancies(listOfVacancies)
+                    viewModel.amountVacancies = state.found
+                    binding.textUnderSearch.text = getCorrectAmountText(viewModel.amountVacancies)
                     binding.textUnderSearch.isVisible = true
                 }
 
