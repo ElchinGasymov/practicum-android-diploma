@@ -87,16 +87,16 @@ class FilterFragment : Fragment() {
                 FilterScreenState.NoIndustry -> {
                     binding.industryTextInput.text?.clear()
                     setNoIndustryEndIcon()
-                    checkFields()
                     viewModel.setIndustry(Industries("", "", false))
+                    checkFields()
                 }
 
                 FilterScreenState.NoPlaceOfWork -> {
                     binding.workTextInput.text?.clear()
                     setNoCountryEndIcon()
-                    checkFields()
                     viewModel.setCountry(Country("", ""))
                     viewModel.setRegion(Region("", "", null))
+                    checkFields()
                 }
 
                 is FilterScreenState.FiltersSaved -> {
