@@ -39,10 +39,7 @@ class SearchFragment : Fragment() {
     private val binding: FragmentSearchBinding by viewBinding(CreateMethod.INFLATE)
     private val viewModel by viewModel<SearchViewModel>()
 
-    private val listOfVacancies = ArrayList<Vacancy>()
     private val adapter = VacancyAdapter({ setOnItemClicked(it) })
-
-    private var amountVacancies = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,11 +52,14 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (listOfVacancies.isNotEmpty()) {
-            binding.searchDefaultPlaceholder.isVisible = false
-            binding.textUnderSearch.text = getCorrectAmountText(amountVacancies)
-            binding.textUnderSearch.isVisible = true
+        viewModel.vacanciesLiveData.observe(viewLifecycleOwner) { vacancies ->
+            adapter.setVacancies(vacancies)
+            binding.textUnderSearch.text = getCorrectAmountText(viewModel.amountVacanciesLiveData.value ?: 0)
+            binding.textUnderSearch.isVisible = vacancies.isNotEmpty()
         }
+
+        binding.searchRecycleView.layoutManager = LinearLayoutManager(requireContext())
+        binding.searchRecycleView.adapter = adapter
 
         binding.filterIc.setOnClickListener {
             findNavController().navigate(R.id.action_searchFragment_to_filterFragment)
@@ -126,14 +126,10 @@ class SearchFragment : Fragment() {
 
                 is SearchScreenState.LoadNextPage -> {
                     binding.progressBarNextPage.isVisible = false
-                    listOfVacancies.addAll(state.vacancies)
-                    adapter.setVacancies(listOfVacancies)
                 }
 
                 SearchScreenState.Loading -> {
-                    amountVacancies = 0
-                    listOfVacancies.clear()
-                    adapter.setVacancies(listOfVacancies)
+                    clearList()
                     removePlaceholders()
                     startProgressBar()
                 }
@@ -144,14 +140,8 @@ class SearchFragment : Fragment() {
                 }
 
                 is SearchScreenState.Success -> {
-                    listOfVacancies.clear()
                     stopProgressBar()
                     removePlaceholders()
-                    listOfVacancies.addAll(state.vacancies)
-                    adapter.setVacancies(listOfVacancies)
-                    amountVacancies = state.found
-                    binding.textUnderSearch.text = getCorrectAmountText(amountVacancies)
-                    binding.textUnderSearch.isVisible = true
                 }
 
                 SearchScreenState.LoadingNextPage -> {
@@ -188,9 +178,6 @@ class SearchFragment : Fragment() {
         }
         viewModel.getOptions()
 
-        val vacanciesRecyclerView = binding.searchRecycleView
-        vacanciesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        vacanciesRecyclerView.adapter = adapter
         initResultListeners()
     }
 
@@ -204,8 +191,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun clearList() {
-        listOfVacancies.clear()
-        adapter.setVacancies(listOfVacancies)
+        adapter.setVacancies(emptyList())
     }
 
     private fun removePlaceholders() {
