@@ -47,7 +47,7 @@ class SearchViewModel(
         false
     )
     private val _vacancyIsClickable = MutableLiveData(true)
-    var vacancyIsClickable: LiveData<Boolean> = _vacancyIsClickable
+    val vacancyIsClickable: LiveData<Boolean> = _vacancyIsClickable
 
     private val vacancySearchDebounce =
         debounce<String>(TWO_SECONDS, viewModelScope, true) { query ->
