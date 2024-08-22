@@ -40,47 +40,47 @@ class ConverterIntoEntity {
     }
 
     fun intoPhoneEntity(vacancy: VacancyDetails): List<PhoneEntity> {
-        val listPhone = ArrayList<PhoneEntity>()
-        vacancy.contacts?.phones?.forEach { phonesModel ->
-            listPhone.add(
-                PhoneEntity(
-                    idVacancy = vacancy.id,
-                    cityCode = phonesModel.cityCode,
-                    comment = phonesModel.comment,
-                    countryCode = phonesModel.countryCode,
-                    formatted = phonesModel.formatted,
-                    number = phonesModel.number
+        return buildList {
+            vacancy.contacts?.phones?.forEach { phonesModel ->
+                add(
+                    PhoneEntity(
+                        idVacancy = vacancy.id,
+                        cityCode = phonesModel.cityCode,
+                        comment = phonesModel.comment,
+                        countryCode = phonesModel.countryCode,
+                        formatted = phonesModel.formatted,
+                        number = phonesModel.number
+                    )
                 )
-            )
+            }
         }
-        return listPhone
     }
 
     fun intoKeySkillEntity(vacancy: VacancyDetails): List<KeySkillEntity> {
-        val listKey = ArrayList<KeySkillEntity>()
-        vacancy.keySkills?.forEach { keySkillsModel ->
-            listKey.add(
-                KeySkillEntity(
-                    idVacancy = vacancy.id,
-                    name = keySkillsModel.name
+        return buildList {
+            vacancy.keySkills?.forEach { keySkillsModel ->
+                add(
+                    KeySkillEntity(
+                        idVacancy = vacancy.id,
+                        name = keySkillsModel.name
+                    )
                 )
-            )
+            }
         }
-        return listKey
     }
 
     fun intoAreaEntity(vacancy: VacancyDetails): List<AreaEntity> {
-        val listArea = ArrayList<AreaEntity>()
-        vacancy.area?.areas?.forEach { area ->
-            listArea.add(
-                AreaEntity(
-                    idVacancy = vacancy.id,
-                    idArea = area.id,
-                    name = area.name,
-                    countryId = area.countryId
+        return buildList {
+            vacancy.area?.areas?.forEach { area ->
+                add(
+                    AreaEntity(
+                        idVacancy = vacancy.id,
+                        idArea = area.id,
+                        name = area.name,
+                        countryId = area.countryId
+                    )
                 )
-            )
+            }
         }
-        return listArea
     }
 }

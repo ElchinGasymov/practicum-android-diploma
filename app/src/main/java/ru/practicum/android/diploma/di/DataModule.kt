@@ -20,7 +20,7 @@ import ru.practicum.android.diploma.data.network.RetrofitNetworkClient
 const val HISTORY_MAIN = "historyMain"
 const val BASE_URL = "https://api.hh.ru/"
 val dataModule = module {
-    factory<NetworkClient> {
+    single<NetworkClient> {
         RetrofitNetworkClient(
             hhApiService = get(),
             context = androidContext()
