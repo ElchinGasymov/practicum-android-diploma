@@ -10,6 +10,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.os.bundleOf
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -54,8 +55,9 @@ class SearchFragment : Fragment() {
 
         viewModel.vacanciesLiveData.observe(viewLifecycleOwner) { vacancies ->
             adapter.setVacancies(vacancies)
-            binding.textUnderSearch.text = getCorrectAmountText(viewModel.amountVacanciesLiveData.value ?: 0)
+            binding.textUnderSearch.text = getCorrectAmountText(vacancies.size)
             binding.textUnderSearch.isVisible = vacancies.isNotEmpty()
+            binding.searchDefaultPlaceholder.isGone = vacancies.isNotEmpty()
         }
 
         binding.searchRecycleView.layoutManager = LinearLayoutManager(requireContext())
@@ -195,7 +197,6 @@ class SearchFragment : Fragment() {
     }
 
     private fun removePlaceholders() {
-        binding.textUnderSearch.isVisible = false
         binding.noVacancyToShow.isVisible = false
         binding.noVacancyToShowText.isVisible = false
         binding.noConnectionText.isVisible = false

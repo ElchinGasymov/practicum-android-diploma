@@ -28,9 +28,6 @@ class SearchViewModel(
     private val _vacanciesLiveData = MutableLiveData<List<Vacancy>>()
     val vacanciesLiveData: LiveData<List<Vacancy>> get() = _vacanciesLiveData
 
-    private val _amountVacanciesLiveData = MutableLiveData<Int>()
-    val amountVacanciesLiveData: LiveData<Int> get() = _amountVacanciesLiveData
-
     private val screenStateLiveData = MutableLiveData<SearchScreenState>()
     private var currentPage = 0
     private var maxPages = 1
@@ -75,9 +72,8 @@ class SearchViewModel(
         return mainRequest
     }
 
-    private fun updateVacancies(vacancies: List<Vacancy>, amount: Int) {
+    private fun updateVacancies(vacancies: List<Vacancy>) {
         _vacanciesLiveData.postValue(vacancies)
-        _amountVacanciesLiveData.postValue(amount)
     }
 
     private fun searchVacancies(request: String) {
@@ -194,12 +190,12 @@ class SearchViewModel(
                 setScreenState(SearchScreenState.NothingFound)
             } else {
                 setScreenState(SearchScreenState.Success(data, quantity))
-                updateVacancies(data, quantity)
+                updateVacancies(data)
             }
         } else {
             val currentVacancies = _vacanciesLiveData.value.orEmpty().toMutableList()
             currentVacancies.addAll(data)
-            updateVacancies(currentVacancies, quantity)
+            updateVacancies(currentVacancies)
             setScreenState(SearchScreenState.LoadNextPage(data))
         }
     }
