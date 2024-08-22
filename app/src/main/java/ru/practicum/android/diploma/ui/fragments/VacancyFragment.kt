@@ -143,14 +143,16 @@ class VacancyFragment : Fragment() {
         binding.experience.text = vacancyDetails.experience?.name
         binding.scheduleEmployment.text = vacancyDetails.employment?.name
         binding.dutiesSubtitle.text = Html.fromHtml(vacancyDetails.description, Html.FROM_HTML_MODE_COMPACT)
+
         if (vacancyDetails.keySkills?.isNotEmpty() == true) {
             binding.keySkillsGroup.isVisible = true
-            var keySkillsText = ""
+            val keySkillsBuilder = StringBuilder()
             vacancyDetails.keySkills.forEach {
-                keySkillsText += StringBuilder().append("• ").append(it.name).append("\n").toString()
+                keySkillsBuilder.append("• ").append(it.name).append("\n")
             }
-            binding.coreSkills.text = keySkillsText
+            binding.coreSkills.text = keySkillsBuilder.toString()
         }
+
         setVacancyContacts(vacancyDetails)
         binding.vacancyDetailsLayout.isVisible = true
 
