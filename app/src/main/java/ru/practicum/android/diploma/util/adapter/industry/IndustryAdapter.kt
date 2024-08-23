@@ -9,6 +9,7 @@ import ru.practicum.android.diploma.domain.models.Industries
 class IndustryAdapter(
     private val onClick: (Industries) -> Unit
 ) : RecyclerView.Adapter<IndustryViewHolder>() {
+    val industries = mutableListOf<Industries>()
     var industry: List<Industries> = emptyList()
         set(value) {
             field = value
@@ -27,4 +28,5 @@ class IndustryAdapter(
     override fun onBindViewHolder(holder: IndustryViewHolder, position: Int) {
         holder.bind(industry[position])
     }
+
 }

@@ -31,20 +31,6 @@ class FilterIndustryViewModel(
     val error: LiveData<ResponseError>
         get() = _error
 
-    /*  fun writeSharedPrefs() {
-          viewModelScope.launch {
-              interactor.writeSharedPrefs(
-                  SaveFiltersSharedPrefs(
-                      industries = _selectedIndustry.value,
-                      null,
-                      null,
-                      null,
-                      false
-                  )
-              )
-          }
-      }*/
-
     fun itemChecked(industries: Industries) {
         val newList = ArrayList<Industries>()
         _industries.value?.forEach { industry ->
@@ -113,7 +99,13 @@ class FilterIndustryViewModel(
                 newSortedList.add(it)
             }
         }
-        _industries.postValue(newSortedList)
+        if (sortedList.isNotEmpty()) {
+            _industries.postValue(newSortedList)
+        } else {
+            _industries.postValue(newSortedList)
+            _error.postValue(ResponseError.NOT_FOUND)
+        }
+
     }
 }
 
