@@ -20,6 +20,13 @@
         <item name="android:textColorHint">?attr/colorOnSecondaryFixed</item>
     </style>
 
+    <style name="text_12_regular_400">
+        <item name="fontFamily">@font/ys_display_regular</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:textSize">@dimen/text_size_12</item>
+        <item name="fontWeight">400</item>
+    </style>
+
     <style name="text_16_regular_400">
         <item name="fontFamily">@font/ys_display_regular</item>
         <item name="textAllCaps">false</item>
@@ -54,5 +61,46 @@
         <item name="android:backgroundTint">?attr/colorSurface</item>
         <item name="android:paddingHorizontal">@dimen/dimen_12dp</item>
         <item name="android:paddingVertical">@dimen/dimen_4dp</item>
+    </style>
+
+    <style name="filter_screen_input_layout_style">
+        <item name="boxStrokeWidth">@dimen/dimen_0dp</item>
+        <item name="android:textAppearance">@style/text_16_regular_400</item>
+        <item name="android:textAlignment">viewStart</item>
+        <item name="android:inputType">textCapSentences</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:singleLine">true</item>
+        <item name="errorEnabled">false</item>
+    </style>
+
+    <style name="filter_screen_text_input_style">
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:textAppearance">@style/text_16_regular_400</item>
+        <item name="android:textAlignment">viewStart</item>
+        <item name="android:inputType">textCapSentences</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:singleLine">true</item>
+
+    </style>
+
+    <style name="salary_layout_style">
+        <item name="boxStrokeWidth">@dimen/dimen_0dp</item>
+        <item name="android:textColorHint">?attr/colorOnSecondaryFixed</item>
+        <item name="hintTextAppearance">@style/text_12_regular_400</item>
+        <item name="boxCollapsedPaddingTop">@dimen/dimen_8dp</item>
+        <item name="placeholderTextAppearance">@style/text_16_regular_400</item>
+        <item name="placeholderTextColor">?attr/colorOnSecondaryFixed</item>
+        <item name="expandedHintEnabled">false</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="salary_text_input_style">
+        <item name="android:backgroundTint">?attr/colorSecondary</item>
+        <item name="android:textAppearance">@style/text_16_regular_400</item>
+        <item name="android:textAlignment">viewStart</item>
+        <item name="android:imeOptions">actionDone</item>
+        <item name="android:inputType">number</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 </resources>

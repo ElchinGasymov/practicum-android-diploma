@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.domain.FilterInteractor
 import ru.practicum.android.diploma.domain.SearchInteractor
 import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.ui.state.SearchScreenState
@@ -14,7 +15,8 @@ import ru.practicum.android.diploma.util.ResponseData
 import ru.practicum.android.diploma.util.debounce
 
 class SearchViewModel(
-    private val searchInteractor: SearchInteractor
+    private val searchInteractor: SearchInteractor,
+    private val filterInteractor: FilterInteractor
 ) : ViewModel() {
     companion object {
         const val ITEMS_PER_PAGE = 20
@@ -23,12 +25,21 @@ class SearchViewModel(
         const val TWO_SECONDS = 2000L
     }
 
-    private val screenStateLiveData = MutableLiveData<SearchScreenState>(SearchScreenState.Default)
+    private val screenStateLiveData = MutableLiveData<SearchScreenState>()
     private var currentPage = 0
     private var maxPages = 1
     private var isNextPageLoading = false
     private var mainRequest = ""
     private var requestNextPage = ""
+    private var options = Options(
+        requestNextPage,
+        ITEMS_PER_PAGE,
+        currentPage,
+        "",
+        "",
+        "",
+        false
+    )
     private val _vacancyIsClickable = MutableLiveData(true)
     var vacancyIsClickable: LiveData<Boolean> = _vacancyIsClickable
 
@@ -54,8 +65,8 @@ class SearchViewModel(
         this.mainRequest = request
     }
 
-    fun onStart() {
-        setScreenState(SearchScreenState.Default)
+    fun getMainRequest(): String {
+        return mainRequest
     }
 
     private fun searchVacancies(request: String) {
@@ -64,15 +75,63 @@ class SearchViewModel(
             setScreenState(SearchScreenState.Loading)
             this.mainRequest = request
             requestNextPage = request
+            getOptions()
             search(true)
         }
 
     }
 
-    private fun search(isNewRequest: Boolean) {
+    fun setDefaultCurrentPage() {
+        currentPage = 0
+    }
+
+    fun getOptions() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val filter = filterInteractor.readSharedPrefs()
+            if (filter != null) {
+                options = Options(
+                    requestNextPage,
+                    ITEMS_PER_PAGE,
+                    0,
+                    if (filter.region?.id?.isNotEmpty() == true) {
+                        filter.region.id
+                    } else {
+                        filter.country?.id.toString()
+                    },
+                    filter.industries?.id.toString(),
+                    filter.currency.toString(),
+                    filter.noCurrency
+                )
+                setScreenState(SearchScreenState.Default)
+            } else {
+                options = Options(
+                    requestNextPage,
+                    ITEMS_PER_PAGE,
+                    currentPage,
+                    "",
+                    "",
+                    "",
+                    false
+                )
+                setScreenState(SearchScreenState.Default)
+            }
+        }
+    }
+
+    fun search(isNewRequest: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
             searchInteractor
-                .search(Options(requestNextPage, ITEMS_PER_PAGE, currentPage))
+                .search(
+                    Options(
+                        requestNextPage,
+                        ITEMS_PER_PAGE,
+                        currentPage,
+                        options.area,
+                        options.industry,
+                        options.salary,
+                        options.withSalary
+                    )
+                )
                 .collect { response ->
                     when (response) {
                         is ResponseData.Data -> {
@@ -99,6 +158,13 @@ class SearchViewModel(
                 search(false)
             }
         }
+    }
+
+    fun isFilter(): Boolean {
+        return options.area?.isNotEmpty() == true ||
+            options.industry?.isNotEmpty() == true ||
+            options.salary?.isNotEmpty() == true ||
+            options.withSalary == true
     }
 
     fun onVacancyClicked() {

@@ -2,10 +2,14 @@ package ru.practicum.android.diploma.di
 
 import org.koin.dsl.module
 import ru.practicum.android.diploma.data.impl.FavouriteVacanciesRepositoryImpl
+import ru.practicum.android.diploma.data.impl.FilterRepositoryImpl
 import ru.practicum.android.diploma.data.impl.SearchRepositoryImpl
+import ru.practicum.android.diploma.data.impl.SharedPrefsRepositoryImpl
 import ru.practicum.android.diploma.data.impl.VacancyRepositoryImpl
-import ru.practicum.android.diploma.domain.api.SearchRepository
 import ru.practicum.android.diploma.domain.FavouriteVacanciesRepository
+import ru.practicum.android.diploma.domain.SharedPrefsRepository
+import ru.practicum.android.diploma.domain.api.FilterRepository
+import ru.practicum.android.diploma.domain.api.SearchRepository
 import ru.practicum.android.diploma.domain.api.VacancyRepository
 
 val repositoryModule = module {
@@ -22,5 +26,15 @@ val repositoryModule = module {
     }
     single<VacancyRepository> {
         VacancyRepositoryImpl(get(), get())
+    }
+    single<FilterRepository> {
+        FilterRepositoryImpl(networkClient = get())
+    }
+
+    single<SharedPrefsRepository> {
+        SharedPrefsRepositoryImpl(
+            gson = get(),
+            sharedPreferences = get()
+        )
     }
 }
