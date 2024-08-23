@@ -37,6 +37,7 @@ class FilterIndustryViewModel(
             if (industry.id == industries.id) {
                 newList.add(industry.copy(isChecked = !industry.isChecked))
                 _hasSelected.postValue(!industry.isChecked)
+                selectedId = industries.id
                 if (!industry.isChecked) _selectedIndustry.postValue(industry)
             } else {
                 newList.add(industry.copy(isChecked = false))
