@@ -18,10 +18,10 @@ class FavouriteVacanciesRepositoryImpl(
         val vacancy = vacanciesDatabase.vacancyDao().findVacancy(vacancyId)
         if (vacancy != null) {
             return converterIntoModel.intoVacancyDetail(
-                listPhone = vacanciesDatabase.phoneDao().getSelectedPhone(vacancyId),
-                listKey = vacanciesDatabase.keySkillDao().getSelectedKeySkill(vacancyId),
-                vacancyEntity = vacancy,
-                areaEntity = vacanciesDatabase.areaDao().getSelectedArea(vacancyId)
+                listPhone = vacancy.phones,
+                listKey = vacancy.keySkills,
+                vacancyEntity = vacancy.vacancy,
+                areaEntity = vacancy.areas
             )
         } else {
             return null
@@ -47,8 +47,8 @@ class FavouriteVacanciesRepositoryImpl(
         vacanciesDatabase.vacancyDao().getSelectedVacancies().forEach { vacancyEntity ->
             listVacancy.add(
                 converterIntoModel.intoVacancy(
-                    vacancy = vacancyEntity,
-                    areas = vacanciesDatabase.areaDao().getSelectedArea(vacancyEntity.id)
+                    vacancy = vacancyEntity.vacancy,
+                    areas = vacancyEntity.areas
                 )
             )
         }

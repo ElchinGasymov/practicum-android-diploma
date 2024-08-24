@@ -8,9 +8,6 @@ import ru.practicum.android.diploma.data.db.entity.AreaEntity
 
 @Dao
 interface AreaDao {
-    @Query("SELECT * FROM `area_table` WHERE `area_table`.`idVacancy` =:vacancyId")
-    suspend fun getSelectedArea(vacancyId: String): List<AreaEntity>
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertArea(areaEntity: List<AreaEntity>)
 

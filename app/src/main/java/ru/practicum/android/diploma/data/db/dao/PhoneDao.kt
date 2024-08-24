@@ -8,9 +8,6 @@ import ru.practicum.android.diploma.data.db.entity.PhoneEntity
 
 @Dao
 interface PhoneDao {
-    @Query("SELECT * FROM `phone_table` WHERE `phone_table`.`idVacancy` =:vacancyId")
-    suspend fun getSelectedPhone(vacancyId: String): List<PhoneEntity>
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPhone(phoneEntity: List<PhoneEntity>)
 
