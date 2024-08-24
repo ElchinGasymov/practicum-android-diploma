@@ -17,6 +17,7 @@ import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSelectPlaceOfWorkBinding
@@ -41,6 +42,7 @@ class FilterPlaceOfWorkFragment : Fragment() {
     private val viewModel by viewModel<FilterPlaceOfWorkViewModel>()
     private var country = Country("", "")
     private var region = Region("", "", null)
+    private val gson: Gson by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -104,8 +106,8 @@ class FilterPlaceOfWorkFragment : Fragment() {
     }
 
     private fun handleSavedState(state: PlaceOfWorkScreenState.Saved) {
-        val jsonCountry = Gson().toJson(state.country)
-        val jsonRegion = Gson().toJson(state.region)
+        val jsonCountry = gson.toJson(state.country)
+        val jsonRegion = gson.toJson(state.region)
         setFragmentResult(
             PLACE_OF_WORK_KEY,
             bundleOf(
@@ -134,7 +136,7 @@ class FilterPlaceOfWorkFragment : Fragment() {
         setFragmentResultListener(COUNTRY_REQUEST_KEY) { _, bundle ->
             val json = bundle.getString(COUNTRY_BUNDLE_KEY).toString()
             val type = object : TypeToken<Country>() {}.type
-            country = Gson().fromJson(json, type)
+            country = gson.fromJson(json, type)
             viewModel.setCountryName(country)
             setNoRegionEndIcon()
             binding.regionTextInput.text?.clear()
@@ -143,7 +145,7 @@ class FilterPlaceOfWorkFragment : Fragment() {
         setFragmentResultListener(REGION_REQUEST_KEY) { _, bundle ->
             val json = bundle.getString(REGION_BUNDLE_KEY).toString()
             val type = object : TypeToken<Region>() {}.type
-            region = Gson().fromJson(json, type)
+            region = gson.fromJson(json, type)
             viewModel.getCountryName(region, false)
             viewModel.setRegionName(region)
         }
@@ -151,10 +153,10 @@ class FilterPlaceOfWorkFragment : Fragment() {
         setFragmentResultListener(FILTER_TO_PLACE_OF_WORK_KEY) { _, bundle ->
             val json = bundle.getString(FILTER_TO_PLACE_OF_WORK_COUNTRY_KEY).toString()
             val type = object : TypeToken<Country>() {}.type
-            country = Gson().fromJson(json, type)
+            country = gson.fromJson(json, type)
             val jsonRegion = bundle.getString(FILTER_TO_PLACE_OF_WORK_REGION_KEY).toString()
             val typeRegion = object : TypeToken<Region>() {}.type
-            region = Gson().fromJson(jsonRegion, typeRegion)
+            region = gson.fromJson(jsonRegion, typeRegion)
             handleLoadedFilters()
         }
     }

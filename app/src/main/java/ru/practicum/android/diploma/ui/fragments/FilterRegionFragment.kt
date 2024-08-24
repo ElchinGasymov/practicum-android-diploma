@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.gson.Gson
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.databinding.FragmentSelectRegionBinding
 import ru.practicum.android.diploma.domain.models.Region
@@ -29,6 +30,7 @@ import ru.practicum.android.diploma.util.adapter.region.RegionAdapter
 class FilterRegionFragment : Fragment() {
     private val binding: FragmentSelectRegionBinding by viewBinding(CreateMethod.INFLATE)
     private val viewModel by viewModel<FilterRegionViewModel>()
+    private val gson: Gson by inject()
     private val adapter = RegionAdapter {
         onItemClicked(it)
     }
@@ -109,7 +111,7 @@ class FilterRegionFragment : Fragment() {
     }
 
     private fun onItemClicked(region: Region) {
-        val json = Gson().toJson(region)
+        val json = gson.toJson(region)
         setFragmentResult(
             REGION_REQUEST_KEY,
             bundleOf(REGION_BUNDLE_KEY to json)

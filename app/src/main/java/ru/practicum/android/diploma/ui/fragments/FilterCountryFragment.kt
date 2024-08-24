@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.gson.Gson
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.databinding.FragmentSelectCountryBinding
 import ru.practicum.android.diploma.domain.models.Country
@@ -26,6 +27,7 @@ import ru.practicum.android.diploma.util.adapter.country.CountryAdapter
 class FilterCountryFragment : Fragment() {
     private val binding: FragmentSelectCountryBinding by viewBinding(CreateMethod.INFLATE)
     private val viewModel by viewModel<FilterCountryViewModel>()
+    private val gson: Gson by inject()
 
     private val adapter = CountryAdapter {
         onItemClicked(it)
@@ -80,7 +82,7 @@ class FilterCountryFragment : Fragment() {
     }
 
     private fun onItemClicked(country: Country) {
-        val json = Gson().toJson(country)
+        val json = gson.toJson(country)
         setFragmentResult(COUNTRY_REQUEST_KEY, bundleOf(COUNTRY_BUNDLE_KEY to json))
         findNavController().navigateUp()
     }

@@ -17,6 +17,7 @@ import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFilterBinding
@@ -40,7 +41,7 @@ import ru.practicum.android.diploma.util.PLACE_OF_WORK_REGION_KEY
 class FilterFragment : Fragment() {
     private val binding: FragmentFilterBinding by viewBinding(CreateMethod.INFLATE)
     private val viewModel by viewModel<FilterViewModel>()
-
+    private val gson: Gson by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -100,7 +101,7 @@ class FilterFragment : Fragment() {
                 }
 
                 is FilterScreenState.FiltersSaved -> {
-                    val json = Gson().toJson(state.filters)
+                    val json = gson.toJson(state.filters)
                     setFragmentResult(FILTER_REQUEST_KEY, bundleOf(FILTER_BUNDLE_KEY to json))
                     findNavController().navigateUp()
                 }
@@ -337,8 +338,8 @@ class FilterFragment : Fragment() {
     }
 
     private fun navigateToPlaceOfWorkScreen() {
-        val jsonCountry = Gson().toJson(viewModel.getCountry())
-        val jsonRegion = Gson().toJson(viewModel.getRegion())
+        val jsonCountry = gson.toJson(viewModel.getCountry())
+        val jsonRegion = gson.toJson(viewModel.getRegion())
         setFragmentResult(
             FILTER_TO_PLACE_OF_WORK_KEY,
             bundleOf(
