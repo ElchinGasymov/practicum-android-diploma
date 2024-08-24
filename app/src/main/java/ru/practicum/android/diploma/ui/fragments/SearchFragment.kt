@@ -27,8 +27,8 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.presentation.viewmodels.SearchViewModel
+import ru.practicum.android.diploma.ui.fragments.FilterFragment.Companion.FILTER_REQUEST_KEY
 import ru.practicum.android.diploma.ui.state.SearchScreenState
-import ru.practicum.android.diploma.util.FILTER_REQUEST_KEY
 import ru.practicum.android.diploma.util.ResponseData
 import ru.practicum.android.diploma.util.adapter.VacancyAdapter
 
