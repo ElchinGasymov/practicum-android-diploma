@@ -3,9 +3,9 @@ package ru.practicum.android.diploma.data.db.entity
 import androidx.room.Entity
 
 @Entity(primaryKeys = ["idVacancyBd", "idAreaBd", "idPhoneBd", "idKeySkillBd"])
-data class VacancyPhonesAreasKeySkillsCross(
+data class BdAllCrossEntity(
     val idVacancyBd: Int,
     val idAreaBd: Int,
     val idPhoneBd: Int,
-    val idKeySkillBd: Int,
+    val idKeySkillBd: Int
 )

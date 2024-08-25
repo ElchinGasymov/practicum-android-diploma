@@ -10,7 +10,7 @@ import ru.practicum.android.diploma.data.db.entity.AreaEntity
 import ru.practicum.android.diploma.data.db.entity.KeySkillEntity
 import ru.practicum.android.diploma.data.db.entity.PhoneEntity
 import ru.practicum.android.diploma.data.db.entity.VacancyEntity
-import ru.practicum.android.diploma.data.db.entity.VacancyPhonesAreasKeySkillsCross
+import ru.practicum.android.diploma.data.db.entity.BdAllCrossEntity
 
 @Database(
     version = 4,
@@ -19,7 +19,7 @@ import ru.practicum.android.diploma.data.db.entity.VacancyPhonesAreasKeySkillsCr
         PhoneEntity::class,
         KeySkillEntity::class,
         AreaEntity::class,
-        VacancyPhonesAreasKeySkillsCross::class
+        BdAllCrossEntity::class
     ]
 )
 abstract class AppDatabase : RoomDatabase() {

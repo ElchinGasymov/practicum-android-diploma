@@ -9,13 +9,13 @@ data class VacancyAndMany(
     @Relation(
         parentColumn = "idVacancyBd",
         entityColumn = "idPhoneBd",
-        associateBy = Junction(VacancyPhonesAreasKeySkillsCross::class)
+        associateBy = Junction(BdAllCrossEntity::class)
     )
     val phones: List<PhoneEntity>,
     @Relation(
         parentColumn = "idVacancyBd",
         entityColumn = "idAreaBd",
-        associateBy = Junction(VacancyPhonesAreasKeySkillsCross::class)
+        associateBy = Junction(BdAllCrossEntity::class)
     )
     val areas: List<AreaEntity>,
     @Relation(
