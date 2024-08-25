@@ -1,7 +1,9 @@
 package ru.practicum.android.diploma.data.impl
 
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import ru.practicum.android.diploma.data.dto.CountriesRequest
 import ru.practicum.android.diploma.data.dto.CountriesResponse
 import ru.practicum.android.diploma.data.dto.IndustriesRequest
@@ -35,7 +37,7 @@ class FilterRepositoryImpl(
 
             else -> emit(responseToError(response))
         }
-    }
+    }.flowOn(Dispatchers.IO)
 
     override fun getRegions(id: String): Flow<ResponseData<List<Region>>> = flow {
         when (val response = networkClient.doRequest(RegionsRequest(id))) {

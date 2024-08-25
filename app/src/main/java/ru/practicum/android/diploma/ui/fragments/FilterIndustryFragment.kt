@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.gson.Gson
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.databinding.FragmentSelectIndustryBinding
 import ru.practicum.android.diploma.presentation.viewmodels.FilterIndustryViewModel
@@ -28,6 +29,7 @@ class FilterIndustryFragment : Fragment() {
 
     private val binding: FragmentSelectIndustryBinding by viewBinding(CreateMethod.INFLATE)
     private val viewModel: FilterIndustryViewModel by viewModel()
+    private val gson: Gson by inject()
     private val adapter by lazy {
         IndustryAdapter(
             onClick = { industryList ->
@@ -107,7 +109,7 @@ class FilterIndustryFragment : Fragment() {
 
     private fun setupApplyButton() {
         binding.applyButton.setOnClickListener {
-            val json = Gson().toJson(viewModel.selectedIndustry.value)
+            val json = gson.toJson(viewModel.selectedIndustry.value)
             setFragmentResult(INDUSTRY_KEY, bundleOf(INDUSTRY_ITEM_KEY to json))
             findNavController().popBackStack()
         }

@@ -15,22 +15,27 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.gson.Gson
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.databinding.FragmentSelectRegionBinding
 import ru.practicum.android.diploma.domain.models.Region
 import ru.practicum.android.diploma.presentation.viewmodels.FilterRegionViewModel
 import ru.practicum.android.diploma.ui.state.RegionsScreenState
-import ru.practicum.android.diploma.util.App.Companion.REGION_ID_KEY
-import ru.practicum.android.diploma.util.REGION_BUNDLE_KEY
-import ru.practicum.android.diploma.util.REGION_REQUEST_KEY
 import ru.practicum.android.diploma.util.ResponseData
 import ru.practicum.android.diploma.util.adapter.region.RegionAdapter
 
 class FilterRegionFragment : Fragment() {
     private val binding: FragmentSelectRegionBinding by viewBinding(CreateMethod.INFLATE)
     private val viewModel by viewModel<FilterRegionViewModel>()
+    private val gson: Gson by inject()
     private val adapter = RegionAdapter {
         onItemClicked(it)
+    }
+
+    companion object {
+        const val REGION_REQUEST_KEY = "REGION_REQUEST_KEY"
+        const val REGION_BUNDLE_KEY = "REGION_BUNDLE_KEY"
+        const val REGION_ID_KEY = "REGION_ID_KEY"
     }
 
     override fun onCreateView(
@@ -109,7 +114,7 @@ class FilterRegionFragment : Fragment() {
     }
 
     private fun onItemClicked(region: Region) {
-        val json = Gson().toJson(region)
+        val json = gson.toJson(region)
         setFragmentResult(
             REGION_REQUEST_KEY,
             bundleOf(REGION_BUNDLE_KEY to json)
