@@ -37,6 +37,7 @@ class FilterIndustryViewModel(
             if (industry.id == industries.id) {
                 newList.add(industry.copy(isChecked = !industry.isChecked))
                 _hasSelected.postValue(!industry.isChecked)
+                selectedId = industries.id
                 if (!industry.isChecked) _selectedIndustry.postValue(industry)
             } else {
                 newList.add(industry.copy(isChecked = false))
@@ -66,15 +67,14 @@ class FilterIndustryViewModel(
 
     private fun whenList(industry: Industries?, list: ResponseData.Data<List<Industries>>) {
         if (industry != null) {
-            val newList = ArrayList<Industries>()
-            list.value.forEach { industryItem ->
-                if (industryItem.id == industry.id) {
-                    newList.add(industryItem.copy(isChecked = true))
-                    _selectedIndustry.postValue(industryItem)
+            val newList = list.value.map {
+                if (industry.id == it.id) {
+                    _selectedIndustry.postValue(it)
                     _hasSelected.postValue(true)
-                    selectedId = industryItem.id
+                    selectedId = it.id
+                    Industries(it.id, it.name, true)
                 } else {
-                    newList.add(industryItem)
+                    it
                 }
             }
             _industries.postValue(newList)
@@ -84,19 +84,20 @@ class FilterIndustryViewModel(
     }
 
     fun search(request: String) {
-        val sortedList = mutableListOf<Industries>()
-        val newSortedList = mutableListOf<Industries>()
-        sortedList.addAll(listOfIndustries)
-        sortedList.removeAll {
-            !it.name.contains(request, true)
+        val sortedList = listOfIndustries.mapNotNull {
+            if (it.name.contains(request, true)) {
+                it
+            } else {
+                null
+            }
         }
-        sortedList.forEach {
+        val newSortedList = sortedList.map {
             if (it.id == selectedId) {
-                newSortedList.add(Industries(it.id, it.name, true))
                 _selectedIndustry.postValue(it)
                 _hasSelected.postValue(true)
+                Industries(it.id, it.name, true)
             } else {
-                newSortedList.add(it)
+                it
             }
         }
         if (sortedList.isNotEmpty()) {
@@ -105,7 +106,6 @@ class FilterIndustryViewModel(
             _industries.postValue(newSortedList)
             _error.postValue(ResponseError.NOT_FOUND)
         }
-
     }
 }
 

@@ -17,6 +17,7 @@ import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFilterBinding
@@ -27,20 +28,23 @@ import ru.practicum.android.diploma.domain.models.SaveFiltersSharedPrefs
 import ru.practicum.android.diploma.presentation.viewmodels.FilterViewModel
 import ru.practicum.android.diploma.ui.fragments.FilterIndustryFragment.Companion.INDUSTRY_ITEM_KEY
 import ru.practicum.android.diploma.ui.fragments.FilterIndustryFragment.Companion.INDUSTRY_KEY
+import ru.practicum.android.diploma.ui.fragments.FilterPlaceOfWorkFragment.Companion.PLACE_OF_WORK_COUNTRY_KEY
+import ru.practicum.android.diploma.ui.fragments.FilterPlaceOfWorkFragment.Companion.PLACE_OF_WORK_KEY
+import ru.practicum.android.diploma.ui.fragments.FilterPlaceOfWorkFragment.Companion.PLACE_OF_WORK_REGION_KEY
 import ru.practicum.android.diploma.ui.state.FilterScreenState
-import ru.practicum.android.diploma.util.FILTER_BUNDLE_KEY
-import ru.practicum.android.diploma.util.FILTER_REQUEST_KEY
-import ru.practicum.android.diploma.util.FILTER_TO_PLACE_OF_WORK_COUNTRY_KEY
-import ru.practicum.android.diploma.util.FILTER_TO_PLACE_OF_WORK_KEY
-import ru.practicum.android.diploma.util.FILTER_TO_PLACE_OF_WORK_REGION_KEY
-import ru.practicum.android.diploma.util.PLACE_OF_WORK_COUNTRY_KEY
-import ru.practicum.android.diploma.util.PLACE_OF_WORK_KEY
-import ru.practicum.android.diploma.util.PLACE_OF_WORK_REGION_KEY
 
 class FilterFragment : Fragment() {
     private val binding: FragmentFilterBinding by viewBinding(CreateMethod.INFLATE)
     private val viewModel by viewModel<FilterViewModel>()
+    private val gson: Gson by inject()
 
+    companion object {
+        const val FILTER_TO_PLACE_OF_WORK_KEY = "FILTER_TO_PLACE_OF_WORK_KEY"
+        const val FILTER_TO_PLACE_OF_WORK_COUNTRY_KEY = "FILTER_TO_PLACE_OF_WORK_COUNTRY_KEY"
+        const val FILTER_TO_PLACE_OF_WORK_REGION_KEY = "FILTER_TO_PLACE_OF_WORK_REGION_KEY"
+        const val FILTER_REQUEST_KEY = "FILTER_REQUEST_KEY"
+        const val FILTER_BUNDLE_KEY = "FILTER_BUNDLE_KEY"
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -100,7 +104,7 @@ class FilterFragment : Fragment() {
                 }
 
                 is FilterScreenState.FiltersSaved -> {
-                    val json = Gson().toJson(state.filters)
+                    val json = gson.toJson(state.filters)
                     setFragmentResult(FILTER_REQUEST_KEY, bundleOf(FILTER_BUNDLE_KEY to json))
                     findNavController().navigateUp()
                 }
@@ -337,8 +341,8 @@ class FilterFragment : Fragment() {
     }
 
     private fun navigateToPlaceOfWorkScreen() {
-        val jsonCountry = Gson().toJson(viewModel.getCountry())
-        val jsonRegion = Gson().toJson(viewModel.getRegion())
+        val jsonCountry = gson.toJson(viewModel.getCountry())
+        val jsonRegion = gson.toJson(viewModel.getRegion())
         setFragmentResult(
             FILTER_TO_PLACE_OF_WORK_KEY,
             bundleOf(

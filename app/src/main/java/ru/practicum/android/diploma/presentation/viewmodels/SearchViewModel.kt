@@ -25,6 +25,9 @@ class SearchViewModel(
         const val TWO_SECONDS = 2000L
     }
 
+    private val _vacanciesLiveData = MutableLiveData<List<Vacancy>>()
+    val vacanciesLiveData: LiveData<List<Vacancy>> get() = _vacanciesLiveData
+
     private val screenStateLiveData = MutableLiveData<SearchScreenState>()
     private var currentPage = 0
     private var maxPages = 1
@@ -41,7 +44,7 @@ class SearchViewModel(
         false
     )
     private val _vacancyIsClickable = MutableLiveData(true)
-    var vacancyIsClickable: LiveData<Boolean> = _vacancyIsClickable
+    val vacancyIsClickable: LiveData<Boolean> = _vacancyIsClickable
 
     private val vacancySearchDebounce =
         debounce<String>(TWO_SECONDS, viewModelScope, true) { query ->
@@ -67,6 +70,10 @@ class SearchViewModel(
 
     fun getMainRequest(): String {
         return mainRequest
+    }
+
+    private fun updateVacancies(vacancies: List<Vacancy>) {
+        _vacanciesLiveData.postValue(vacancies)
     }
 
     private fun searchVacancies(request: String) {
@@ -182,11 +189,13 @@ class SearchViewModel(
             if (data.isEmpty()) {
                 setScreenState(SearchScreenState.NothingFound)
             } else {
-                setScreenState(
-                    SearchScreenState.Success(data, quantity)
-                )
+                setScreenState(SearchScreenState.Success(data, quantity))
+                updateVacancies(data)
             }
         } else {
+            val currentVacancies = _vacanciesLiveData.value.orEmpty().toMutableList()
+            currentVacancies.addAll(data)
+            updateVacancies(currentVacancies)
             setScreenState(SearchScreenState.LoadNextPage(data))
         }
     }

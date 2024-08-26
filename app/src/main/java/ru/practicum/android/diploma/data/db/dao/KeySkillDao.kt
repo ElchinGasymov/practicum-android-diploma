@@ -8,9 +8,6 @@ import ru.practicum.android.diploma.data.db.entity.KeySkillEntity
 
 @Dao
 interface KeySkillDao {
-    @Query("SELECT * FROM `key_skill_table` WHERE `key_skill_table`.`idVacancy` =:vacancyId")
-    suspend fun getSelectedKeySkill(vacancyId: String): List<KeySkillEntity>
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertKeySkill(keySkillEntity: List<KeySkillEntity>)
 
