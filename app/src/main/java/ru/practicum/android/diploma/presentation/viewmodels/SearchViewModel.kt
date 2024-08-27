@@ -27,6 +27,8 @@ class SearchViewModel(
 
     private val _vacanciesLiveData = MutableLiveData<List<Vacancy>>()
     val vacanciesLiveData: LiveData<List<Vacancy>> get() = _vacanciesLiveData
+    private val _vacanciesQuantityLiveData = MutableLiveData<Int>()
+    val vacanciesQuantityLiveData: LiveData<Int> get() = _vacanciesQuantityLiveData
 
     private val screenStateLiveData = MutableLiveData<SearchScreenState>()
     private var currentPage = 0
@@ -190,6 +192,7 @@ class SearchViewModel(
                 setScreenState(SearchScreenState.NothingFound)
             } else {
                 setScreenState(SearchScreenState.Success(data, quantity))
+                _vacanciesQuantityLiveData.postValue(quantity)
                 updateVacancies(data)
             }
         } else {
