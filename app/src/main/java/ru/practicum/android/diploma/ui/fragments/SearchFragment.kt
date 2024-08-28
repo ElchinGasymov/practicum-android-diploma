@@ -55,9 +55,11 @@ class SearchFragment : Fragment() {
 
         viewModel.vacanciesLiveData.observe(viewLifecycleOwner) { vacancies ->
             adapter.setVacancies(vacancies)
-            binding.textUnderSearch.text = getCorrectAmountText(vacancies.size)
             binding.textUnderSearch.isVisible = vacancies.isNotEmpty()
             binding.searchDefaultPlaceholder.isGone = vacancies.isNotEmpty()
+        }
+        viewModel.vacanciesQuantityLiveData.observe(viewLifecycleOwner) { quantity ->
+            binding.textUnderSearch.text = getCorrectAmountText(quantity)
         }
 
         binding.searchRecycleView.layoutManager = LinearLayoutManager(requireContext())
